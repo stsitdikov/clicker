@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:clicker/logic/clicker_brain.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MoneyDisplay extends StatelessWidget {
-  final double money;
-
-  MoneyDisplay(this.money);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class MoneyDisplay extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            '${money.toStringAsFixed(1)} \$',
+            '${Provider.of<ClickerBrain>(context).money.toStringAsFixed(1)} \$',
             style: TextStyle(fontSize: 30.0),
           ),
         ),

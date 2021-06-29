@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-class ClickerBrain {
+class ClickerBrain extends ChangeNotifier {
   double money = 0.0;
   double mainIncrement = 1.2;
   double upgradeClickCost = 20;
@@ -8,7 +8,8 @@ class ClickerBrain {
   double clickAmount = 1.0;
 
   void clickIncreaseMoney() {
-    money = money = money + clickAmount;
+    money = money + clickAmount;
+    notifyListeners();
   }
 
   void clickUpgradeCost() {
@@ -16,6 +17,7 @@ class ClickerBrain {
       money = money - upgradeClickCost;
       upgradeClickCost = upgradeClickCost * mainIncrement;
       clickAmount = clickAmount * mainIncrement;
+      notifyListeners();
     }
   }
 }
