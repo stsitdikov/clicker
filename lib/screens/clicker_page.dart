@@ -2,6 +2,7 @@ import 'package:clicker/components/click_row.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
+import 'package:clicker/components/autoclick_row.dart';
 
 class ClickerScreen extends StatelessWidget {
   @override
@@ -16,6 +17,9 @@ class ClickerScreen extends StatelessWidget {
           Expanded(
             flex: 6,
             child: MoneyDisplay(),
+          ),
+          Expanded(
+            child: AutoclickRow(),
           ),
           Expanded(
             child: ClickRow(),

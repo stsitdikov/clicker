@@ -1,6 +1,7 @@
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:clicker/elements/upgrade_container.dart';
 
 class ClickRow extends StatelessWidget {
   @override
@@ -15,7 +16,10 @@ class ClickRow extends StatelessWidget {
                   .clickIncreaseMoney();
             },
             child: Container(
-              color: Colors.blueGrey,
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+                border: Border.all(color: Colors.black),
+              ),
               child: Center(
                 child: Text(
                   'Click (${Provider.of<ClickerBrain>(context).clickAmount.toStringAsFixed(1)} \$)',
@@ -31,17 +35,10 @@ class ClickRow extends StatelessWidget {
               Provider.of<ClickerBrain>(context, listen: false)
                   .clickUpgradeCost();
             },
-            child: Container(
-              color: Colors.blueGrey[700],
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(Icons.arrow_upward_outlined),
-                  Text(Provider.of<ClickerBrain>(context)
-                      .upgradeClickCost
-                      .toStringAsFixed(1)),
-                ],
-              ),
+            child: UpgradeContainer(
+              Provider.of<ClickerBrain>(context)
+                  .upgradeClickCost
+                  .toStringAsFixed(1),
             ),
           ),
         ),
