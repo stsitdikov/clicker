@@ -1,8 +1,10 @@
 import 'package:clicker/components/click_row.dart';
+import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
 import 'package:clicker/components/autoclick_row.dart';
+import 'package:provider/provider.dart';
 
 class ClickerScreen extends StatelessWidget {
   @override
@@ -18,8 +20,11 @@ class ClickerScreen extends StatelessWidget {
             flex: 6,
             child: MoneyDisplay(),
           ),
-          Expanded(
-            child: AutoclickRow(),
+          Visibility(
+            visible: Provider.of<ClickerBrain>(context).isAutoClickVisible(),
+            child: Expanded(
+              child: AutoclickRow(),
+            ),
           ),
           Expanded(
             child: ClickRow(),

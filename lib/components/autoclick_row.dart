@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clicker/logic/clicker_brain.dart';
-import 'package:clicker/elements/upgrade_container.dart';
+import 'package:clicker/custom_widgets/upgrade_container.dart';
 
 class AutoclickRow extends StatelessWidget {
   @override
@@ -9,23 +9,12 @@ class AutoclickRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
+          flex: 4,
           child: Container(
             color: Colors.blueGrey,
             child: Center(
               child: Text(
-                Provider.of<ClickerBrain>(context).autoClickNumber.toString(),
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          flex: 3,
-          child: Container(
-            color: Colors.blueGrey,
-            child: Center(
-              child: Text(
-                'AutoClicker',
+                '${Provider.of<ClickerBrain>(context).autoClickNumber.toString()}  x  AutoClicker',
                 style: TextStyle(fontSize: 20.0),
               ),
             ),

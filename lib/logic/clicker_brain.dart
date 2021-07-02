@@ -6,10 +6,14 @@ class ClickerBrain extends ChangeNotifier {
   double money = 0.0;
   double mainIncrement = 1.2;
   double upgradeClickCost = 20;
+
+  bool autoClickVisible = false;
+  double moneyToShowAutoClick = 100;
   double autoClickCost = 10;
   int autoClickNumber = 0;
 
   double clickAmount = 1.0;
+  bool clickUpgradeVisible = false;
 
   void clickIncreaseMoney() {
     money = money + clickAmount;
@@ -48,5 +52,19 @@ class ClickerBrain extends ChangeNotifier {
         },
       );
     }
+  }
+
+  bool isClickUpgradeVisible() {
+    if (clickUpgradeVisible == false && money >= upgradeClickCost) {
+      clickUpgradeVisible = true;
+    }
+    return clickUpgradeVisible;
+  }
+
+  bool isAutoClickVisible() {
+    if (autoClickVisible == false && money >= moneyToShowAutoClick) {
+      autoClickVisible = true;
+    }
+    return autoClickVisible;
   }
 }

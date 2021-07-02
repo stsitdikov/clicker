@@ -1,7 +1,7 @@
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clicker/elements/upgrade_container.dart';
+import 'package:clicker/custom_widgets/upgrade_container.dart';
 
 class ClickRow extends StatelessWidget {
   @override
@@ -29,16 +29,19 @@ class ClickRow extends StatelessWidget {
             ),
           ),
         ),
-        Expanded(
-          child: GestureDetector(
-            onTap: () {
-              Provider.of<ClickerBrain>(context, listen: false)
-                  .clickUpgradeCost();
-            },
-            child: UpgradeContainer(
-              Provider.of<ClickerBrain>(context)
-                  .upgradeClickCost
-                  .toStringAsFixed(1),
+        Visibility(
+          visible: Provider.of<ClickerBrain>(context).isClickUpgradeVisible(),
+          child: Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<ClickerBrain>(context, listen: false)
+                    .clickUpgradeCost();
+              },
+              child: UpgradeContainer(
+                Provider.of<ClickerBrain>(context)
+                    .upgradeClickCost
+                    .toStringAsFixed(1),
+              ),
             ),
           ),
         ),
