@@ -2,6 +2,7 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clicker/custom_widgets/upgrade_container.dart';
+import 'package:clicker/logic/constants.dart';
 
 class ClickRow extends StatelessWidget {
   @override
@@ -41,6 +42,11 @@ class ClickRow extends StatelessWidget {
                 Provider.of<ClickerBrain>(context)
                     .upgradeClickCost
                     .toStringAsFixed(1),
+                Border(
+                  top: BorderSide(color: kborderColor),
+                  right: BorderSide(color: kborderColor),
+                  bottom: BorderSide(color: kborderColor),
+                ),
               ),
             ),
           ),
