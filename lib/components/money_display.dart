@@ -6,7 +6,7 @@ class MoneyDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 30.0, vertical: 30.0),
+      margin: EdgeInsets.symmetric(horizontal: 60.0, vertical: 25.0),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.blueGrey,

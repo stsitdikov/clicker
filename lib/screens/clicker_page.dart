@@ -17,17 +17,18 @@ class ClickerScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            flex: 6,
             child: MoneyDisplay(),
           ),
-          Visibility(
-            visible: Provider.of<ClickerBrain>(context).isAutoClickVisible(),
-            child: Expanded(
-              child: AutoclickRow(),
-            ),
-          ),
-          Expanded(
-            child: ClickRow(),
+          ListView(
+            shrinkWrap: true,
+            children: [
+              Visibility(
+                visible:
+                    Provider.of<ClickerBrain>(context).isAutoClickVisible(),
+                child: AutoclickRow(),
+              ),
+              ClickRow(),
+            ],
           ),
         ],
       ),

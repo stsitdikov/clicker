@@ -8,7 +8,7 @@ class ClickerBrain extends ChangeNotifier {
   double upgradeClickCost = 20;
 
   bool autoClickVisible = false;
-  double moneyToShowAutoClick = 100;
+  double moneyToShowAutoClick = 50;
   double autoClickCost = 10;
   int autoClickNumber = 0;
 
