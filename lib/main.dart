@@ -1,3 +1,4 @@
+import 'package:clicker/screens/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'screens/clicker_page.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       create: (_) => ClickerBrain(),
       child: MaterialApp(
         // theme: ThemeData.dark(),
-        home: ClickerScreen(),
+        home: TestScreen(),
       ),
     );
   }

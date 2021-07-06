@@ -16,7 +16,7 @@ class _TestScreenState extends State<TestScreen>
   late final AnimationController controller = AnimationController(
     duration: Duration(seconds: 3),
     vsync: this,
-  )..repeat();
+  );
   late final Animation<double> animation = CurvedAnimation(
     parent: controller,
     curve: Curves.linear,
@@ -38,8 +38,11 @@ class _TestScreenState extends State<TestScreen>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Container(
-              color: Colors.blueGrey,
+            child: GestureDetector(
+              onTap: () => controller.repeat(),
+              child: Container(
+                color: Colors.blueGrey,
+              ),
             ),
           ),
           Expanded(
@@ -52,7 +55,7 @@ class _TestScreenState extends State<TestScreen>
                   sizeFactor: animation,
                   axis: Axis.horizontal,
                   child: Container(
-                    color: Colors.black.withOpacity(0),
+                    color: Colors.black.withOpacity(0.5),
                   ),
                 ),
               ],
