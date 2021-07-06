@@ -24,9 +24,9 @@ class AutoclickRow extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blueGrey,
                     border: Border(
-                      left: BorderSide(color: kborderColor),
-                      top: BorderSide(color: kborderColor),
-                      right: BorderSide(color: kborderColor),
+                      left: BorderSide(color: kBorderColor),
+                      top: BorderSide(color: kBorderColor),
+                      right: BorderSide(color: kBorderColor),
                     ),
                   ),
                   child: Center(
@@ -57,8 +57,8 @@ class AutoclickRow extends StatelessWidget {
                     .autoClickCost
                     .toStringAsFixed(1),
                 Border(
-                  top: BorderSide(color: kborderColor),
-                  right: BorderSide(color: kborderColor),
+                  top: BorderSide(color: kBorderColor),
+                  right: BorderSide(color: kBorderColor),
                 ),
               ),
             ),

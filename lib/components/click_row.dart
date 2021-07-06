@@ -45,9 +45,9 @@ class ClickRow extends StatelessWidget {
                       .upgradeClickCost
                       .toStringAsFixed(1),
                   Border(
-                    top: BorderSide(color: kborderColor),
-                    right: BorderSide(color: kborderColor),
-                    bottom: BorderSide(color: kborderColor),
+                    top: BorderSide(color: kBorderColor),
+                    right: BorderSide(color: kBorderColor),
+                    bottom: BorderSide(color: kBorderColor),
                   ),
                 ),
               ),

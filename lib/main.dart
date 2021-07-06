@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       create: (_) => ClickerBrain(),
       child: MaterialApp(
         // theme: ThemeData.dark(),
-        home: ClickerScreen(),
+        home: TestScreen(),
       ),
     );
   }
