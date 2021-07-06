@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 class ClickerBrain extends ChangeNotifier {
   double money = 0.0;
   double mainIncrement = 1.2;
-  double upgradeClickCost = 20;
+  double upgradeClickCost = 5;
 
   bool autoClickVisible = false;
-  double moneyToShowAutoClick = 50;
+  bool autoClickAnimation = false;
+  double moneyToShowAutoClick = 10;
   double autoClickCost = 10;
   int autoClickNumber = 0;
+  Duration autoClickerDuration = Duration(seconds: 3);
 
   double clickAmount = 1.0;
   bool clickUpgradeVisible = false;
@@ -37,6 +39,7 @@ class ClickerBrain extends ChangeNotifier {
       notifyListeners();
       if (autoClickNumber == 1) {
         autoClicker();
+        autoClickAnimation = true;
       }
       ;
     }
@@ -45,7 +48,7 @@ class ClickerBrain extends ChangeNotifier {
   void autoClicker() {
     if (autoClickNumber > 0) {
       Timer.periodic(
-        Duration(seconds: 1),
+        autoClickerDuration,
         (timer) {
           money = money + autoClickNumber * clickAmount;
           notifyListeners();

@@ -1,6 +1,6 @@
 import 'package:clicker/screens/test_screen.dart';
 import 'package:flutter/material.dart';
-import 'screens/clicker_page.dart';
+import 'screens/clicker_screen.dart';
 import 'package:provider/provider.dart';
 import 'logic/clicker_brain.dart';
 
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       create: (_) => ClickerBrain(),
       child: MaterialApp(
         // theme: ThemeData.dark(),
-        home: TestScreen(),
+        home: ClickerScreen(),
       ),
     );
   }
