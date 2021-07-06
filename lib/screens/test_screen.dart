@@ -46,23 +46,37 @@ class _TestScreenState extends State<TestScreen>
             ),
           ),
           Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  color: Colors.lightGreen,
-                ),
-                SizeTransition(
-                  sizeFactor: animation,
-                  axis: Axis.horizontal,
-                  child: Container(
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                ),
-              ],
-            ),
+            child: AnimatedStack(animation: animation),
           ),
         ],
       ),
+    );
+  }
+}
+
+class AnimatedStack extends StatelessWidget {
+  const AnimatedStack({
+    Key? key,
+    required this.animation,
+  }) : super(key: key);
+
+  final Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          color: Colors.lightGreen,
+        ),
+        SizeTransition(
+          sizeFactor: animation,
+          axis: Axis.horizontal,
+          child: Container(
+            color: Colors.black.withOpacity(0.5),
+          ),
+        ),
+      ],
     );
   }
 }
