@@ -35,7 +35,7 @@ class _TestScreenState extends State<TestScreen>
     flexExpand = (controller.value * 100).round();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clicker'),
+        title: Text('Clicker 1231231231'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
