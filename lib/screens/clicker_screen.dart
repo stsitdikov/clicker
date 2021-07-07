@@ -1,10 +1,10 @@
 import 'package:clicker/components/click_row.dart';
 import 'package:clicker/logic/clicker_brain.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
 import 'package:clicker/components/reusable_progress_row.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class ClickerScreen extends StatefulWidget {
   @override
@@ -31,11 +31,21 @@ class _ClickerScreenState extends State<ClickerScreen>
     curve: Curves.linear,
   );
 
+  late final AnimationController managerController = AnimationController(
+    duration: Provider.of<ClickerBrain>(context).managerDuration,
+    vsync: this,
+  );
+  late final Animation<double> managerAnimation = CurvedAnimation(
+    parent: managerController,
+    curve: Curves.linear,
+  );
+
   @override
   void dispose() {
     super.dispose();
     autoClickController.dispose();
     workerController.dispose();
+    managerController.dispose();
   }
 
   @override
@@ -46,6 +56,10 @@ class _ClickerScreenState extends State<ClickerScreen>
 
     if (Provider.of<ClickerBrain>(context).workerAnimation == true) {
       workerController.repeat();
+    }
+
+    if (Provider.of<ClickerBrain>(context).managerAnimation == true) {
+      managerController.repeat();
     }
 
     return Scaffold(
@@ -63,6 +77,23 @@ class _ClickerScreenState extends State<ClickerScreen>
               return ListView(
                 shrinkWrap: true,
                 children: [
+                  // manager
+
+                  Visibility(
+                    visible: clickerBrain.isManagerVisible(),
+                    child: ReusableProgressRow(
+                      animation: managerAnimation,
+                      title:
+                          '${NumberFormat.compact().format(clickerBrain.managerNumber)}  x  Manager',
+                      onUpgradeTap: () {
+                        Provider.of<ClickerBrain>(context, listen: false)
+                            .buyManager();
+                      },
+                      upgradeCost: NumberFormat.compact()
+                          .format(clickerBrain.managerCost),
+                    ),
+                  ),
+
                   // worker
 
                   Visibility(
@@ -70,12 +101,13 @@ class _ClickerScreenState extends State<ClickerScreen>
                     child: ReusableProgressRow(
                       animation: workerAnimation,
                       title:
-                          '${clickerBrain.workerNumber.toString()}  x  Worker',
+                          '${NumberFormat.compact().format(clickerBrain.workerNumber)}  x  Worker',
                       onUpgradeTap: () {
                         Provider.of<ClickerBrain>(context, listen: false)
                             .buyWorker();
                       },
-                      upgradeCost: clickerBrain.workerCost.toStringAsFixed(1),
+                      upgradeCost: NumberFormat.compact()
+                          .format(clickerBrain.workerCost),
                     ),
                   ),
 
@@ -86,13 +118,13 @@ class _ClickerScreenState extends State<ClickerScreen>
                     child: ReusableProgressRow(
                       animation: autoClickAnimation,
                       title:
-                          '${clickerBrain.autoClickNumber.toString()}  x  AutoClicker',
+                          '${NumberFormat.compact().format(clickerBrain.autoClickNumber)}  x  AutoClicker',
                       onUpgradeTap: () {
                         Provider.of<ClickerBrain>(context, listen: false)
                             .buyAutoClicker();
                       },
-                      upgradeCost:
-                          clickerBrain.autoClickCost.toStringAsFixed(1),
+                      upgradeCost: NumberFormat.compact()
+                          .format(clickerBrain.autoClickCost),
                     ),
                   ),
 

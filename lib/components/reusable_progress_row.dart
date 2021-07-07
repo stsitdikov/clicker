@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/custom_widgets/upgrade_container.dart';
 import 'package:clicker/logic/constants.dart';
 

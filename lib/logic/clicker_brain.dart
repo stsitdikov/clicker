@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class ClickerBrain extends ChangeNotifier {
   // main
@@ -9,7 +8,7 @@ class ClickerBrain extends ChangeNotifier {
   double upgradeClickCost = 5;
 
   // click row
-  double clickAmount = 1.0;
+  double clickAmount = 300.0;
   bool clickUpgradeVisible = false;
 
   void clickIncreaseMoney() {
@@ -99,7 +98,7 @@ class ClickerBrain extends ChangeNotifier {
       Timer.periodic(
         workerDuration,
         (timer) {
-          autoClickNumber++;
+          autoClickNumber = autoClickNumber + workerNumber;
           notifyListeners();
         },
       );
@@ -112,5 +111,45 @@ class ClickerBrain extends ChangeNotifier {
       workerVisible = true;
     }
     return workerVisible;
+  }
+
+  // worker
+  bool managerVisible = false;
+  bool managerAnimation = false;
+  double workerNumberToShowManager = 5;
+  double managerCost = 10;
+  int managerNumber = 0;
+  Duration managerDuration = Duration(seconds: 30);
+
+  void buyManager() {
+    if (money >= managerCost) {
+      money = money - managerCost;
+      managerCost = managerCost * mainIncrement;
+      managerNumber++;
+      notifyListeners();
+      if (managerNumber == 1) {
+        manager();
+        managerAnimation = true;
+      }
+    }
+  }
+
+  void manager() {
+    if (managerNumber > 0) {
+      Timer.periodic(
+        managerDuration,
+        (timer) {
+          workerNumber = workerNumber + managerNumber;
+          notifyListeners();
+        },
+      );
+    }
+  }
+
+  bool isManagerVisible() {
+    if (managerVisible == false && workerNumber >= workerNumberToShowManager) {
+      managerVisible = true;
+    }
+    return managerVisible;
   }
 }
