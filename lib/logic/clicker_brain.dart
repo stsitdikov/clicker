@@ -36,15 +36,16 @@ class ClickerBrain extends ChangeNotifier {
   bool autoClickVisible = false;
   bool autoClickAnimation = false;
   double moneyToShowAutoClick = 10;
+  int autoClickIncrement = 1;
   double autoClickCost = 10;
   int autoClickNumber = 0;
   Duration autoClickerDuration = Duration(seconds: 3);
 
   void buyAutoClicker() {
-    if (money >= autoClickCost) {
-      money = money - autoClickCost;
-      autoClickCost = autoClickCost * mainIncrement;
-      autoClickNumber++;
+    if (money >= autoClickCost * autoClickIncrement) {
+      money = money - autoClickCost * autoClickIncrement;
+      autoClickCost = autoClickCost * mainIncrement * autoClickIncrement;
+      autoClickNumber = autoClickNumber + autoClickNumber * autoClickIncrement;
       notifyListeners();
       if (autoClickNumber == 1) {
         autoClicker();
@@ -70,6 +71,22 @@ class ClickerBrain extends ChangeNotifier {
       autoClickVisible = true;
     }
     return autoClickVisible;
+  }
+
+  void changeAutoClickIncrement() {
+    if (autoClickIncrement == 1) {
+      autoClickIncrement = 10;
+    }
+    if (autoClickIncrement == 10) {
+      autoClickIncrement = 100;
+    } else {
+      autoClickIncrement = 1;
+    }
+    notifyListeners();
+  }
+
+  void get autoClickCost() {
+
   }
 
   // worker

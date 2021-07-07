@@ -91,6 +91,12 @@ class _ClickerScreenState extends State<ClickerScreen>
                       },
                       upgradeCost: NumberFormat.compact()
                           .format(clickerBrain.managerCost),
+                      incrementNumber:
+                          clickerBrain.autoClickIncrement.toString(),
+                      onIncrementTap: () {
+                        Provider.of<ClickerBrain>(context, listen: false)
+                            .changeAutoClickIncrement();
+                      },
                     ),
                   ),
 
@@ -108,6 +114,12 @@ class _ClickerScreenState extends State<ClickerScreen>
                       },
                       upgradeCost: NumberFormat.compact()
                           .format(clickerBrain.workerCost),
+                      incrementNumber:
+                          clickerBrain.autoClickIncrement.toString(),
+                      onIncrementTap: () {
+                        Provider.of<ClickerBrain>(context, listen: false)
+                            .changeAutoClickIncrement();
+                      },
                     ),
                   ),
 
@@ -125,6 +137,12 @@ class _ClickerScreenState extends State<ClickerScreen>
                       },
                       upgradeCost: NumberFormat.compact()
                           .format(clickerBrain.autoClickCost),
+                      incrementNumber:
+                          clickerBrain.autoClickIncrement.toString(),
+                      onIncrementTap: () {
+                        Provider.of<ClickerBrain>(context, listen: false)
+                            .changeAutoClickIncrement();
+                      },
                     ),
                   ),
 
