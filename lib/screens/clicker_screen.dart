@@ -12,26 +12,40 @@ class ClickerScreen extends StatefulWidget {
 }
 
 class _ClickerScreenState extends State<ClickerScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController controller = AnimationController(
+    with TickerProviderStateMixin {
+  late final AnimationController autoClickController = AnimationController(
     duration: Provider.of<ClickerBrain>(context).autoClickerDuration,
     vsync: this,
   );
-  late final Animation<double> animation = CurvedAnimation(
-    parent: controller,
+  late final Animation<double> autoClickAnimation = CurvedAnimation(
+    parent: autoClickController,
+    curve: Curves.linear,
+  );
+
+  late final AnimationController workerController = AnimationController(
+    duration: Provider.of<ClickerBrain>(context).workerDuration,
+    vsync: this,
+  );
+  late final Animation<double> workerAnimation = CurvedAnimation(
+    parent: workerController,
     curve: Curves.linear,
   );
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    autoClickController.dispose();
+    workerController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     if (Provider.of<ClickerBrain>(context).autoClickAnimation == true) {
-      controller.repeat();
+      autoClickController.repeat();
+    }
+
+    if (Provider.of<ClickerBrain>(context).workerAnimation == true) {
+      workerController.repeat();
     }
 
     return Scaffold(
@@ -49,24 +63,28 @@ class _ClickerScreenState extends State<ClickerScreen>
               return ListView(
                 shrinkWrap: true,
                 children: [
+                  // worker
+
                   Visibility(
-                    visible: clickerBrain.isAutoClickVisible(),
+                    visible: clickerBrain.isWorkerVisible(),
                     child: ReusableProgressRow(
-                      animation: animation,
+                      animation: workerAnimation,
                       title:
-                          '${Provider.of<ClickerBrain>(context).autoClickNumber.toString()}  x  AutoClicker',
+                          '${clickerBrain.workerNumber.toString()}  x  Worker',
                       onUpgradeTap: () {
                         Provider.of<ClickerBrain>(context, listen: false)
-                            .buyAutoClicker();
+                            .buyWorker();
                       },
-                      upgradeCost:
-                          clickerBrain.autoClickCost.toStringAsFixed(1),
+                      upgradeCost: clickerBrain.workerCost.toStringAsFixed(1),
                     ),
                   ),
+
+                  // Autoclicker
+
                   Visibility(
                     visible: clickerBrain.isAutoClickVisible(),
                     child: ReusableProgressRow(
-                      animation: animation,
+                      animation: autoClickAnimation,
                       title:
                           '${clickerBrain.autoClickNumber.toString()}  x  AutoClicker',
                       onUpgradeTap: () {
@@ -77,6 +95,7 @@ class _ClickerScreenState extends State<ClickerScreen>
                           clickerBrain.autoClickCost.toStringAsFixed(1),
                     ),
                   ),
+
                   ClickRow(),
                 ],
               );
