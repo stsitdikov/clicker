@@ -28,16 +28,11 @@ class _TestScreenState extends State<TestScreen>
     controller.dispose();
   }
 
-  int flex1 = 4;
-  int flex2 = 0;
+  int flexExpand = 0;
 
   @override
   Widget build(BuildContext context) {
-    final total = flex1 + flex2;
-    final width = MediaQuery.of(context).size.width;
-    final width1 = (width * flex1) / total;
-    final width2 = (width * flex2) / total;
-
+    flexExpand = (controller.value * 100).round();
     return Scaffold(
       appBar: AppBar(
         title: Text('Clicker'),
@@ -48,8 +43,9 @@ class _TestScreenState extends State<TestScreen>
           Expanded(
             child: GestureDetector(
               onTap: () {
-                setState(() {
-                  flex2 == 0 ? flex2 = 1 : flex2 = 0;
+                controller.forward();
+                controller.addListener(() {
+                  setState(() {});
                 });
               },
               child: Container(
@@ -59,17 +55,18 @@ class _TestScreenState extends State<TestScreen>
           ),
           Expanded(
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  color: Colors.blue,
-                  width: width1,
+                Expanded(
+                  flex: 400,
+                  child: Container(
+                    color: Colors.blue,
+                  ),
                 ),
-                AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  color: Colors.green,
-                  width: width2,
+                Expanded(
+                  flex: flexExpand,
+                  child: Container(
+                    color: Colors.green,
+                  ),
                 ),
               ],
             ),
