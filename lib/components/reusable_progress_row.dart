@@ -1,14 +1,20 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/custom_widgets/upgrade_container.dart';
 import 'package:clicker/logic/constants.dart';
 
-class AutoclickRow extends StatelessWidget {
+class ReusableProgressRow extends StatelessWidget {
   final Animation<double> animation;
+  final String title;
+  final onUpgradeTap;
+  final String upgradeCost;
 
-  AutoclickRow(this.animation);
+  ReusableProgressRow(
+      {required this.animation,
+      required this.title,
+      required this.onUpgradeTap,
+      required this.upgradeCost});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +37,7 @@ class AutoclickRow extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      '${Provider.of<ClickerBrain>(context).autoClickNumber.toString()}  x  AutoClicker',
+                      title,
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -48,14 +54,9 @@ class AutoclickRow extends StatelessWidget {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: () {
-                Provider.of<ClickerBrain>(context, listen: false)
-                    .buyAutoClicker();
-              },
+              onTap: onUpgradeTap,
               child: UpgradeContainer(
-                Provider.of<ClickerBrain>(context)
-                    .autoClickCost
-                    .toStringAsFixed(1),
+                upgradeCost,
                 Border(
                   top: BorderSide(color: kBorderColor),
                   right: BorderSide(color: kBorderColor),

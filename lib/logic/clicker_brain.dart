@@ -41,7 +41,6 @@ class ClickerBrain extends ChangeNotifier {
         autoClicker();
         autoClickAnimation = true;
       }
-      ;
     }
   }
 

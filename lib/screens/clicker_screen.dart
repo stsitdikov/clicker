@@ -3,7 +3,7 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
-import 'package:clicker/components/autoclick_row.dart';
+import 'package:clicker/components/reusable_progress_row.dart';
 import 'package:provider/provider.dart';
 
 class ClickerScreen extends StatefulWidget {
@@ -30,10 +30,7 @@ class _ClickerScreenState extends State<ClickerScreen>
 
   @override
   Widget build(BuildContext context) {
-    bool autoClickAnimation =
-        Provider.of<ClickerBrain>(context).autoClickAnimation;
-
-    if (autoClickAnimation == true) {
+    if (Provider.of<ClickerBrain>(context).autoClickAnimation == true) {
       controller.repeat();
     }
 
@@ -47,16 +44,43 @@ class _ClickerScreenState extends State<ClickerScreen>
           Expanded(
             child: MoneyDisplay(),
           ),
-          ListView(
-            shrinkWrap: true,
-            children: [
-              Visibility(
-                visible:
-                    Provider.of<ClickerBrain>(context).isAutoClickVisible(),
-                child: AutoclickRow(controller),
-              ),
-              ClickRow(),
-            ],
+          Consumer<ClickerBrain>(
+            builder: (context, clickerBrain, child) {
+              return ListView(
+                shrinkWrap: true,
+                children: [
+                  Visibility(
+                    visible: clickerBrain.isAutoClickVisible(),
+                    child: ReusableProgressRow(
+                      animation: animation,
+                      title:
+                          '${Provider.of<ClickerBrain>(context).autoClickNumber.toString()}  x  AutoClicker',
+                      onUpgradeTap: () {
+                        Provider.of<ClickerBrain>(context, listen: false)
+                            .buyAutoClicker();
+                      },
+                      upgradeCost:
+                          clickerBrain.autoClickCost.toStringAsFixed(1),
+                    ),
+                  ),
+                  Visibility(
+                    visible: clickerBrain.isAutoClickVisible(),
+                    child: ReusableProgressRow(
+                      animation: animation,
+                      title:
+                          '${clickerBrain.autoClickNumber.toString()}  x  AutoClicker',
+                      onUpgradeTap: () {
+                        Provider.of<ClickerBrain>(context, listen: false)
+                            .buyAutoClicker();
+                      },
+                      upgradeCost:
+                          clickerBrain.autoClickCost.toStringAsFixed(1),
+                    ),
+                  ),
+                  ClickRow(),
+                ],
+              );
+            },
           ),
         ],
       ),

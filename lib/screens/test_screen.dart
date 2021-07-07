@@ -1,9 +1,8 @@
 import 'package:clicker/components/click_row.dart';
 import 'package:clicker/logic/clicker_brain.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
-import 'package:clicker/components/autoclick_row.dart';
+import 'package:clicker/components/reusable_progress_row.dart';
 import 'package:provider/provider.dart';
 
 class TestScreen extends StatefulWidget {
@@ -11,28 +10,29 @@ class TestScreen extends StatefulWidget {
   _TestScreenState createState() => _TestScreenState();
 }
 
-class _TestScreenState extends State<TestScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController controller = AnimationController(
+class _TestScreenState extends State<TestScreen> with TickerProviderStateMixin {
+  late final AnimationController autoClickController = AnimationController(
     duration: Duration(seconds: 3),
     vsync: this,
   );
-  late final Animation<double> animation = CurvedAnimation(
-    parent: controller,
+  late final Animation<double> autoClickAnimation = CurvedAnimation(
+    parent: autoClickController,
     curve: Curves.linear,
+  );
+
+  late final AnimationController expandController = AnimationController(
+    duration: Duration(seconds: 2),
+    vsync: this,
   );
 
   @override
   void dispose() {
     super.dispose();
-    controller.dispose();
+    autoClickController.dispose();
   }
-
-  int flexExpand = 0;
 
   @override
   Widget build(BuildContext context) {
-    flexExpand = (controller.value * 100).round();
     return Scaffold(
       appBar: AppBar(
         title: Text('Clicker 1231231231'),
@@ -43,8 +43,8 @@ class _TestScreenState extends State<TestScreen>
           Expanded(
             child: GestureDetector(
               onTap: () {
-                controller.forward();
-                controller.addListener(() {
+                expandController.forward();
+                expandController.addListener(() {
                   setState(() {});
                 });
               },
@@ -54,25 +54,36 @@ class _TestScreenState extends State<TestScreen>
             ),
           ),
           Expanded(
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 400,
-                  child: Container(
-                    color: Colors.blue,
-                  ),
-                ),
-                Expanded(
-                  flex: flexExpand,
-                  child: Container(
-                    color: Colors.green,
-                  ),
-                ),
-              ],
-            ),
+            child: ExpandableRow((expandController.value * 100).round()),
           ),
         ],
       ),
+    );
+  }
+}
+
+class ExpandableRow extends StatelessWidget {
+  ExpandableRow(this.flexExpand);
+
+  final int flexExpand;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 400,
+          child: Container(
+            color: Colors.blue,
+          ),
+        ),
+        Expanded(
+          flex: flexExpand,
+          child: Container(
+            color: Colors.green,
+          ),
+        ),
+      ],
     );
   }
 }
