@@ -25,7 +25,7 @@ class MoneyDisplay extends StatelessWidget {
           child: Center(
             child: Text(
               NumberFormat.compact()
-                      .format(Provider.of<ClickerBrain>(context).money) +
+                      .format(Provider.of<ClickerBrain>(context).getMoney()) +
                   ' \$',
               style: TextStyle(fontSize: 30.0),
             ),

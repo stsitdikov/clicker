@@ -39,7 +39,7 @@ class ClickRow extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Provider.of<ClickerBrain>(context, listen: false)
-                      .clickUpgradeCost();
+                      .clickUpgrade();
                 },
                 child: UpgradeContainer(
                   NumberFormat.compact().format(

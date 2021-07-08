@@ -1,76 +1,69 @@
 import 'dart:async';
+import 'package:clicker/logic/autoclick_logic.dart';
+import 'package:clicker/logic/click_row_logic.dart';
+import 'package:clicker/logic/money_logic.dart';
 import 'package:flutter/material.dart';
 
 class ClickerBrain extends ChangeNotifier {
-  // main
-  double money = 0.0;
-  double mainIncrement = 1.2;
-  double upgradeClickCost = 5;
+  MoneyLogic moneyLogic;
+  ClickRowLogic clickRowLogic;
+  AutoClickLogic autoClickLogic;
+
+  ClickerBrain(this.moneyLogic, this.clickRowLogic, this.autoClickLogic);
+
+  double getMoney() {
+    return moneyLogic.money;
+  }
 
   // click row
-  double clickAmount = 300.0;
-  bool clickUpgradeVisible = false;
 
   void clickIncreaseMoney() {
-    money = money + clickAmount;
+    moneyLogic.clickIncreaseMoney(clickRowLogic.clickAmount);
     notifyListeners();
   }
 
-  void clickUpgradeCost() {
-    if (money >= upgradeClickCost) {
-      money = money - upgradeClickCost;
-      upgradeClickCost = upgradeClickCost * mainIncrement;
-      clickAmount = clickAmount * mainIncrement;
+  void clickUpgrade() {
+    if (moneyLogic.canUpgradeClick(clickRowLogic.upgradeClickCost)) {
+      moneyLogic.decreaseMoney(clickRowLogic.upgradeClickCost);
+      clickRowLogic.clickCostIncrease(moneyLogic.mainIncrement);
+      clickRowLogic.upgradeClickAmount(moneyLogic.mainIncrement);
       notifyListeners();
     }
   }
 
   bool isClickUpgradeVisible() {
-    if (clickUpgradeVisible == false && money >= upgradeClickCost) {
-      clickUpgradeVisible = true;
-    }
-    return clickUpgradeVisible;
+    return clickRowLogic.isClickUpgradeVisible(moneyLogic.money);
   }
 
   // autoclicker
-  bool autoClickVisible = false;
-  bool autoClickAnimation = false;
-  int startAutoClickAnimation = 0;
-  double moneyToShowAutoClick = 10;
-  int autoClickIncrement = 1;
-  double autoClickCost = 10;
-  double autoClickCostOne = 0;
-  int autoClickNumber = 0;
-  Duration autoClickerDuration = Duration(seconds: 3);
 
   void buyAutoClicker() {
-    if (money >= autoClickCost) {
-      money = money - autoClickCost;
-      autoClickCost = autoClickCost * mainIncrement;
-      autoClickNumber = autoClickNumber + autoClickIncrement;
-      startAutoClickAnimation++;
+    if (moneyLogic.canUpgradeAutoClick(autoClickLogic.autoClickCost)) {
+      moneyLogic.decreaseMoney(autoClickLogic.autoClickCost);
+      autoClickLogic.autoClickCostIncrease(moneyLogic.mainIncrement);
+      autoClickLogic.autoClickNumberIncrease();
       notifyListeners();
-      if (startAutoClickAnimation == 1) {
-        autoClicker();
+      if (autoClickLogic.shouldStartAutoClickAnimation()) {
+        timer(
+            duration: autoClickLogic.autoClickerDuration,
+            action: () => moneyLogic.autoClickIncreaseMoney(
+                autoClickLogic.autoClickNumber, clickRowLogic.clickAmount));
       }
     }
   }
 
-  void autoClicker() {
+  void timer({duration, action}) {
     Timer.periodic(
-      autoClickerDuration,
+      duration,
       (timer) {
-        money = money + autoClickNumber * clickAmount;
+        action;
         notifyListeners();
       },
     );
   }
 
   bool isAutoClickVisible() {
-    if (autoClickVisible == false && money >= moneyToShowAutoClick) {
-      autoClickVisible = true;
-    }
-    return autoClickVisible;
+    return autoClickLogic.isAutoClickVisible(moneyLogic.canUpgradeAutoclick);
   }
 
   void changeAutoClickIncrement() {
