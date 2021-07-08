@@ -50,7 +50,7 @@ class _ClickerScreenState extends State<ClickerScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (Provider.of<ClickerBrain>(context).autoClickAnimation == true) {
+    if (Provider.of<ClickerBrain>(context).startAutoClickAnimation == 1) {
       autoClickController.repeat();
     }
 

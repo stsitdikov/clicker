@@ -35,35 +35,35 @@ class ClickerBrain extends ChangeNotifier {
   // autoclicker
   bool autoClickVisible = false;
   bool autoClickAnimation = false;
+  int startAutoClickAnimation = 0;
   double moneyToShowAutoClick = 10;
   int autoClickIncrement = 1;
   double autoClickCost = 10;
+  double autoClickCostOne = 0;
   int autoClickNumber = 0;
   Duration autoClickerDuration = Duration(seconds: 3);
 
   void buyAutoClicker() {
-    if (money >= autoClickCost * autoClickIncrement) {
-      money = money - autoClickCost * autoClickIncrement;
-      autoClickCost = autoClickCost * mainIncrement * autoClickIncrement;
-      autoClickNumber = autoClickNumber + autoClickNumber * autoClickIncrement;
+    if (money >= autoClickCost) {
+      money = money - autoClickCost;
+      autoClickCost = autoClickCost * mainIncrement;
+      autoClickNumber = autoClickNumber + autoClickIncrement;
+      startAutoClickAnimation++;
       notifyListeners();
-      if (autoClickNumber == 1) {
+      if (startAutoClickAnimation == 1) {
         autoClicker();
-        autoClickAnimation = true;
       }
     }
   }
 
   void autoClicker() {
-    if (autoClickNumber > 0) {
-      Timer.periodic(
-        autoClickerDuration,
-        (timer) {
-          money = money + autoClickNumber * clickAmount;
-          notifyListeners();
-        },
-      );
-    }
+    Timer.periodic(
+      autoClickerDuration,
+      (timer) {
+        money = money + autoClickNumber * clickAmount;
+        notifyListeners();
+      },
+    );
   }
 
   bool isAutoClickVisible() {
@@ -74,19 +74,28 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void changeAutoClickIncrement() {
-    if (autoClickIncrement == 1) {
-      autoClickIncrement = 10;
-    }
-    if (autoClickIncrement == 10) {
-      autoClickIncrement = 100;
-    } else {
-      autoClickIncrement = 1;
-    }
+    updateAutoClickIncrement();
     notifyListeners();
   }
 
-  void get autoClickCost() {
+  void updateAutoClickIncrement() {
+    if (autoClickIncrement == 1) {
+      autoClickIncrement = 10;
+      autoClickCostOne = autoClickCost;
+      updateAutoClickCost();
+    } else if (autoClickIncrement == 10) {
+      autoClickIncrement = 100;
+      updateAutoClickCost();
+    } else if (autoClickIncrement == 100) {
+      autoClickIncrement = 1;
+      autoClickCost = autoClickCostOne;
+    }
+  }
 
+  void updateAutoClickCost() {
+    for (var i = autoClickIncrement; i > 0; i--) {
+      autoClickCost = autoClickCost * mainIncrement;
+    }
   }
 
   // worker

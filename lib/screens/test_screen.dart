@@ -35,7 +35,7 @@ class _TestScreenState extends State<TestScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clicker 1231231231'),
+        title: Text('Clicker'),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
