@@ -1,7 +1,6 @@
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 class MoneyDisplay extends StatelessWidget {
   @override
@@ -24,9 +23,7 @@ class MoneyDisplay extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              NumberFormat.compact()
-                      .format(Provider.of<ClickerBrain>(context).getMoney()) +
-                  ' \$',
+              Provider.of<ClickerBrain>(context).getMoney() + ' \$',
               style: TextStyle(fontSize: 30.0),
             ),
           ),

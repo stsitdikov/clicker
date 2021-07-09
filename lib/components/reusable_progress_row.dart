@@ -1,4 +1,3 @@
-import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/custom_widgets/upgrade_container.dart';
 import 'package:clicker/logic/constants.dart';

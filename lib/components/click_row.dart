@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:clicker/custom_widgets/upgrade_container.dart';
 import 'package:clicker/logic/constants.dart';
-import 'package:intl/intl.dart';
 
 class ClickRow extends StatelessWidget {
   @override
@@ -26,7 +25,7 @@ class ClickRow extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Click (${NumberFormat.compact().format(Provider.of<ClickerBrain>(context).clickAmount)} \$)',
+                    'Click (${Provider.of<ClickerBrain>(context).getClickAmount()} \$)',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ),
@@ -42,8 +41,7 @@ class ClickRow extends StatelessWidget {
                       .clickUpgrade();
                 },
                 child: UpgradeContainer(
-                  NumberFormat.compact().format(
-                      Provider.of<ClickerBrain>(context).upgradeClickCost),
+                  Provider.of<ClickerBrain>(context).getUpgradeClickCost(),
                   Border(
                     top: BorderSide(color: kBorderColor),
                     right: BorderSide(color: kBorderColor),

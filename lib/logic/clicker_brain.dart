@@ -1,21 +1,35 @@
 import 'dart:async';
 import 'package:clicker/logic/autoclick_logic.dart';
 import 'package:clicker/logic/click_row_logic.dart';
+import 'package:clicker/logic/manager_logic.dart';
 import 'package:clicker/logic/money_logic.dart';
+import 'package:clicker/logic/worker_logic.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ClickerBrain extends ChangeNotifier {
   MoneyLogic moneyLogic;
   ClickRowLogic clickRowLogic;
   AutoClickLogic autoClickLogic;
+  WorkerLogic workerLogic;
+  ManagerLogic managerLogic;
 
-  ClickerBrain(this.moneyLogic, this.clickRowLogic, this.autoClickLogic);
+  ClickerBrain(this.moneyLogic, this.clickRowLogic, this.autoClickLogic,
+      this.workerLogic, this.managerLogic);
 
-  double getMoney() {
-    return moneyLogic.money;
+  String getMoney() {
+    return NumberFormat.compact().format(moneyLogic.money);
   }
 
   // click row
+
+  String getClickAmount() {
+    return NumberFormat.compact().format(clickRowLogic.clickAmount);
+  }
+
+  String getUpgradeClickCost() {
+    return NumberFormat.compact().format(clickRowLogic.upgradeClickCost);
+  }
 
   void clickIncreaseMoney() {
     moneyLogic.clickIncreaseMoney(clickRowLogic.clickAmount);
@@ -37,138 +51,161 @@ class ClickerBrain extends ChangeNotifier {
 
   // autoclicker
 
+  String getAutoClickNumber() {
+    return NumberFormat.compact().format(autoClickLogic.autoClickNumber);
+  }
+
+  String getAutoClickCost() {
+    return NumberFormat.compact().format(autoClickLogic.autoClickCost);
+  }
+
+  String getAutoClickIncrement() {
+    return autoClickLogic.autoClickIncrement.toString();
+  }
+
+  Duration getAutoClickDuration() {
+    return autoClickLogic.autoClickerDuration;
+  }
+
+  bool shouldStartAutoClickAnimation() {
+    return autoClickLogic.shouldStartAutoClickAnimation();
+  }
+
   void buyAutoClicker() {
     if (moneyLogic.canUpgradeAutoClick(autoClickLogic.autoClickCost)) {
       moneyLogic.decreaseMoney(autoClickLogic.autoClickCost);
       autoClickLogic.autoClickCostIncrease(moneyLogic.mainIncrement);
-      autoClickLogic.autoClickNumberIncrease();
+      autoClickLogic.autoClickNumberIncrease(0);
       notifyListeners();
-      if (autoClickLogic.shouldStartAutoClickAnimation()) {
-        timer(
-            duration: autoClickLogic.autoClickerDuration,
-            action: () => moneyLogic.autoClickIncreaseMoney(
-                autoClickLogic.autoClickNumber, clickRowLogic.clickAmount));
+      if (shouldStartAutoClickAnimation()) {
+        autoClickTimer();
       }
     }
   }
 
-  void timer({duration, action}) {
+  void autoClickTimer() {
     Timer.periodic(
-      duration,
+      autoClickLogic.autoClickerDuration,
       (timer) {
-        action;
+        moneyLogic.autoClickIncreaseMoney(
+            autoClickLogic.autoClickNumber, clickRowLogic.clickAmount);
         notifyListeners();
       },
     );
   }
 
   bool isAutoClickVisible() {
-    return autoClickLogic.isAutoClickVisible(moneyLogic.canUpgradeAutoclick);
+    return autoClickLogic.isAutoClickVisible(moneyLogic.money);
   }
 
   void changeAutoClickIncrement() {
-    updateAutoClickIncrement();
+    autoClickLogic.updateAutoClickIncrement(moneyLogic.mainIncrement);
     notifyListeners();
   }
 
-  void updateAutoClickIncrement() {
-    if (autoClickIncrement == 1) {
-      autoClickIncrement = 10;
-      autoClickCostOne = autoClickCost;
-      updateAutoClickCost();
-    } else if (autoClickIncrement == 10) {
-      autoClickIncrement = 100;
-      updateAutoClickCost();
-    } else if (autoClickIncrement == 100) {
-      autoClickIncrement = 1;
-      autoClickCost = autoClickCostOne;
-    }
-  }
-
-  void updateAutoClickCost() {
-    for (var i = autoClickIncrement; i > 0; i--) {
-      autoClickCost = autoClickCost * mainIncrement;
-    }
-  }
-
   // worker
-  bool workerVisible = false;
-  bool workerAnimation = false;
-  double autoClickNumberToShowWorker = 5;
-  double workerCost = 10;
-  int workerNumber = 0;
-  Duration workerDuration = Duration(seconds: 10);
+
+  String getWorkerNumber() {
+    return NumberFormat.compact().format(workerLogic.workerNumber);
+  }
+
+  String getWorkerCost() {
+    return NumberFormat.compact().format(workerLogic.workerCost);
+  }
+
+  String getWorkerIncrement() {
+    return workerLogic.workerIncrement.toString();
+  }
+
+  Duration getWorkerDuration() {
+    return workerLogic.workerDuration;
+  }
+
+  bool shouldStartWorkerAnimation() {
+    return workerLogic.shouldStartWorkerAnimation();
+  }
 
   void buyWorker() {
-    if (money >= workerCost) {
-      money = money - workerCost;
-      workerCost = workerCost * mainIncrement;
-      workerNumber++;
+    if (moneyLogic.canUpgradeWorker(workerLogic.workerCost)) {
+      moneyLogic.decreaseMoney(workerLogic.workerCost);
+      workerLogic.workerCostIncrease(moneyLogic.mainIncrement);
+      workerLogic.workerNumberIncrease(0);
       notifyListeners();
-      if (workerNumber == 1) {
-        worker();
-        workerAnimation = true;
+      if (shouldStartWorkerAnimation()) {
+        workerTimer();
       }
     }
   }
 
-  void worker() {
-    if (workerNumber > 0) {
-      Timer.periodic(
-        workerDuration,
-        (timer) {
-          autoClickNumber = autoClickNumber + workerNumber;
-          notifyListeners();
-        },
-      );
-    }
+  void workerTimer() {
+    Timer.periodic(
+      workerLogic.workerDuration,
+      (timer) {
+        autoClickLogic.autoClickNumberIncrease(workerLogic.workerNumber);
+        notifyListeners();
+      },
+    );
   }
 
   bool isWorkerVisible() {
-    if (workerVisible == false &&
-        autoClickNumber >= autoClickNumberToShowWorker) {
-      workerVisible = true;
-    }
-    return workerVisible;
+    return workerLogic.isWorkerVisible(autoClickLogic.autoClickNumber);
   }
 
-  // worker
-  bool managerVisible = false;
-  bool managerAnimation = false;
-  double workerNumberToShowManager = 5;
-  double managerCost = 10;
-  int managerNumber = 0;
-  Duration managerDuration = Duration(seconds: 30);
+  void changeWorkerIncrement() {
+    workerLogic.updateWorkerIncrement(moneyLogic.mainIncrement);
+    notifyListeners();
+  }
+
+  // manager
+
+  String getManagerNumber() {
+    return NumberFormat.compact().format(managerLogic.managerNumber);
+  }
+
+  String getManagerCost() {
+    return NumberFormat.compact().format(managerLogic.managerCost);
+  }
+
+  String getManagerIncrement() {
+    return managerLogic.managerIncrement.toString();
+  }
+
+  Duration getManagerDuration() {
+    return managerLogic.managerDuration;
+  }
+
+  bool shouldStartManagerAnimation() {
+    return managerLogic.shouldStartManagerAnimation();
+  }
 
   void buyManager() {
-    if (money >= managerCost) {
-      money = money - managerCost;
-      managerCost = managerCost * mainIncrement;
-      managerNumber++;
+    if (moneyLogic.canUpgradeManager(managerLogic.managerCost)) {
+      moneyLogic.decreaseMoney(managerLogic.managerCost);
+      managerLogic.managerCostIncrease(moneyLogic.mainIncrement);
+      managerLogic.managerNumberIncrease();
       notifyListeners();
-      if (managerNumber == 1) {
-        manager();
-        managerAnimation = true;
+      if (shouldStartManagerAnimation()) {
+        managerTimer();
       }
     }
   }
 
-  void manager() {
-    if (managerNumber > 0) {
-      Timer.periodic(
-        managerDuration,
-        (timer) {
-          workerNumber = workerNumber + managerNumber;
-          notifyListeners();
-        },
-      );
-    }
+  void managerTimer() {
+    Timer.periodic(
+      managerLogic.managerDuration,
+      (timer) {
+        workerLogic.workerNumberIncrease(managerLogic.managerNumber);
+        notifyListeners();
+      },
+    );
   }
 
   bool isManagerVisible() {
-    if (managerVisible == false && workerNumber >= workerNumberToShowManager) {
-      managerVisible = true;
-    }
-    return managerVisible;
+    return managerLogic.isManagerVisible(workerLogic.workerNumber);
+  }
+
+  void changeManagerIncrement() {
+    managerLogic.updateManagerIncrement(moneyLogic.mainIncrement);
+    notifyListeners();
   }
 }

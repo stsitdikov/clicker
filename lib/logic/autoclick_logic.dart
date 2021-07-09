@@ -1,5 +1,3 @@
-import 'dart:async';
-
 class AutoClickLogic {
   bool autoClickVisible = false;
   bool autoClickAnimation = false;
@@ -7,26 +5,48 @@ class AutoClickLogic {
   int autoClickIncrement = 1;
   double autoClickCost = 10;
   double autoClickCostOne = 0;
-  int autoClickNumber = 0;
+  num autoClickNumber = 0;
   Duration autoClickerDuration = Duration(seconds: 3);
+
+  double moneyToShowAutoClick = 10;
 
   void autoClickCostIncrease(mainIncrement) {
     autoClickCost = autoClickCost * mainIncrement;
   }
 
-  void autoClickNumberIncrease() {
-    autoClickNumber = autoClickNumber + autoClickIncrement;
+  void autoClickNumberIncrease(workerNumber) {
+    autoClickNumber = autoClickNumber + autoClickIncrement + workerNumber;
+    startAutoClickAnimation++;
   }
 
   bool shouldStartAutoClickAnimation() {
-    startAutoClickAnimation++;
     return startAutoClickAnimation == 1;
   }
 
-  bool isAutoClickVisible(canUpgradeAutoclick) {
-    if (autoClickVisible == false && canUpgradeAutoclick) {
+  bool isAutoClickVisible(money) {
+    if (autoClickVisible == false && money >= moneyToShowAutoClick) {
       autoClickVisible = true;
     }
     return autoClickVisible;
+  }
+
+  void updateAutoClickIncrement(mainIncrement) {
+    if (autoClickIncrement == 1) {
+      autoClickIncrement = 10;
+      autoClickCostOne = autoClickCost;
+      incrementalAutoClickCost(mainIncrement);
+    } else if (autoClickIncrement == 10) {
+      autoClickIncrement = 100;
+      incrementalAutoClickCost(mainIncrement);
+    } else if (autoClickIncrement == 100) {
+      autoClickIncrement = 1;
+      autoClickCost = autoClickCostOne;
+    }
+  }
+
+  void incrementalAutoClickCost(mainIncrement) {
+    for (var i = autoClickIncrement; i > 0; i--) {
+      autoClickCost = autoClickCost * mainIncrement;
+    }
   }
 }
