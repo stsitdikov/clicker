@@ -37,6 +37,7 @@ class AutoClickLogic {
       incrementalAutoClickCost(mainIncrement);
     } else if (autoClickIncrement == 10) {
       autoClickIncrement = 100;
+      autoClickCost = autoClickCostOne;
       incrementalAutoClickCost(mainIncrement);
     } else if (autoClickIncrement == 100) {
       autoClickIncrement = 1;

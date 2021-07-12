@@ -37,6 +37,7 @@ class WorkerLogic {
       incrementalWorkerCost(mainIncrement);
     } else if (workerIncrement == 10) {
       workerIncrement = 100;
+      workerCost = workerCostOne;
       incrementalWorkerCost(mainIncrement);
     } else if (workerIncrement == 100) {
       workerIncrement = 1;

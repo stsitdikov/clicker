@@ -5,9 +5,7 @@ import 'package:clicker/components/worker_row.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
-import 'package:clicker/components/reusable_progress_row.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 class ClickerScreen extends StatefulWidget {
   @override

@@ -36,6 +36,7 @@ class ManagerLogic {
       incrementalManagerCost(mainIncrement);
     } else if (managerIncrement == 10) {
       managerIncrement = 100;
+      managerCost = managerCostOne;
       incrementalManagerCost(mainIncrement);
     } else if (managerIncrement == 100) {
       managerIncrement = 1;
