@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class WorkerLogic {
   bool workerVisible = false;
   int startWorkerAnimation = 0;
@@ -10,7 +12,8 @@ class WorkerLogic {
   double autoClickNumberToShowWorker = 5;
 
   void workerCostIncrease(mainIncrement) {
-    workerCost = workerCost * mainIncrement;
+    workerCost = workerCostOne;
+    incrementalWorkerCost(mainIncrement);
   }
 
   void workerNumberIncrease(managerNumber) {
@@ -46,8 +49,12 @@ class WorkerLogic {
   }
 
   void incrementalWorkerCost(mainIncrement) {
-    for (var i = workerIncrement; i > 0; i--) {
-      workerCost = workerCost * mainIncrement;
+    for (var i = 1; i < workerIncrement; i++) {
+      workerCost = workerCost + workerCostOne * pow(mainIncrement, i);
     }
+  }
+
+  void updateWorkerCostOne(mainIncrement) {
+    workerCostOne = workerCostOne * pow(mainIncrement, workerIncrement);
   }
 }

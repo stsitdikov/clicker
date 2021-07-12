@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class AutoClickLogic {
   bool autoClickVisible = false;
   bool autoClickAnimation = false;
@@ -11,7 +13,8 @@ class AutoClickLogic {
   double moneyToShowAutoClick = 10;
 
   void autoClickCostIncrease(mainIncrement) {
-    autoClickCost = autoClickCost * mainIncrement;
+    autoClickCost = autoClickCostOne;
+    incrementalAutoClickCost(mainIncrement);
   }
 
   void autoClickNumberIncrease(workerNumber) {
@@ -46,8 +49,13 @@ class AutoClickLogic {
   }
 
   void incrementalAutoClickCost(mainIncrement) {
-    for (var i = autoClickIncrement; i > 0; i--) {
-      autoClickCost = autoClickCost * mainIncrement;
+    for (var i = 1; i < autoClickIncrement; i++) {
+      autoClickCost = autoClickCost + autoClickCostOne * pow(mainIncrement, i);
     }
+  }
+
+  void updateAutoClickCostOne(mainIncrement) {
+    autoClickCostOne =
+        autoClickCostOne * pow(mainIncrement, autoClickIncrement);
   }
 }

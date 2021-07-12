@@ -49,6 +49,10 @@ class ClickerBrain extends ChangeNotifier {
     return clickRowLogic.isClickUpgradeVisible(moneyLogic.money);
   }
 
+  // bool isClickIncrementVisible() {
+  //   return clickRowLogic.
+  // }
+
   // autoclicker
 
   String getAutoClickNumber() {
@@ -74,6 +78,7 @@ class ClickerBrain extends ChangeNotifier {
   void buyAutoClicker() {
     if (moneyLogic.canUpgradeAutoClick(autoClickLogic.autoClickCost)) {
       moneyLogic.decreaseMoney(autoClickLogic.autoClickCost);
+      autoClickLogic.updateAutoClickCostOne(moneyLogic.mainIncrement);
       autoClickLogic.autoClickCostIncrease(moneyLogic.mainIncrement);
       autoClickLogic.autoClickNumberIncrease(0);
       notifyListeners();
@@ -128,6 +133,7 @@ class ClickerBrain extends ChangeNotifier {
   void buyWorker() {
     if (moneyLogic.canUpgradeWorker(workerLogic.workerCost)) {
       moneyLogic.decreaseMoney(workerLogic.workerCost);
+      workerLogic.updateWorkerCostOne(moneyLogic.mainIncrement);
       workerLogic.workerCostIncrease(moneyLogic.mainIncrement);
       workerLogic.workerNumberIncrease(0);
       notifyListeners();
