@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class ManagerLogic {
   bool managerVisible = false;
   int startManagerAnimation = 0;
@@ -10,7 +12,8 @@ class ManagerLogic {
   double workerNumberToShowManager = 5;
 
   void managerCostIncrease(mainIncrement) {
-    managerCost = managerCost * mainIncrement;
+    managerCost = managerCostOne;
+    incrementalManagerCost(mainIncrement);
   }
 
   void managerNumberIncrease() {
@@ -45,8 +48,12 @@ class ManagerLogic {
   }
 
   void incrementalManagerCost(mainIncrement) {
-    for (var i = managerIncrement; i > 0; i--) {
-      managerCost = managerCost * mainIncrement;
+    for (var i = 1; i < managerIncrement; i++) {
+      managerCost = managerCost + managerCostOne * pow(mainIncrement, i);
     }
+  }
+
+  void updateManagerCostOne(mainIncrement) {
+    managerCostOne = managerCostOne * pow(mainIncrement, managerIncrement);
   }
 }

@@ -187,6 +187,7 @@ class ClickerBrain extends ChangeNotifier {
   void buyManager() {
     if (moneyLogic.canUpgradeManager(managerLogic.managerCost)) {
       moneyLogic.decreaseMoney(managerLogic.managerCost);
+      managerLogic.updateManagerCostOne(moneyLogic.mainIncrement);
       managerLogic.managerCostIncrease(moneyLogic.mainIncrement);
       managerLogic.managerNumberIncrease();
       notifyListeners();
