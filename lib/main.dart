@@ -8,8 +8,14 @@ import 'package:flutter/material.dart';
 import 'screens/clicker_screen.dart';
 import 'package:provider/provider.dart';
 import 'logic/clicker_brain.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+void main() async {
+  final appDocumentDir = await getApplicationDocumentsDirectory();
+  String appDocumentPath = appDocumentDir.path;
+  await Hive.initFlutter();
   runApp(MyApp());
 }
 
