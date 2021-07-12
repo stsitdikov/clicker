@@ -6,7 +6,7 @@ class AutoClickLogic {
   int startAutoClickAnimation = 0;
   int autoClickIncrement = 1;
   double autoClickCost = 10;
-  double autoClickCostOne = 0;
+  double autoClickCostOne = 10;
   num autoClickNumber = 0;
   Duration autoClickerDuration = Duration(seconds: 3);
 

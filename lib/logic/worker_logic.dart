@@ -4,7 +4,7 @@ class WorkerLogic {
   bool workerVisible = false;
   int startWorkerAnimation = 0;
   double workerCost = 10;
-  double workerCostOne = 0;
+  double workerCostOne = 10;
   num workerNumber = 0;
   int workerIncrement = 1;
   Duration workerDuration = Duration(seconds: 10);

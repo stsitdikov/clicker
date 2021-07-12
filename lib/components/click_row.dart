@@ -12,7 +12,7 @@ class ClickRow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            flex: 4,
+            flex: 3,
             child: GestureDetector(
               onTap: () {
                 Provider.of<ClickerBrain>(context, listen: false)
@@ -27,6 +27,30 @@ class ClickRow extends StatelessWidget {
                   child: Text(
                     'Click (${Provider.of<ClickerBrain>(context).getClickAmount()} \$)',
                     style: TextStyle(fontSize: 20.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: Provider.of<ClickerBrain>(context).isClickUpgradeVisible(),
+            child: Expanded(
+              child: GestureDetector(
+                onTap: () => Provider.of<ClickerBrain>(context, listen: false)
+                    .changeClickIncrement(),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    border: Border(
+                      top: BorderSide(color: kBorderColor),
+                      right: BorderSide(color: kBorderColor),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'x ${Provider.of<ClickerBrain>(context).getClickIncrement()}',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
                   ),
                 ),
               ),

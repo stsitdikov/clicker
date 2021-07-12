@@ -28,7 +28,11 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   String getUpgradeClickCost() {
-    return NumberFormat.compact().format(clickRowLogic.upgradeClickCost);
+    return NumberFormat.compact().format(clickRowLogic.clickCost);
+  }
+
+  String getClickIncrement() {
+    return clickRowLogic.clickIncrement.toString();
   }
 
   void clickIncreaseMoney() {
@@ -37,8 +41,9 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void clickUpgrade() {
-    if (moneyLogic.canUpgradeClick(clickRowLogic.upgradeClickCost)) {
-      moneyLogic.decreaseMoney(clickRowLogic.upgradeClickCost);
+    if (moneyLogic.canUpgradeClick(clickRowLogic.clickCost)) {
+      moneyLogic.decreaseMoney(clickRowLogic.clickCost);
+      clickRowLogic.updateClickCostOne(moneyLogic.mainIncrement);
       clickRowLogic.clickCostIncrease(moneyLogic.mainIncrement);
       clickRowLogic.upgradeClickAmount(moneyLogic.mainIncrement);
       notifyListeners();
@@ -49,9 +54,10 @@ class ClickerBrain extends ChangeNotifier {
     return clickRowLogic.isClickUpgradeVisible(moneyLogic.money);
   }
 
-  // bool isClickIncrementVisible() {
-  //   return clickRowLogic.
-  // }
+  void changeClickIncrement() {
+    clickRowLogic.updateClickIncrement(moneyLogic.mainIncrement);
+    notifyListeners();
+  }
 
   // autoclicker
 

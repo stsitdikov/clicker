@@ -4,7 +4,7 @@ class ManagerLogic {
   bool managerVisible = false;
   int startManagerAnimation = 0;
   double managerCost = 10;
-  double managerCostOne = 0;
+  double managerCostOne = 10;
   double managerNumber = 0;
   int managerIncrement = 1;
   Duration managerDuration = Duration(seconds: 30);
