@@ -1,116 +1,50 @@
 import 'package:clicker/components/click_row.dart';
 import 'package:clicker/logic/clicker_brain.dart';
+import 'package:clicker/logic/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
 import 'package:clicker/components/reusable_progress_row.dart';
 import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class TestScreen extends StatefulWidget {
+  const TestScreen({Key? key}) : super(key: key);
+
   @override
   _TestScreenState createState() => _TestScreenState();
 }
 
-class _TestScreenState extends State<TestScreen> with TickerProviderStateMixin {
-  late final AnimationController autoClickController = AnimationController(
-    duration: Duration(seconds: 3),
-    vsync: this,
-  );
-  late final Animation<double> autoClickAnimation = CurvedAnimation(
-    parent: autoClickController,
-    curve: Curves.linear,
-  );
-
-  late final AnimationController expandController = AnimationController(
-    duration: Duration(seconds: 2),
-    vsync: this,
-  );
+class _TestScreenState extends State<TestScreen> {
+  late Box<double> box;
 
   @override
-  void dispose() {
-    super.dispose();
-    autoClickController.dispose();
+  void initState() {
+    super.initState();
+    box = Hive.box(kClickerBrainBox);
+  }
+
+  void click() async {
+    double newMoney = (box.get('money', defaultValue: 0)) as double;
+    newMoney = newMoney + 10;
+    box.put('money', newMoney);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clicker'),
+        title: Text('Hive Test'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                expandController.forward();
-                expandController.addListener(() {
-                  setState(() {});
-                });
-              },
-              child: Container(
-                color: Colors.blueGrey,
-              ),
-            ),
-          ),
-          Expanded(
-            child: ExpandableRow((expandController.value * 100).round()),
-          ),
-        ],
+      body: ValueListenableBuilder(
+        valueListenable: box.listenable(),
+        builder: (context, Box<double> box, _) {
+          return Center(
+            child: Text(box.get('money', defaultValue: 0).toString()),
+          );
+        },
       ),
-    );
-  }
-}
-
-class ExpandableRow extends StatelessWidget {
-  ExpandableRow(this.flexExpand);
-
-  final int flexExpand;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 400,
-          child: Container(
-            color: Colors.blue,
-          ),
-        ),
-        Expanded(
-          flex: flexExpand,
-          child: Container(
-            color: Colors.green,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class AnimatedStack extends StatelessWidget {
-  const AnimatedStack({
-    Key? key,
-    required this.animation,
-  }) : super(key: key);
-
-  final Animation<double> animation;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          color: Colors.lightGreen,
-        ),
-        SizeTransition(
-          sizeFactor: animation,
-          axis: Axis.horizontal,
-          child: Container(
-            color: Colors.black.withOpacity(0.5),
-          ),
-        ),
-      ],
+      floatingActionButton: FloatingActionButton(onPressed: click),
     );
   }
 }

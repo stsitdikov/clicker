@@ -1,5 +1,6 @@
 import 'package:clicker/logic/autoclick_logic.dart';
 import 'package:clicker/logic/click_row_logic.dart';
+import 'package:clicker/logic/constants.dart';
 import 'package:clicker/logic/manager_logic.dart';
 import 'package:clicker/logic/money_logic.dart';
 import 'package:clicker/logic/worker_logic.dart';
@@ -10,12 +11,10 @@ import 'package:provider/provider.dart';
 import 'logic/clicker_brain.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 void main() async {
-  final appDocumentDir = await getApplicationDocumentsDirectory();
-  String appDocumentPath = appDocumentDir.path;
   await Hive.initFlutter();
+  await Hive.openBox<double>(kClickerBrainBox);
   runApp(MyApp());
 }
 
@@ -27,7 +26,7 @@ class MyApp extends StatelessWidget {
           AutoClickLogic(), WorkerLogic(), ManagerLogic()),
       child: MaterialApp(
         // theme: ThemeData.dark(),
-        home: ClickerScreen(),
+        home: TestScreen(),
       ),
     );
   }
