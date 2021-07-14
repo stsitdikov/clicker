@@ -65,7 +65,7 @@ class ClickRow extends StatelessWidget {
                       .clickUpgrade();
                 },
                 child: UpgradeContainer(
-                  Provider.of<ClickerBrain>(context).getUpgradeClickCost(),
+                  Provider.of<ClickerBrain>(context).getClickCost(),
                   Border(
                     top: BorderSide(color: kBorderColor),
                     right: BorderSide(color: kBorderColor),

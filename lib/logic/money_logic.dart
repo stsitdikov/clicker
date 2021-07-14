@@ -1,32 +1,59 @@
-class MoneyLogic {
-  double money = 0.0;
-  double mainIncrement = 1.2;
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:clicker/logic/constants.dart';
 
-  void clickIncreaseMoney(clickAmount) {
-    money = money + clickAmount;
+double money = Hive.box<double>(kClickerBrainBox)
+    .get('money', defaultValue: kDefaultMoney) as double;
+
+double clickAmount = (Hive.box<double>(kClickerBrainBox)
+    .get('clickAmount', defaultValue: kDefaultClickAmount)) as double;
+
+double clickCost = (Hive.box<double>(kClickerBrainBox)
+    .get('clickCost', defaultValue: kDefaultClickCost)) as double;
+
+double autoClickCost = (Hive.box<double>(kClickerBrainBox)
+    .get('autoClickCost', defaultValue: kDefaultAutoClickCost)) as double;
+
+double autoClickNumber = (Hive.box<double>(kClickerBrainBox)
+    .get('autoClickNumber', defaultValue: kDefaultAutoClickNumber)) as double;
+
+double workerCost = (Hive.box<double>(kClickerBrainBox)
+    .get('workerCost', defaultValue: kDefaultWorkerCost)) as double;
+
+double managerCost = (Hive.box<double>(kClickerBrainBox)
+    .get('managerCost', defaultValue: kDefaultManagerCost)) as double;
+
+class MoneyLogic {
+  double newMoney = 0;
+
+  void clickIncreaseMoney() {
+    newMoney = money + clickAmount;
+    Hive.box<double>(kClickerBrainBox).put('money', newMoney);
   }
 
-  bool canUpgradeClick(upgradeClickCost) {
-    return money >= upgradeClickCost;
+  bool canUpgradeClick() {
+    return money >= clickCost;
   }
 
   void decreaseMoney(amount) {
-    money = money - amount;
+    newMoney = money - amount;
+
+    Hive.box<double>(kClickerBrainBox).put('money', newMoney);
   }
 
-  bool canUpgradeAutoClick(autoClickCost) {
+  bool canUpgradeAutoClick() {
     return money >= autoClickCost;
   }
 
-  void autoClickIncreaseMoney(autoClickNumber, clickAmount) {
+  void autoClickIncreaseMoney() {
     money = money + autoClickNumber * clickAmount;
   }
 
-  bool canUpgradeWorker(workerCost) {
+  bool canUpgradeWorker() {
     return money >= workerCost;
   }
 
-  bool canUpgradeManager(managerCost) {
+  bool canUpgradeManager() {
     return money >= managerCost;
   }
 }

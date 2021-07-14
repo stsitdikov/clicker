@@ -1,4 +1,5 @@
 import 'package:clicker/logic/clicker_brain.dart';
+import 'package:clicker/logic/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

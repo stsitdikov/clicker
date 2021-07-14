@@ -6,6 +6,9 @@ import 'package:clicker/logic/money_logic.dart';
 import 'package:clicker/logic/worker_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:clicker/logic/constants.dart';
 
 class ClickerBrain extends ChangeNotifier {
   MoneyLogic moneyLogic;
@@ -18,17 +21,20 @@ class ClickerBrain extends ChangeNotifier {
       this.workerLogic, this.managerLogic);
 
   String getMoney() {
-    return NumberFormat.compact().format(moneyLogic.money);
+    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
+        .get('money', defaultValue: kDefaultMoney));
   }
 
   // click row
 
   String getClickAmount() {
-    return NumberFormat.compact().format(clickRowLogic.clickAmount);
+    return NumberFormat.compact().format((Hive.box<double>(kClickerBrainBox)
+        .get('clickAmount', defaultValue: kDefaultClickAmount)));
   }
 
-  String getUpgradeClickCost() {
-    return NumberFormat.compact().format(clickRowLogic.clickCost);
+  String getClickCost() {
+    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
+        .get('clickCost', defaultValue: kDefaultClickCost));
   }
 
   String getClickIncrement() {
@@ -36,26 +42,27 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void clickIncreaseMoney() {
-    moneyLogic.clickIncreaseMoney(clickRowLogic.clickAmount);
+    moneyLogic.clickIncreaseMoney();
     notifyListeners();
   }
 
   void clickUpgrade() {
-    if (moneyLogic.canUpgradeClick(clickRowLogic.clickCost)) {
-      moneyLogic.decreaseMoney(clickRowLogic.clickCost);
-      clickRowLogic.updateClickCostOne(moneyLogic.mainIncrement);
-      clickRowLogic.clickCostIncrease(moneyLogic.mainIncrement);
-      clickRowLogic.upgradeClickAmount(moneyLogic.mainIncrement);
+    if (moneyLogic.canUpgradeClick()) {
+      moneyLogic.decreaseMoney(Hive.box<double>(kClickerBrainBox)
+          .get('clickCost', defaultValue: kDefaultClickCost));
+      clickRowLogic.updateClickCostOne();
+      clickRowLogic.clickCostIncrease();
+      clickRowLogic.upgradeClickAmount();
       notifyListeners();
     }
   }
 
   bool isClickUpgradeVisible() {
-    return clickRowLogic.isClickUpgradeVisible(moneyLogic.money);
+    return clickRowLogic.isClickUpgradeVisible();
   }
 
   void changeClickIncrement() {
-    clickRowLogic.updateClickIncrement(moneyLogic.mainIncrement);
+    clickRowLogic.updateClickIncrement();
     notifyListeners();
   }
 
@@ -82,10 +89,10 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void buyAutoClicker() {
-    if (moneyLogic.canUpgradeAutoClick(autoClickLogic.autoClickCost)) {
+    if (moneyLogic.canUpgradeAutoClick()) {
       moneyLogic.decreaseMoney(autoClickLogic.autoClickCost);
-      autoClickLogic.updateAutoClickCostOne(moneyLogic.mainIncrement);
-      autoClickLogic.autoClickCostIncrease(moneyLogic.mainIncrement);
+      autoClickLogic.updateAutoClickCostOne();
+      autoClickLogic.autoClickCostIncrease();
       autoClickLogic.autoClickNumberIncrease(0);
       notifyListeners();
       if (shouldStartAutoClickAnimation()) {
@@ -98,19 +105,18 @@ class ClickerBrain extends ChangeNotifier {
     Timer.periodic(
       autoClickLogic.autoClickerDuration,
       (timer) {
-        moneyLogic.autoClickIncreaseMoney(
-            autoClickLogic.autoClickNumber, clickRowLogic.clickAmount);
+        moneyLogic.autoClickIncreaseMoney();
         notifyListeners();
       },
     );
   }
 
   bool isAutoClickVisible() {
-    return autoClickLogic.isAutoClickVisible(moneyLogic.money);
+    return autoClickLogic.isAutoClickVisible(money);
   }
 
   void changeAutoClickIncrement() {
-    autoClickLogic.updateAutoClickIncrement(moneyLogic.mainIncrement);
+    autoClickLogic.updateAutoClickIncrement(mainIncrement);
     notifyListeners();
   }
 
@@ -137,10 +143,10 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void buyWorker() {
-    if (moneyLogic.canUpgradeWorker(workerLogic.workerCost)) {
+    if (moneyLogic.canUpgradeWorker()) {
       moneyLogic.decreaseMoney(workerLogic.workerCost);
-      workerLogic.updateWorkerCostOne(moneyLogic.mainIncrement);
-      workerLogic.workerCostIncrease(moneyLogic.mainIncrement);
+      workerLogic.updateWorkerCostOne(mainIncrement);
+      workerLogic.workerCostIncrease(mainIncrement);
       workerLogic.workerNumberIncrease(0);
       notifyListeners();
       if (shouldStartWorkerAnimation()) {
@@ -164,7 +170,7 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void changeWorkerIncrement() {
-    workerLogic.updateWorkerIncrement(moneyLogic.mainIncrement);
+    workerLogic.updateWorkerIncrement(mainIncrement);
     notifyListeners();
   }
 
@@ -191,10 +197,10 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void buyManager() {
-    if (moneyLogic.canUpgradeManager(managerLogic.managerCost)) {
+    if (moneyLogic.canUpgradeManager()) {
       moneyLogic.decreaseMoney(managerLogic.managerCost);
-      managerLogic.updateManagerCostOne(moneyLogic.mainIncrement);
-      managerLogic.managerCostIncrease(moneyLogic.mainIncrement);
+      managerLogic.updateManagerCostOne(mainIncrement);
+      managerLogic.managerCostIncrease(mainIncrement);
       managerLogic.managerNumberIncrease();
       notifyListeners();
       if (shouldStartManagerAnimation()) {
@@ -218,7 +224,7 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void changeManagerIncrement() {
-    managerLogic.updateManagerIncrement(moneyLogic.mainIncrement);
+    managerLogic.updateManagerIncrement(mainIncrement);
     notifyListeners();
   }
 }

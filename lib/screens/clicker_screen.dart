@@ -6,6 +6,9 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
 import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:clicker/logic/constants.dart';
 
 class ClickerScreen extends StatefulWidget {
   @override
@@ -47,6 +50,15 @@ class _ClickerScreenState extends State<ClickerScreen>
     autoClickController.dispose();
     workerController.dispose();
     managerController.dispose();
+  }
+
+  late Box<double> box;
+
+  @override
+  void initState() {
+    super.initState();
+    box = Hive.box(kClickerBrainBox);
+    box.put('mainIncrement', kMainIncrement);
   }
 
   @override
