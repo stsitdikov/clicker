@@ -4,6 +4,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
 
 class ClickRowLogic {
+  // getters
+
   double getClickAmount() {
     return (Hive.box<double>(kClickerBrainBox)
         .get('clickAmount', defaultValue: kDefaultClickAmount)) as double;
@@ -28,6 +30,8 @@ class ClickRowLogic {
     return (Hive.box<double>(kClickerBrainBox).get('clickUpgradeVisible',
         defaultValue: kDefaultClickUpgradeVisible)) as double;
   }
+
+  // functions
 
   void clickCostIncrease() {
     Hive.box<double>(kClickerBrainBox).put('clickCost', getClickCostOne());
@@ -72,7 +76,7 @@ class ClickRowLogic {
 
   void updateClickCostOne() {
     double clickCostOne =
-        getClickCostOne() * pow(kMainIncrement, getClickIncrement());
+        (getClickCostOne() * pow(kMainIncrement, getClickIncrement()));
     Hive.box<double>(kClickerBrainBox).put('clickCostOne', clickCostOne);
   }
 }

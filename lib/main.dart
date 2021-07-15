@@ -4,13 +4,13 @@ import 'package:clicker/logic/constants.dart';
 import 'package:clicker/logic/manager_logic.dart';
 import 'package:clicker/logic/money_logic.dart';
 import 'package:clicker/logic/worker_logic.dart';
-import 'package:clicker/screens/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'screens/clicker_screen.dart';
 import 'package:provider/provider.dart';
 import 'logic/clicker_brain.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'screens/test_screen.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           AutoClickLogic(), WorkerLogic(), ManagerLogic()),
       child: MaterialApp(
         // theme: ThemeData.dark(),
-        home: ClickerScreen(),
+        home: TestScreen(),
       ),
     );
   }

@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:clicker/logic/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:clicker/logic/constants.dart';
 
 class ManagerLogic {
   Duration managerDuration = Duration(seconds: 30);

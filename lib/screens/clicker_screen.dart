@@ -62,7 +62,7 @@ class _ClickerScreenState extends State<ClickerScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (Provider.of<ClickerBrain>(context).shouldStartAutoClickAnimation()) {
+    if (Provider.of<ClickerBrain>(context).shouldAnimateAutoClick()) {
       autoClickController.repeat();
     }
 
@@ -73,6 +73,8 @@ class _ClickerScreenState extends State<ClickerScreen>
     if (Provider.of<ClickerBrain>(context).shouldStartManagerAnimation()) {
       managerController.repeat();
     }
+
+    Provider.of<ClickerBrain>(context).initialAutoClickTimer();
 
     return Scaffold(
       appBar: AppBar(
@@ -91,7 +93,7 @@ class _ClickerScreenState extends State<ClickerScreen>
                 children: [
                   // ManagerRow(managerAnimation),
                   // WorkerRow(workerAnimation),
-                  // AutoClickRow(autoClickAnimation),
+                  AutoClickRow(autoClickAnimation),
                   ClickRow(),
                 ],
               );

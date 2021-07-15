@@ -21,7 +21,7 @@ class ClickerBrain extends ChangeNotifier {
       this.workerLogic, this.managerLogic);
 
   String getMoneyString() {
-    return NumberFormat.compact().format(moneyLogic.getMoney());
+    return NumberFormat.compact().format(getMoney());
   }
 
   double getMoney() {
@@ -74,18 +74,15 @@ class ClickerBrain extends ChangeNotifier {
   // autoclicker
 
   String getAutoClickNumber() {
-    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
-        .get('autoClickNumber', defaultValue: kDefaultAutoClickNumber));
+    return NumberFormat.compact().format(autoClickLogic.getAutoClickNumber());
   }
 
   String getAutoClickCost() {
-    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
-        .get('autoClickCost', defaultValue: kDefaultAutoClickCost));
+    return NumberFormat.compact().format(autoClickLogic.getAutoClickCost());
   }
 
   double getAutoClickIncrement() {
-    return Hive.box<double>(kClickerBrainBox).get('autoClickIncrement',
-        defaultValue: kDefaultAutoClickIncrement) as double;
+    return autoClickLogic.getAutoClickIncrement();
   }
 
   Duration getAutoClickDuration() {
@@ -96,14 +93,16 @@ class ClickerBrain extends ChangeNotifier {
     return autoClickLogic.shouldStartAutoClickAnimation();
   }
 
+  bool shouldAnimateAutoClick() {
+    return autoClickLogic.shouldAnimateAutoClick() == 1;
+  }
+
   void buyAutoClicker() {
-    if (moneyLogic.canUpgrade(Hive.box<double>(kClickerBrainBox)
-        .get('autoClickCost', defaultValue: kDefaultAutoClickCost))) {
-      moneyLogic.decreaseMoney(Hive.box<double>(kClickerBrainBox)
-          .get('autoClickCost', defaultValue: kDefaultAutoClickCost));
+    if (moneyLogic.canUpgrade(autoClickLogic.getAutoClickCost())) {
+      moneyLogic.decreaseMoney(autoClickLogic.getAutoClickCost());
       autoClickLogic.updateAutoClickCostOne();
       autoClickLogic.autoClickCostIncrease();
-      autoClickLogic.autoClickNumberIncrease();
+      autoClickLogic.autoClickNumberIncrease(workerLogic.workerNumber);
       notifyListeners();
       if (shouldStartAutoClickAnimation()) {
         autoClickTimer();
@@ -112,6 +111,7 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void autoClickTimer() {
+    wasAutoClickInitiated++;
     Timer.periodic(
       autoClickLogic.autoClickerDuration,
       (timer) {
@@ -121,8 +121,18 @@ class ClickerBrain extends ChangeNotifier {
     );
   }
 
+  double wasAutoClickInitiated = 0;
+
+  void initialAutoClickTimer() {
+    if (autoClickLogic.shouldAnimateAutoClick() == 1 &&
+        wasAutoClickInitiated == 0) {
+      autoClickTimer();
+      wasAutoClickInitiated++;
+    }
+  }
+
   bool isAutoClickVisible() {
-    return autoClickLogic.isAutoClickVisible();
+    return autoClickLogic.isAutoClickVisible(getMoney());
   }
 
   void updateAutoClickIncrement() {
@@ -174,7 +184,7 @@ class ClickerBrain extends ChangeNotifier {
     Timer.periodic(
       workerLogic.workerDuration,
       (timer) {
-        autoClickLogic.autoClickNumberIncrease();
+        autoClickLogic.autoClickNumberIncrease(workerLogic.workerNumber);
         notifyListeners();
       },
     );
