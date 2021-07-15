@@ -58,7 +58,6 @@ class _ClickerScreenState extends State<ClickerScreen>
   void initState() {
     super.initState();
     box = Hive.box(kClickerBrainBox);
-    box.put('mainIncrement', kMainIncrement);
   }
 
   @override
@@ -90,9 +89,9 @@ class _ClickerScreenState extends State<ClickerScreen>
               return ListView(
                 shrinkWrap: true,
                 children: [
-                  ManagerRow(managerAnimation),
-                  WorkerRow(workerAnimation),
-                  AutoClickRow(autoClickAnimation),
+                  // ManagerRow(managerAnimation),
+                  // WorkerRow(workerAnimation),
+                  // AutoClickRow(autoClickAnimation),
                   ClickRow(),
                 ],
               );

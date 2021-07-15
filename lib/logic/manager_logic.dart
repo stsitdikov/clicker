@@ -1,59 +1,91 @@
 import 'dart:math';
 
+import 'package:clicker/logic/constants.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:clicker/logic/constants.dart';
+
 class ManagerLogic {
-  bool managerVisible = false;
-  int startManagerAnimation = 0;
-  double managerCost = 10;
-  double managerCostOne = 10;
-  double managerNumber = 0;
-  int managerIncrement = 1;
   Duration managerDuration = Duration(seconds: 30);
 
-  double workerNumberToShowManager = 5;
+  double managerCost = Hive.box<double>(kClickerBrainBox)
+      .get('managerCost', defaultValue: kDefaultManagerCost) as double;
 
-  void managerCostIncrease(mainIncrement) {
-    managerCost = managerCostOne;
-    incrementalManagerCost(mainIncrement);
+  double managerCostOne = Hive.box<double>(kClickerBrainBox)
+      .get('managerCostOne', defaultValue: kDefaultManagerCostOne) as double;
+
+  double managerNumber = Hive.box<double>(kClickerBrainBox)
+      .get('managerNumber', defaultValue: kDefaultManagerNumber) as double;
+
+  double managerIncrement = Hive.box<double>(kClickerBrainBox)
+          .get('managerIncrement', defaultValue: kDefaultManagerIncrement)
+      as double;
+
+  double startManagerAnimation = Hive.box<double>(kClickerBrainBox).get(
+      'startManagerAnimation',
+      defaultValue: kDefaultStartManagerAnimation) as double;
+
+  double managerVisible = Hive.box<double>(kClickerBrainBox)
+      .get('managerVisible', defaultValue: kDefaultManagerVisible) as double;
+
+  double workerNumber = Hive.box<double>(kClickerBrainBox)
+      .get('workerNumber', defaultValue: kDefaultWorkerNumber) as double;
+
+  void managerCostIncrease() {
+    double newManagerCost = managerCostOne;
+    Hive.box<double>(kClickerBrainBox).put('managerCost', newManagerCost);
+    incrementalManagerCost();
   }
 
   void managerNumberIncrease() {
-    managerNumber = managerNumber + managerIncrement;
-    startManagerAnimation++;
+    double newManagerNumber = managerNumber + managerIncrement;
+    Hive.box<double>(kClickerBrainBox).put('managerNumber', newManagerNumber);
+    if (startManagerAnimation == 0) {
+      Hive.box<double>(kClickerBrainBox).put('startManagerAnimation', 1);
+    }
   }
 
   bool shouldStartManagerAnimation() {
     return startManagerAnimation == 1;
   }
 
-  bool isManagerVisible(workerNumber) {
-    if (managerVisible == false && workerNumber >= workerNumberToShowManager) {
-      managerVisible = true;
+  bool isManagerVisible() {
+    if (managerVisible == 0 && workerNumber >= kWorkerNumberToShowManager) {
+      Hive.box<double>(kClickerBrainBox).put('managerVisible', 1);
     }
-    return managerVisible;
+    return managerVisible == 1;
   }
 
-  void updateManagerIncrement(mainIncrement) {
+  void updateManagerIncrement() {
     if (managerIncrement == 1) {
-      managerIncrement = 10;
-      managerCostOne = managerCost;
-      incrementalManagerCost(mainIncrement);
+      Hive.box<double>(kClickerBrainBox).put('managerIncrement', 10);
+      double newManagerCostOne = managerCost;
+      Hive.box<double>(kClickerBrainBox)
+          .put('managerCostOne', newManagerCostOne);
+      incrementalManagerCost();
     } else if (managerIncrement == 10) {
-      managerIncrement = 100;
-      managerCost = managerCostOne;
-      incrementalManagerCost(mainIncrement);
+      Hive.box<double>(kClickerBrainBox).put('managerIncrement', 100);
+      double newManagerCost = managerCostOne;
+      Hive.box<double>(kClickerBrainBox).put('managerCost', newManagerCost);
+      incrementalManagerCost();
     } else if (managerIncrement == 100) {
-      managerIncrement = 1;
-      managerCost = managerCostOne;
+      Hive.box<double>(kClickerBrainBox).put('managerIncrement', 1);
+      double newManagerCost = managerCostOne;
+      Hive.box<double>(kClickerBrainBox).put('managerCost', newManagerCost);
     }
   }
 
-  void incrementalManagerCost(mainIncrement) {
+  void incrementalManagerCost() {
+    double newManagerCost = 0;
     for (var i = 1; i < managerIncrement; i++) {
-      managerCost = managerCost + managerCostOne * pow(mainIncrement, i);
+      newManagerCost = managerCost + managerCostOne * pow(kMainIncrement, i);
     }
+    Hive.box<double>(kClickerBrainBox).put('managerCost', newManagerCost);
   }
 
-  void updateManagerCostOne(mainIncrement) {
-    managerCostOne = managerCostOne * pow(mainIncrement, managerIncrement);
+  void updateManagerCostOne() {
+    double newManagerCostOne =
+        managerCostOne * pow(kMainIncrement, managerIncrement);
+    Hive.box<double>(kClickerBrainBox).put('managerCostOne', newManagerCostOne);
   }
 }

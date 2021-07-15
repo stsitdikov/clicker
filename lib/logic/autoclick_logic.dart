@@ -1,61 +1,98 @@
 import 'dart:math';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:clicker/logic/constants.dart';
 
 class AutoClickLogic {
-  bool autoClickVisible = false;
-  bool autoClickAnimation = false;
-  int startAutoClickAnimation = 0;
-  int autoClickIncrement = 1;
-  double autoClickCost = 10;
-  double autoClickCostOne = 10;
-  num autoClickNumber = 0;
   Duration autoClickerDuration = Duration(seconds: 3);
 
-  double moneyToShowAutoClick = 10;
+  double money = Hive.box<double>(kClickerBrainBox)
+      .get('money', defaultValue: kDefaultMoney) as double;
 
-  void autoClickCostIncrease(mainIncrement) {
-    autoClickCost = autoClickCostOne;
-    incrementalAutoClickCost(mainIncrement);
+  double autoClickCost = Hive.box<double>(kClickerBrainBox)
+      .get('autoClickCost', defaultValue: kDefaultAutoClickCost) as double;
+
+  double autoClickCostOne = Hive.box<double>(kClickerBrainBox)
+          .get('autoClickCostOne', defaultValue: kDefaultAutoClickCostOne)
+      as double;
+
+  double autoClickNumber = Hive.box<double>(kClickerBrainBox)
+      .get('autoClickNumber', defaultValue: kDefaultAutoClickNumber) as double;
+
+  double autoClickIncrement = Hive.box<double>(kClickerBrainBox)
+          .get('autoClickIncrement', defaultValue: kDefaultAutoClickIncrement)
+      as double;
+
+  double startAutoClickAnimation = Hive.box<double>(kClickerBrainBox).get(
+      'startAutoClickAnimation',
+      defaultValue: kDefaultStartAutoClickAnimation) as double;
+
+  double autoClickVisible = (Hive.box<double>(kClickerBrainBox))
+          .get('autoClickVisible', defaultValue: kDefaultAutoClickVisible)
+      as double;
+
+  double workerNumber = (Hive.box<double>(kClickerBrainBox)
+      .get('workerNumber', defaultValue: kDefaultWorkerNumber)) as double;
+
+  void autoClickCostIncrease() {
+    double newAutoClickCost = autoClickCostOne;
+    Hive.box<double>(kClickerBrainBox).put('autoClickCost', newAutoClickCost);
+    incrementalAutoClickCost();
   }
 
-  void autoClickNumberIncrease(workerNumber) {
-    autoClickNumber = autoClickNumber + autoClickIncrement + workerNumber;
-    startAutoClickAnimation++;
+  void autoClickNumberIncrease() {
+    double newAutoClickNumber =
+        autoClickNumber + autoClickIncrement + workerNumber;
+    Hive.box<double>(kClickerBrainBox)
+        .put('autoClickNumber', newAutoClickNumber);
+    if (startAutoClickAnimation == 0) {
+      Hive.box<double>(kClickerBrainBox).put('startAutoClickAnimation', 1);
+    }
   }
 
   bool shouldStartAutoClickAnimation() {
     return startAutoClickAnimation == 1;
   }
 
-  bool isAutoClickVisible(money) {
-    if (autoClickVisible == false && money >= moneyToShowAutoClick) {
-      autoClickVisible = true;
+  bool isAutoClickVisible() {
+    if (autoClickVisible == 0 && money >= kMoneyToShowAutoClick) {
+      Hive.box<double>(kClickerBrainBox).put('autoClickVisible', 1);
     }
-    return autoClickVisible;
+    return autoClickVisible == 1;
   }
 
-  void updateAutoClickIncrement(mainIncrement) {
+  void updateAutoClickIncrement() {
     if (autoClickIncrement == 1) {
-      autoClickIncrement = 10;
-      autoClickCostOne = autoClickCost;
-      incrementalAutoClickCost(mainIncrement);
+      Hive.box<double>(kClickerBrainBox).put('autoClickIncrement', 10);
+      double newAutoClickCostOne = autoClickCost;
+      Hive.box<double>(kClickerBrainBox)
+          .put('autoClickCostOne', newAutoClickCostOne);
+      incrementalAutoClickCost();
     } else if (autoClickIncrement == 10) {
-      autoClickIncrement = 100;
-      autoClickCost = autoClickCostOne;
-      incrementalAutoClickCost(mainIncrement);
+      Hive.box<double>(kClickerBrainBox).put('autoClickIncrement', 100);
+      double newAutoClickCost = autoClickCostOne;
+      Hive.box<double>(kClickerBrainBox).put('autoClickCost', newAutoClickCost);
+      incrementalAutoClickCost();
     } else if (autoClickIncrement == 100) {
-      autoClickIncrement = 1;
-      autoClickCost = autoClickCostOne;
+      Hive.box<double>(kClickerBrainBox).put('autoClickIncrement', 1);
+      double newAutoClickCost = autoClickCostOne;
+      Hive.box<double>(kClickerBrainBox).put('autoClickCost', newAutoClickCost);
     }
   }
 
-  void incrementalAutoClickCost(mainIncrement) {
+  void incrementalAutoClickCost() {
+    double newAutoClickCost = 0;
     for (var i = 1; i < autoClickIncrement; i++) {
-      autoClickCost = autoClickCost + autoClickCostOne * pow(mainIncrement, i);
+      newAutoClickCost =
+          autoClickCost + autoClickCostOne * pow(kMainIncrement, i);
     }
+    Hive.box<double>(kClickerBrainBox).put('autoClickCost', newAutoClickCost);
   }
 
-  void updateAutoClickCostOne(mainIncrement) {
-    autoClickCostOne =
-        autoClickCostOne * pow(mainIncrement, autoClickIncrement);
+  void updateAutoClickCostOne() {
+    double newAutoClickCostOne =
+        autoClickCostOne * pow(kMainIncrement, autoClickIncrement);
+    Hive.box<double>(kClickerBrainBox)
+        .put('autoClickCostOne', newAutoClickCostOne);
   }
 }

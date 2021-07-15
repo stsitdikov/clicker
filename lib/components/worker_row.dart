@@ -23,7 +23,7 @@ class WorkerRow extends StatelessWidget {
           clickerBrainListenFalse.buyWorker();
         },
         upgradeCost: clickerBrain.getWorkerCost(),
-        incrementNumber: clickerBrain.getWorkerIncrement(),
+        incrementNumber: clickerBrain.getWorkerIncrement().toStringAsFixed(0),
         onIncrementTap: () {
           clickerBrainListenFalse.changeWorkerIncrement();
         },

@@ -7,6 +7,9 @@ import 'package:clicker/logic/constants.dart';
 class ClickRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool isUpgradeVisible =
+        Provider.of<ClickerBrain>(context).isClickUpgradeVisible();
+
     return Container(
       height: 70.0,
       child: Row(
@@ -33,7 +36,7 @@ class ClickRow extends StatelessWidget {
             ),
           ),
           Visibility(
-            visible: Provider.of<ClickerBrain>(context).isClickUpgradeVisible(),
+            visible: isUpgradeVisible,
             child: Expanded(
               child: GestureDetector(
                 onTap: () => Provider.of<ClickerBrain>(context, listen: false)
@@ -48,7 +51,10 @@ class ClickRow extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'x ${Provider.of<ClickerBrain>(context).getClickIncrement()}',
+                      'x ' +
+                          Provider.of<ClickerBrain>(context)
+                              .getClickIncrement()
+                              .toStringAsFixed(0),
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -57,7 +63,7 @@ class ClickRow extends StatelessWidget {
             ),
           ),
           Visibility(
-            visible: Provider.of<ClickerBrain>(context).isClickUpgradeVisible(),
+            visible: isUpgradeVisible,
             child: Expanded(
               child: GestureDetector(
                 onTap: () {

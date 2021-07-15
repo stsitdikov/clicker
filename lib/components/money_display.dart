@@ -7,8 +7,11 @@ class MoneyDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // onTap: () {
+      //   Provider.of<ClickerBrain>(context, listen: false).clickIncreaseMoney();
+      // },
       onTap: () {
-        Provider.of<ClickerBrain>(context, listen: false).clickIncreaseMoney();
+        Provider.of<ClickerBrain>(context, listen: false).clearBox();
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 60.0, vertical: 25.0),
@@ -24,7 +27,7 @@ class MoneyDisplay extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              Provider.of<ClickerBrain>(context).getMoney() + ' \$',
+              Provider.of<ClickerBrain>(context).getMoneyString() + ' \$',
               style: TextStyle(fontSize: 30.0),
             ),
           ),
