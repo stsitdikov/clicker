@@ -5,8 +5,9 @@ import 'reusable_progress_row.dart';
 
 class AutoClickRow extends StatelessWidget {
   final Animation<double> animation;
+  final AnimationController controller;
 
-  AutoClickRow(this.animation);
+  AutoClickRow(this.animation, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class AutoClickRow extends StatelessWidget {
         animation: animation,
         title: clickerBrain.getAutoClickNumber() + ' x  AutoClicker',
         onUpgradeTap: () {
-          clickerBrainListenFalse.buyAutoClicker();
+          clickerBrainListenFalse.buyAutoClicker(controller);
         },
         upgradeCost: clickerBrain.getAutoClickCost(),
         incrementNumber:

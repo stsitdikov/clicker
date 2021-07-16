@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           AutoClickLogic(), WorkerLogic(), ManagerLogic()),
       child: MaterialApp(
         // theme: ThemeData.dark(),
-        home: TestScreen(),
+        home: ClickerScreen(),
       ),
     );
   }
