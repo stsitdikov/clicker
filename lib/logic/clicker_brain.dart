@@ -55,9 +55,7 @@ class ClickerBrain extends ChangeNotifier {
   void clickUpgrade() {
     if (moneyLogic.canUpgrade(clickRowLogic.getClickCost())) {
       moneyLogic.decreaseMoney(clickRowLogic.getClickCost());
-      clickRowLogic.updateClickCostOne();
-      clickRowLogic.clickCostIncrease();
-      clickRowLogic.upgradeClickAmount();
+      clickRowLogic.clickUpgrade();
       notifyListeners();
     }
   }
@@ -100,9 +98,7 @@ class ClickerBrain extends ChangeNotifier {
   void buyAutoClicker(controller) {
     if (moneyLogic.canUpgrade(autoClickLogic.getAutoClickCost())) {
       moneyLogic.decreaseMoney(autoClickLogic.getAutoClickCost());
-      autoClickLogic.updateAutoClickCostOne();
-      autoClickLogic.autoClickCostIncrease();
-      autoClickLogic.autoClickNumberIncrease(workerLogic.workerNumber);
+      autoClickLogic.buyAutoClicker(workerLogic.workerNumber);
       notifyListeners();
       if (shouldStartAutoClickAnimation()) {
         controller.forward();

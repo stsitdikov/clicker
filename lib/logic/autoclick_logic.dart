@@ -43,7 +43,31 @@ class AutoClickLogic {
         .get('shouldAnimateAutoClick', defaultValue: 0) as double;
   }
 
+  double getInitialAutoClickUpgradeDone() {
+    return (Hive.box<double>(kClickerBrainBox).get(
+        'initialAutoClickUpgradeDone',
+        defaultValue: kDefaultInitialAutoClickUpgradeDone)) as double;
+  }
+
   // functions
+
+  void buyAutoClicker(workerNumber) {
+    if (getInitialAutoClickUpgradeDone() == 1) {
+      updateAutoClickCostOne();
+    }
+    autoClickCostIncrease();
+    autoClickNumberIncrease(workerNumber);
+    if (getInitialAutoClickUpgradeDone() == 0) {
+      Hive.box<double>(kClickerBrainBox).put('initialAutoClickUpgradeDone', 1);
+    }
+  }
+
+  void updateAutoClickCostOne() {
+    double newAutoClickCostOne =
+        (getAutoClickCostOne() * pow(kMainIncrement, getAutoClickIncrement()));
+    Hive.box<double>(kClickerBrainBox)
+        .put('autoClickCostOne', newAutoClickCostOne);
+  }
 
   void autoClickCostIncrease() {
     Hive.box<double>(kClickerBrainBox)
@@ -96,12 +120,5 @@ class AutoClickLogic {
       autoClickCost = getAutoClickCostOne() * pow(kMainIncrement, i);
     }
     Hive.box<double>(kClickerBrainBox).put('autoClickCost', autoClickCost);
-  }
-
-  void updateAutoClickCostOne() {
-    double newAutoClickCostOne =
-        (getAutoClickCostOne() * pow(kMainIncrement, getAutoClickIncrement()));
-    Hive.box<double>(kClickerBrainBox)
-        .put('autoClickCostOne', newAutoClickCostOne);
   }
 }

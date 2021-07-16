@@ -31,7 +31,29 @@ class ClickRowLogic {
         defaultValue: kDefaultClickUpgradeVisible)) as double;
   }
 
+  double getInitialClickUpgradeDone() {
+    return (Hive.box<double>(kClickerBrainBox).get('initialClickUpgradeDone',
+        defaultValue: kDefaultInitialClickUpgradeDone)) as double;
+  }
+
   // functions
+
+  void clickUpgrade() {
+    if (getInitialClickUpgradeDone() == 1) {
+      updateClickCostOne();
+    }
+    clickCostIncrease();
+    upgradeClickAmount();
+    if (getInitialClickUpgradeDone() == 0) {
+      Hive.box<double>(kClickerBrainBox).put('initialClickUpgradeDone', 1);
+    }
+  }
+
+  void updateClickCostOne() {
+    double clickCostOne =
+        (getClickCostOne() * pow(kMainIncrement, getClickIncrement()));
+    Hive.box<double>(kClickerBrainBox).put('clickCostOne', clickCostOne);
+  }
 
   void clickCostIncrease() {
     Hive.box<double>(kClickerBrainBox).put('clickCost', getClickCostOne());
@@ -72,11 +94,5 @@ class ClickRowLogic {
       clickCost = getClickCostOne() * pow(kMainIncrement, i);
     }
     Hive.box<double>(kClickerBrainBox).put('clickCost', clickCost);
-  }
-
-  void updateClickCostOne() {
-    double clickCostOne =
-        (getClickCostOne() * pow(kMainIncrement, getClickIncrement()));
-    Hive.box<double>(kClickerBrainBox).put('clickCostOne', clickCostOne);
   }
 }

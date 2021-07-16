@@ -16,6 +16,7 @@ const double kDefaultClickCost = 10;
 const double kDefaultClickCostOne = 10;
 const double kDefaultClickIncrement = 1;
 const double kDefaultClickUpgradeVisible = 0;
+const double kDefaultInitialClickUpgradeDone = 0;
 
 // autoclick constants
 
@@ -26,6 +27,7 @@ const double kDefaultAutoClickNumber = 0;
 const double kDefaultAutoClickIncrement = 1;
 const double kDefaultStartAutoClickAnimation = 0;
 const double kDefaultAutoClickVisible = 0;
+const double kDefaultInitialAutoClickUpgradeDone = 0;
 
 // worker constants
 
