@@ -3,36 +3,34 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
 
 class MoneyLogic {
-  double getMoney() {
-    return Hive.box<double>(kClickerBrainBox)
-        .get('money', defaultValue: kDefaultMoney) as double;
+  Box box = Hive.box<double>(kClickerBrainBox);
+
+  double money() {
+    return box.get('money', defaultValue: kDefaultMoney) as double;
   }
 
-  double getClickAmount() {
-    return (Hive.box<double>(kClickerBrainBox)
-        .get('clickAmount', defaultValue: kDefaultClickAmount)) as double;
+  double clickAmount() {
+    return box.get('clickAmount', defaultValue: kDefaultClickAmount) as double;
   }
 
-  double getAutoClickNumber() {
-    return (Hive.box<double>(kClickerBrainBox).get('autoClickNumber',
-        defaultValue: kDefaultAutoClickNumber)) as double;
+  double autoClickNumber() {
+    return box.get('autoClickNumber', defaultValue: kDefaultAutoClickNumber)
+        as double;
   }
 
   void clickIncreaseMoney() {
-    Hive.box<double>(kClickerBrainBox)
-        .put('money', (getMoney() + getClickAmount()));
+    box.put('money', (money() + clickAmount()));
   }
 
   bool canUpgrade(cost) {
-    return getMoney() >= cost;
+    return money() >= cost;
   }
 
   void decreaseMoney(amount) {
-    Hive.box<double>(kClickerBrainBox).put('money', (getMoney() - amount));
+    box.put('money', (money() - amount));
   }
 
   void autoClickIncreaseMoney() {
-    Hive.box<double>(kClickerBrainBox)
-        .put('money', (getMoney() + getAutoClickNumber() * getClickAmount()));
+    box.put('money', (money() + autoClickNumber() * clickAmount()));
   }
 }

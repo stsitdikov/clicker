@@ -25,7 +25,7 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   double getMoney() {
-    return moneyLogic.getMoney();
+    return moneyLogic.money();
   }
 
   void clearBox() {
@@ -36,15 +36,15 @@ class ClickerBrain extends ChangeNotifier {
   // click row
 
   String getClickAmount() {
-    return NumberFormat.compact().format(clickRowLogic.getClickAmount());
+    return NumberFormat.compact().format(clickRowLogic.clickAmount());
   }
 
   String getClickCost() {
-    return NumberFormat.compact().format(clickRowLogic.getClickCost());
+    return NumberFormat.compact().format(clickRowLogic.clickCost());
   }
 
   double getClickIncrement() {
-    return clickRowLogic.getClickIncrement();
+    return clickRowLogic.clickIncrement();
   }
 
   void clickIncreaseMoney() {
@@ -53,8 +53,8 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void clickUpgrade() {
-    if (moneyLogic.canUpgrade(clickRowLogic.getClickCost())) {
-      moneyLogic.decreaseMoney(clickRowLogic.getClickCost());
+    if (moneyLogic.canUpgrade(clickRowLogic.clickCost())) {
+      moneyLogic.decreaseMoney(clickRowLogic.clickCost());
       clickRowLogic.clickUpgrade();
       notifyListeners();
     }
@@ -72,15 +72,15 @@ class ClickerBrain extends ChangeNotifier {
   // autoclicker
 
   String getAutoClickNumber() {
-    return NumberFormat.compact().format(autoClickLogic.getAutoClickNumber());
+    return NumberFormat.compact().format(autoClickLogic.autoClickNumber());
   }
 
   String getAutoClickCost() {
-    return NumberFormat.compact().format(autoClickLogic.getAutoClickCost());
+    return NumberFormat.compact().format(autoClickLogic.autoClickCost());
   }
 
   double getAutoClickIncrement() {
-    return autoClickLogic.getAutoClickIncrement();
+    return autoClickLogic.autoClickIncrement();
   }
 
   Duration getAutoClickDuration() {
@@ -96,9 +96,9 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void buyAutoClicker(controller) {
-    if (moneyLogic.canUpgrade(autoClickLogic.getAutoClickCost())) {
-      moneyLogic.decreaseMoney(autoClickLogic.getAutoClickCost());
-      autoClickLogic.buyAutoClicker(workerLogic.workerNumber);
+    if (moneyLogic.canUpgrade(autoClickLogic.autoClickCost())) {
+      moneyLogic.decreaseMoney(autoClickLogic.autoClickCost());
+      autoClickLogic.buyAutoClicker(workerLogic.workerNumber());
       notifyListeners();
       if (shouldStartAutoClickAnimation()) {
         controller.forward();
@@ -142,18 +142,15 @@ class ClickerBrain extends ChangeNotifier {
   // worker
 
   String getWorkerNumber() {
-    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
-        .get('workerNumber', defaultValue: kDefaultWorkerNumber));
+    return NumberFormat.compact().format(workerLogic.workerNumber());
   }
 
   String getWorkerCost() {
-    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
-        .get('workerCost', defaultValue: kDefaultWorkerCost));
+    return NumberFormat.compact().format(workerLogic.workerCost());
   }
 
   double getWorkerIncrement() {
-    return Hive.box<double>(kClickerBrainBox).get('workerIncrement',
-        defaultValue: kDefaultWorkerIncrement) as double;
+    return workerLogic.workerIncrement();
   }
 
   Duration getWorkerDuration() {
@@ -164,14 +161,10 @@ class ClickerBrain extends ChangeNotifier {
     return workerLogic.shouldStartWorkerAnimation();
   }
 
-  void buyWorker() {
-    if (moneyLogic.canUpgrade(Hive.box<double>(kClickerBrainBox)
-        .get('workerCost', defaultValue: kDefaultWorkerCost))) {
-      moneyLogic.decreaseMoney(Hive.box<double>(kClickerBrainBox)
-          .get('workerCost', defaultValue: kDefaultWorkerCost));
-      workerLogic.updateWorkerCostOne();
-      workerLogic.workerCostIncrease();
-      workerLogic.workerNumberIncrease();
+  void buyWorker(controller) {
+    if (moneyLogic.canUpgrade(workerLogic.workerCost())) {
+      moneyLogic.decreaseMoney(workerLogic.workerCost());
+      workerLogic.buyWorker(managerLogic.managerNumber);
       notifyListeners();
       if (shouldStartWorkerAnimation()) {
         workerTimer();
@@ -190,7 +183,7 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   bool isWorkerVisible() {
-    return workerLogic.isWorkerVisible();
+    return workerLogic.isWorkerVisible(autoClickLogic.autoClickNumber());
   }
 
   void changeWorkerIncrement() {
@@ -237,7 +230,7 @@ class ClickerBrain extends ChangeNotifier {
     Timer.periodic(
       managerLogic.managerDuration,
       (timer) {
-        workerLogic.workerNumberIncrease();
+        workerLogic.workerNumberIncrease(managerLogic.managerNumber);
         notifyListeners();
       },
     );

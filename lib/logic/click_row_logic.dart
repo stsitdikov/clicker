@@ -4,95 +4,95 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
 
 class ClickRowLogic {
+  Box box = Hive.box<double>(kClickerBrainBox);
+
   // getters
 
-  double getClickAmount() {
-    return (Hive.box<double>(kClickerBrainBox)
-        .get('clickAmount', defaultValue: kDefaultClickAmount)) as double;
+  double clickAmount() {
+    return box.get('clickAmount', defaultValue: kDefaultClickAmount) as double;
   }
 
-  double getClickCost() {
-    return (Hive.box<double>(kClickerBrainBox)
-        .get('clickCost', defaultValue: kDefaultClickCost)) as double;
+  double clickCost() {
+    return box.get('clickCost', defaultValue: kDefaultClickCost) as double;
   }
 
-  double getClickCostOne() {
-    return (Hive.box<double>(kClickerBrainBox)
-        .get('clickCostOne', defaultValue: kDefaultClickCostOne)) as double;
+  double clickCostOne() {
+    return box.get('clickCostOne', defaultValue: kDefaultClickCostOne)
+        as double;
   }
 
-  double getClickIncrement() {
-    return (Hive.box<double>(kClickerBrainBox)
-        .get('clickIncrement', defaultValue: kDefaultClickIncrement)) as double;
+  double clickIncrement() {
+    return box.get('clickIncrement', defaultValue: kDefaultClickIncrement)
+        as double;
   }
 
-  double getClickUpgradeVisible() {
-    return (Hive.box<double>(kClickerBrainBox).get('clickUpgradeVisible',
-        defaultValue: kDefaultClickUpgradeVisible)) as double;
+  double clickUpgradeVisible() {
+    return box.get('clickUpgradeVisible',
+        defaultValue: kDefaultClickUpgradeVisible) as double;
   }
 
-  double getInitialClickUpgradeDone() {
-    return (Hive.box<double>(kClickerBrainBox).get('initialClickUpgradeDone',
-        defaultValue: kDefaultInitialClickUpgradeDone)) as double;
+  double initialClickUpgradeDone() {
+    return box.get('initialClickUpgradeDone',
+        defaultValue: kDefaultInitialClickUpgradeDone) as double;
   }
 
   // functions
 
   void clickUpgrade() {
-    if (getInitialClickUpgradeDone() == 1) {
+    if (initialClickUpgradeDone() == 1.0) {
       updateClickCostOne();
     }
     clickCostIncrease();
     upgradeClickAmount();
-    if (getInitialClickUpgradeDone() == 0) {
-      Hive.box<double>(kClickerBrainBox).put('initialClickUpgradeDone', 1);
+    if (initialClickUpgradeDone() == 0.0) {
+      box.put('initialClickUpgradeDone', 1.0);
     }
   }
 
   void updateClickCostOne() {
-    double clickCostOne =
-        (getClickCostOne() * pow(kMainIncrement, getClickIncrement()));
-    Hive.box<double>(kClickerBrainBox).put('clickCostOne', clickCostOne);
+    double newClickCostOne =
+        (clickCostOne() * pow(kMainIncrement, clickIncrement()));
+    box.put('clickCostOne', newClickCostOne);
   }
 
   void clickCostIncrease() {
-    Hive.box<double>(kClickerBrainBox).put('clickCost', getClickCostOne());
+    box.put('clickCost', clickCostOne());
     incrementalClickCost();
   }
 
   void upgradeClickAmount() {
-    double clickAmount =
-        getClickAmount() * pow(kMainIncrement, getClickIncrement());
-    Hive.box<double>(kClickerBrainBox).put('clickAmount', clickAmount);
+    double newClickAmount =
+        clickAmount() * pow(kMainIncrement, clickIncrement());
+    box.put('clickAmount', newClickAmount);
   }
 
   bool isClickUpgradeVisible(money) {
-    if (getClickUpgradeVisible() == 0 && money >= getClickCost()) {
-      Hive.box<double>(kClickerBrainBox).put('clickUpgradeVisible', 1);
+    if (clickUpgradeVisible() == 0.0 && money >= clickCost()) {
+      box.put('clickUpgradeVisible', 1.0);
     }
-    return getClickUpgradeVisible() == 1;
+    return clickUpgradeVisible() == 1.0;
   }
 
   void updateClickIncrement() {
-    if (getClickIncrement() == 1) {
-      Hive.box<double>(kClickerBrainBox).put('clickIncrement', 10);
-      Hive.box<double>(kClickerBrainBox).put('clickCostOne', getClickCost());
+    if (clickIncrement() == 1.0) {
+      box.put('clickIncrement', 10.0);
+      box.put('clickCostOne', clickCost());
       incrementalClickCost();
-    } else if (getClickIncrement() == 10) {
-      Hive.box<double>(kClickerBrainBox).put('clickIncrement', 100);
-      Hive.box<double>(kClickerBrainBox).put('clickCost', getClickCostOne());
+    } else if (clickIncrement() == 10.0) {
+      box.put('clickIncrement', 100.0);
+      box.put('clickCost', clickCostOne());
       incrementalClickCost();
-    } else if (getClickIncrement() == 100) {
-      Hive.box<double>(kClickerBrainBox).put('clickIncrement', 1);
-      Hive.box<double>(kClickerBrainBox).put('clickCost', getClickCostOne());
+    } else if (clickIncrement() == 100.0) {
+      box.put('clickIncrement', 1.0);
+      box.put('clickCost', clickCostOne());
     }
   }
 
   void incrementalClickCost() {
-    double clickCost = 0;
-    for (var i = 1; i <= getClickIncrement(); i++) {
-      clickCost = getClickCostOne() * pow(kMainIncrement, i);
+    double newClickCost = 0;
+    for (var i = 1; i <= clickIncrement(); i++) {
+      newClickCost = clickCostOne() * pow(kMainIncrement, i);
     }
-    Hive.box<double>(kClickerBrainBox).put('clickCost', clickCost);
+    box.put('clickCost', newClickCost);
   }
 }

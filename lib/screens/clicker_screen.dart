@@ -93,7 +93,7 @@ class _ClickerScreenState extends State<ClickerScreen>
                 shrinkWrap: true,
                 children: [
                   // ManagerRow(managerAnimation),
-                  // WorkerRow(workerAnimation),
+                  WorkerRow(workerAnimation, workerController),
                   AutoClickRow(autoClickAnimation, autoClickController),
                   ClickRow(),
                 ],

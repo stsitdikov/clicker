@@ -5,8 +5,9 @@ import 'reusable_progress_row.dart';
 
 class WorkerRow extends StatelessWidget {
   final Animation<double> animation;
+  final AnimationController controller;
 
-  WorkerRow(this.animation);
+  WorkerRow(this.animation, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class WorkerRow extends StatelessWidget {
         animation: animation,
         title: clickerBrain.getWorkerNumber() + ' x  Worker',
         onUpgradeTap: () {
-          clickerBrainListenFalse.buyWorker();
+          clickerBrainListenFalse.buyWorker(controller);
         },
         upgradeCost: clickerBrain.getWorkerCost(),
         incrementNumber: clickerBrain.getWorkerIncrement().toStringAsFixed(0),
