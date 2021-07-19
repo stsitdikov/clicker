@@ -20,32 +20,21 @@ class ClickerBrain extends ChangeNotifier {
   ClickerBrain(this.moneyLogic, this.clickRowLogic, this.autoClickLogic,
       this.workerLogic, this.managerLogic);
 
-  String getMoneyString() {
-    return NumberFormat.compact().format(getMoney());
-  }
+  String getMoneyString() => NumberFormat.compact().format(getMoney());
 
-  double getMoney() {
-    return moneyLogic.money();
-  }
+  double getMoney() => moneyLogic.money();
 
-  void clearBox() {
-    Box box = Hive.box<double>(kClickerBrainBox);
-    box.clear();
-  }
+  void clearBox() => Hive.box<double>(kClickerBrainBox).clear();
 
   // click row
 
-  String getClickAmount() {
-    return NumberFormat.compact().format(clickRowLogic.clickAmount());
-  }
+  String getClickAmount() =>
+      NumberFormat.compact().format(clickRowLogic.clickAmount());
 
-  String getClickCost() {
-    return NumberFormat.compact().format(clickRowLogic.clickCost());
-  }
+  String getClickCost() =>
+      NumberFormat.compact().format(clickRowLogic.clickCost());
 
-  double getClickIncrement() {
-    return clickRowLogic.clickIncrement();
-  }
+  double getClickIncrement() => clickRowLogic.clickIncrement();
 
   void clickIncreaseMoney() {
     moneyLogic.clickIncreaseMoney();
@@ -60,9 +49,8 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  bool isClickUpgradeVisible() {
-    return clickRowLogic.isClickUpgradeVisible(getMoney());
-  }
+  bool isClickUpgradeVisible() =>
+      clickRowLogic.isClickUpgradeVisible(getMoney());
 
   void changeClickIncrement() {
     clickRowLogic.updateClickIncrement();
@@ -71,36 +59,24 @@ class ClickerBrain extends ChangeNotifier {
 
   // autoclicker
 
-  String getAutoClickNumber() {
-    return NumberFormat.compact().format(autoClickLogic.autoClickNumber());
-  }
+  String getAutoClickNumber() =>
+      NumberFormat.compact().format(autoClickLogic.autoClickNumber());
 
-  String getAutoClickCost() {
-    return NumberFormat.compact().format(autoClickLogic.autoClickCost());
-  }
+  String getAutoClickCost() =>
+      NumberFormat.compact().format(autoClickLogic.autoClickCost());
 
-  double getAutoClickIncrement() {
-    return autoClickLogic.autoClickIncrement();
-  }
+  double getAutoClickIncrement() => autoClickLogic.autoClickIncrement();
 
-  Duration getAutoClickDuration() {
-    return autoClickLogic.autoClickerDuration;
-  }
+  Duration getAutoClickDuration() => autoClickLogic.autoClickerDuration;
 
-  bool shouldStartAutoClickAnimation() {
-    return autoClickLogic.shouldStartAutoClickAnimation();
-  }
-
-  bool shouldAnimateAutoClick() {
-    return autoClickLogic.shouldAnimateAutoClick() == 1;
-  }
+  bool shouldAnimateAutoClick() => autoClickLogic.shouldAnimateAutoClick() == 1;
 
   void buyAutoClicker(controller) {
     if (moneyLogic.canUpgrade(autoClickLogic.autoClickCost())) {
       moneyLogic.decreaseMoney(autoClickLogic.autoClickCost());
-      autoClickLogic.buyAutoClicker(workerLogic.workerNumber());
+      autoClickLogic.buyAutoClicker();
       notifyListeners();
-      if (shouldStartAutoClickAnimation()) {
+      if (shouldAnimateAutoClick() && wasAutoClickInitiated == 0) {
         controller.forward();
         autoClickTimer(controller);
       }
@@ -126,13 +102,10 @@ class ClickerBrain extends ChangeNotifier {
     if (autoClickLogic.shouldAnimateAutoClick() == 1 &&
         wasAutoClickInitiated == 0) {
       autoClickTimer(controller);
-      wasAutoClickInitiated++;
     }
   }
 
-  bool isAutoClickVisible() {
-    return autoClickLogic.isAutoClickVisible(getMoney());
-  }
+  bool isAutoClickVisible() => autoClickLogic.isAutoClickVisible(getMoney());
 
   void updateAutoClickIncrement() {
     autoClickLogic.updateAutoClickIncrement();
@@ -141,106 +114,110 @@ class ClickerBrain extends ChangeNotifier {
 
   // worker
 
-  String getWorkerNumber() {
-    return NumberFormat.compact().format(workerLogic.workerNumber());
-  }
+  String getWorkerNumber() =>
+      NumberFormat.compact().format(workerLogic.workerNumber());
 
-  String getWorkerCost() {
-    return NumberFormat.compact().format(workerLogic.workerCost());
-  }
+  String getWorkerCost() =>
+      NumberFormat.compact().format(workerLogic.workerCost());
 
-  double getWorkerIncrement() {
-    return workerLogic.workerIncrement();
-  }
+  double getWorkerIncrement() => workerLogic.workerIncrement();
 
-  Duration getWorkerDuration() {
-    return workerLogic.workerDuration;
-  }
+  Duration getWorkerDuration() => workerLogic.workerDuration;
 
-  bool shouldStartWorkerAnimation() {
-    return workerLogic.shouldStartWorkerAnimation();
-  }
+  bool shouldAnimateWorker() => workerLogic.shouldAnimateWorker() == 1;
 
   void buyWorker(controller) {
     if (moneyLogic.canUpgrade(workerLogic.workerCost())) {
       moneyLogic.decreaseMoney(workerLogic.workerCost());
-      workerLogic.buyWorker(managerLogic.managerNumber);
+      workerLogic.buyWorker();
       notifyListeners();
-      if (shouldStartWorkerAnimation()) {
-        workerTimer();
+      if (shouldAnimateWorker() && wasWorkerInitiated == 0) {
+        controller.forward();
+        workerTimer(controller);
       }
     }
   }
 
-  void workerTimer() {
+  double wasWorkerInitiated = 0;
+
+  void workerTimer(controller) {
+    wasWorkerInitiated++;
     Timer.periodic(
       workerLogic.workerDuration,
       (timer) {
-        autoClickLogic.autoClickNumberIncrease(workerLogic.workerNumber);
+        autoClickLogic.workerBuysAutoClicks(workerLogic.workerNumber());
+        controller.reset();
+        controller.forward();
         notifyListeners();
       },
     );
   }
 
-  bool isWorkerVisible() {
-    return workerLogic.isWorkerVisible(autoClickLogic.autoClickNumber());
+  void initialWorkerTimer(controller) {
+    if (shouldAnimateWorker() && wasWorkerInitiated == 0) {
+      workerTimer(controller);
+    }
   }
 
-  void changeWorkerIncrement() {
+  bool isWorkerVisible() =>
+      workerLogic.isWorkerVisible(autoClickLogic.autoClickNumber());
+
+  void updateWorkerIncrement() {
     workerLogic.updateWorkerIncrement();
     notifyListeners();
   }
 
   // manager
 
-  String getManagerNumber() {
-    return NumberFormat.compact().format(managerLogic.managerNumber);
-  }
+  String getManagerNumber() =>
+      NumberFormat.compact().format(managerLogic.managerNumber());
 
-  String getManagerCost() {
-    return NumberFormat.compact().format(managerLogic.managerCost);
-  }
+  String getManagerCost() =>
+      NumberFormat.compact().format(managerLogic.managerCost());
 
-  String getManagerIncrement() {
-    return managerLogic.managerIncrement.toStringAsFixed(0);
-  }
+  double getManagerIncrement() => managerLogic.managerIncrement();
 
-  Duration getManagerDuration() {
-    return managerLogic.managerDuration;
-  }
+  Duration getManagerDuration() => managerLogic.managerDuration;
 
-  bool shouldStartManagerAnimation() {
-    return managerLogic.shouldStartManagerAnimation();
-  }
+  bool shouldAnimateManager() => managerLogic.shouldAnimateManager() == 1;
 
-  void buyManager() {
-    if (moneyLogic.canUpgrade(managerLogic.managerCost)) {
-      moneyLogic.decreaseMoney(managerLogic.managerCost);
-      managerLogic.updateManagerCostOne();
-      managerLogic.managerCostIncrease();
-      managerLogic.managerNumberIncrease();
+  void buyManager(controller) {
+    if (moneyLogic.canUpgrade(managerLogic.managerCost())) {
+      moneyLogic.decreaseMoney(managerLogic.managerCost());
+      managerLogic.buyManager();
       notifyListeners();
-      if (shouldStartManagerAnimation()) {
-        managerTimer();
+      if (shouldAnimateManager() && wasManagerInitiated == 0) {
+        controller.forward();
+        managerTimer(controller);
       }
     }
   }
 
-  void managerTimer() {
+  double wasManagerInitiated = 0;
+
+  void managerTimer(controller) {
+    wasManagerInitiated++;
     Timer.periodic(
       managerLogic.managerDuration,
       (timer) {
-        workerLogic.workerNumberIncrease(managerLogic.managerNumber);
+        workerLogic.managerBuysWorkers(managerLogic.managerNumber());
+        controller.reset();
+        controller.forward();
         notifyListeners();
       },
     );
   }
 
-  bool isManagerVisible() {
-    return managerLogic.isManagerVisible();
+  void initialManagerTimer(controller) {
+    if (shouldAnimateManager() && wasManagerInitiated == 0) {
+      managerTimer(controller);
+    }
   }
 
-  void changeManagerIncrement() {
+  bool isManagerVisible() =>
+      managerLogic.isManagerVisible(workerLogic.workerNumber());
+
+  void updateManagerIncrement() {
     managerLogic.updateManagerIncrement();
     notifyListeners();
   }

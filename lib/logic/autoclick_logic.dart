@@ -10,52 +10,39 @@ class AutoClickLogic {
 
   // getters
 
-  double autoClickCost() {
-    return box.get('autoClickCost', defaultValue: kDefaultAutoClickCost)
-        as double;
-  }
+  double autoClickCost() =>
+      box.get('autoClickCost', defaultValue: kDefaultAutoClickCost) as double;
 
-  double autoClickCostOne() {
-    return box.get('autoClickCostOne', defaultValue: kDefaultAutoClickCostOne)
-        as double;
-  }
+  double autoClickCostOne() =>
+      box.get('autoClickCostOne', defaultValue: kDefaultAutoClickCostOne)
+          as double;
 
-  double autoClickNumber() {
-    return box.get('autoClickNumber', defaultValue: kDefaultAutoClickNumber)
-        as double;
-  }
+  double autoClickNumber() =>
+      box.get('autoClickNumber', defaultValue: kDefaultAutoClickNumber)
+          as double;
 
-  double autoClickIncrement() {
-    return box.get('autoClickIncrement',
-        defaultValue: kDefaultAutoClickIncrement) as double;
-  }
+  double autoClickIncrement() =>
+      box.get('autoClickIncrement', defaultValue: kDefaultAutoClickIncrement)
+          as double;
 
-  double startAutoClickAnimation() {
-    return box.get('startAutoClickAnimation',
-        defaultValue: kDefaultStartAutoClickAnimation) as double;
-  }
+  double autoClickVisible() =>
+      box.get('autoClickVisible', defaultValue: kDefaultAutoClickVisible)
+          as double;
 
-  double autoClickVisible() {
-    return box.get('autoClickVisible', defaultValue: kDefaultAutoClickVisible)
-        as double;
-  }
+  double shouldAnimateAutoClick() =>
+      box.get('shouldAnimateAutoClick', defaultValue: 0.0) as double;
 
-  double shouldAnimateAutoClick() {
-    return box.get('shouldAnimateAutoClick', defaultValue: 0.0) as double;
-  }
-
-  double initialAutoClickUpgradeDone() {
-    return box.get('initialAutoClickUpgradeDone', defaultValue: 0.0) as double;
-  }
+  double initialAutoClickUpgradeDone() =>
+      box.get('initialAutoClickUpgradeDone', defaultValue: 0.0) as double;
 
   // functions
 
-  void buyAutoClicker(workerNumber) {
+  void buyAutoClicker() {
     if (initialAutoClickUpgradeDone() == 1.0) {
       updateAutoClickCostOne();
     }
     autoClickCostIncrease();
-    autoClickNumberIncrease(workerNumber);
+    autoClickNumberIncrease();
     if (initialAutoClickUpgradeDone() == 0.0) {
       box.put('initialAutoClickUpgradeDone', 1.0);
     }
@@ -63,7 +50,7 @@ class AutoClickLogic {
 
   void updateAutoClickCostOne() {
     double newAutoClickCostOne =
-        (autoClickCostOne() * pow(kMainIncrement, autoClickIncrement()));
+        autoClickCostOne() * pow(kMainIncrement, autoClickIncrement());
     box.put('autoClickCostOne', newAutoClickCostOne);
   }
 
@@ -72,18 +59,15 @@ class AutoClickLogic {
     incrementalAutoClickCost();
   }
 
-  void autoClickNumberIncrease(workerNumber) {
-    box.put('autoClickNumber',
-        (autoClickNumber() + autoClickIncrement() + workerNumber));
-    box.put('startAutoClickAnimation', (startAutoClickAnimation() + 1));
+  void autoClickNumberIncrease() {
+    box.put('autoClickNumber', (autoClickNumber() + autoClickIncrement()));
     if (shouldAnimateAutoClick() == 0.0) {
       box.put('shouldAnimateAutoClick', 1.0);
     }
   }
 
-  bool shouldStartAutoClickAnimation() {
-    return startAutoClickAnimation() == 1.0;
-  }
+  void workerBuysAutoClicks(workerNumber) =>
+      box.put('autoClickNumber', (autoClickNumber() + workerNumber));
 
   bool isAutoClickVisible(money) {
     if (autoClickVisible() == 0.0 && money >= kMoneyToShowAutoClick) {

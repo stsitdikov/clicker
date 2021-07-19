@@ -10,51 +10,36 @@ class WorkerLogic {
 
   // getters
 
-  double workerCost() {
-    return box.get('workerCost', defaultValue: kDefaultWorkerCost) as double;
-  }
+  double workerCost() =>
+      box.get('workerCost', defaultValue: kDefaultWorkerCost) as double;
 
-  double workerCostOne() {
-    return box.get('workerCostOne', defaultValue: kDefaultWorkerCostOne)
-        as double;
-  }
+  double workerCostOne() =>
+      box.get('workerCostOne', defaultValue: kDefaultWorkerCostOne) as double;
 
-  double workerNumber() {
-    return box.get('workerNumber', defaultValue: kDefaultWorkerNumber)
-        as double;
-  }
+  double workerNumber() =>
+      box.get('workerNumber', defaultValue: kDefaultWorkerNumber) as double;
 
-  double workerIncrement() {
-    return box.get('workerIncrement', defaultValue: kDefaultWorkerIncrement)
-        as double;
-  }
+  double workerIncrement() =>
+      box.get('workerIncrement', defaultValue: kDefaultWorkerIncrement)
+          as double;
 
-  double startWorkerAnimation() {
-    return box.get('startWorkerAnimation',
-        defaultValue: kDefaultStartWorkerAnimation) as double;
-  }
+  double workerVisible() =>
+      box.get('workerVisible', defaultValue: kDefaultWorkerVisible) as double;
 
-  double workerVisible() {
-    return box.get('workerVisible', defaultValue: kDefaultWorkerVisible)
-        as double;
-  }
+  double shouldAnimateWorker() =>
+      box.get('shouldAnimateWorker', defaultValue: 0.0) as double;
 
-  double shouldAnimateWorker() {
-    return box.get('shouldAnimateWorker', defaultValue: 0.0) as double;
-  }
-
-  double initialWorkerUpgradeDone() {
-    return box.get('initialWorkerUpgradeDone', defaultValue: 0.0) as double;
-  }
+  double initialWorkerUpgradeDone() =>
+      box.get('initialWorkerUpgradeDone', defaultValue: 0.0) as double;
 
   // functions
 
-  void buyWorker(managerNumber) {
+  void buyWorker() {
     if (initialWorkerUpgradeDone() == 1.0) {
       updateWorkerCostOne();
     }
     workerCostIncrease();
-    workerNumberIncrease(managerNumber);
+    workerNumberIncrease();
     if (initialWorkerUpgradeDone() == 0.0) {
       box.put('initialWorkerUpgradeDone', 1.0);
     }
@@ -67,22 +52,19 @@ class WorkerLogic {
   }
 
   void workerCostIncrease() {
-    double newWorkerCost = workerCostOne();
-    box.put('workerCost', newWorkerCost);
+    box.put('workerCost', workerCostOne());
     incrementalWorkerCost();
   }
 
-  void workerNumberIncrease(managerNumber) {
-    double newWorkerNumber = workerNumber() + workerIncrement() + managerNumber;
-    box.put('workerNumber', newWorkerNumber);
-    if (startWorkerAnimation() == 0.0) {
-      box.put('startWorkerAnimation', 1.0);
+  void workerNumberIncrease() {
+    box.put('workerNumber', (workerNumber() + workerIncrement()));
+    if (shouldAnimateWorker() == 0.0) {
+      box.put('shouldAnimateWorker', 1.0);
     }
   }
 
-  bool shouldStartWorkerAnimation() {
-    return startWorkerAnimation() == 1.0;
-  }
+  void managerBuysWorkers(managerNumber) =>
+      box.put('workerNumber', (workerNumber() + managerNumber));
 
   bool isWorkerVisible(autoClickNumber) {
     if (workerVisible() == 0.0 &&
@@ -109,8 +91,8 @@ class WorkerLogic {
 
   void incrementalWorkerCost() {
     double newWorkerCost = 0;
-    for (var i = 1; i < workerIncrement(); i++) {
-      newWorkerCost = workerCost() + workerCostOne() * pow(kMainIncrement, i);
+    for (var i = 1; i <= workerIncrement(); i++) {
+      newWorkerCost = workerCostOne() * pow(kMainIncrement, i);
     }
     box.put('workerCost', newWorkerCost);
   }

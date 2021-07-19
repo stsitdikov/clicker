@@ -8,33 +8,24 @@ class ClickRowLogic {
 
   // getters
 
-  double clickAmount() {
-    return box.get('clickAmount', defaultValue: kDefaultClickAmount) as double;
-  }
+  double clickAmount() =>
+      box.get('clickAmount', defaultValue: kDefaultClickAmount) as double;
 
-  double clickCost() {
-    return box.get('clickCost', defaultValue: kDefaultClickCost) as double;
-  }
+  double clickCost() =>
+      box.get('clickCost', defaultValue: kDefaultClickCost) as double;
 
-  double clickCostOne() {
-    return box.get('clickCostOne', defaultValue: kDefaultClickCostOne)
-        as double;
-  }
+  double clickCostOne() =>
+      box.get('clickCostOne', defaultValue: kDefaultClickCostOne) as double;
 
-  double clickIncrement() {
-    return box.get('clickIncrement', defaultValue: kDefaultClickIncrement)
-        as double;
-  }
+  double clickIncrement() =>
+      box.get('clickIncrement', defaultValue: kDefaultClickIncrement) as double;
 
-  double clickUpgradeVisible() {
-    return box.get('clickUpgradeVisible',
-        defaultValue: kDefaultClickUpgradeVisible) as double;
-  }
+  double clickUpgradeVisible() =>
+      box.get('clickUpgradeVisible', defaultValue: kDefaultClickUpgradeVisible)
+          as double;
 
-  double initialClickUpgradeDone() {
-    return box.get('initialClickUpgradeDone',
-        defaultValue: kDefaultInitialClickUpgradeDone) as double;
-  }
+  double initialClickUpgradeDone() => box.get('initialClickUpgradeDone',
+      defaultValue: kDefaultInitialClickUpgradeDone) as double;
 
   // functions
 

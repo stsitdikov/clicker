@@ -5,8 +5,9 @@ import 'reusable_progress_row.dart';
 
 class ManagerRow extends StatelessWidget {
   final Animation<double> animation;
+  final AnimationController controller;
 
-  ManagerRow(this.animation);
+  ManagerRow(this.animation, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +21,12 @@ class ManagerRow extends StatelessWidget {
         animation: animation,
         title: clickerBrain.getManagerNumber() + ' x  Manager',
         onUpgradeTap: () {
-          clickerBrainListenFalse.buyManager();
+          clickerBrainListenFalse.buyManager(controller);
         },
         upgradeCost: clickerBrain.getManagerCost(),
-        incrementNumber: clickerBrain.getManagerIncrement(),
+        incrementNumber: clickerBrain.getManagerIncrement().toStringAsFixed(0),
         onIncrementTap: () {
-          clickerBrainListenFalse.changeManagerIncrement();
+          clickerBrainListenFalse.updateManagerIncrement();
         },
       ),
     );
