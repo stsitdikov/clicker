@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'reusable_progress_row.dart';
 
-class AutoClickRow extends StatelessWidget {
+class WorkerRow extends StatelessWidget {
   final Animation<double> animation;
-  final AnimationController controller;
 
-  AutoClickRow(this.animation, this.controller);
+  WorkerRow(this.animation);
 
   @override
   Widget build(BuildContext context) {
@@ -16,18 +15,17 @@ class AutoClickRow extends StatelessWidget {
         Provider.of<ClickerBrain>(context, listen: false);
 
     return Visibility(
-      visible: clickerBrain.isAutoClickVisible(),
+      visible: clickerBrain.isWorkerVisible(),
       child: ReusableProgressRow(
         animation: animation,
-        title: clickerBrain.getAutoClickNumber() + ' x  AutoClicker',
+        title: clickerBrain.getWorkerNumber() + ' x  Worker',
         onUpgradeTap: () {
-          clickerBrainListenFalse.buyAutoClicker(controller);
+          clickerBrainListenFalse.buyWorker();
         },
-        upgradeCost: clickerBrain.getAutoClickCost(),
-        incrementNumber:
-            clickerBrain.getAutoClickIncrement().toStringAsFixed(0),
+        upgradeCost: clickerBrain.getWorkerCost(),
+        incrementNumber: clickerBrain.getWorkerIncrement().toStringAsFixed(0),
         onIncrementTap: () {
-          clickerBrainListenFalse.updateAutoClickIncrement();
+          clickerBrainListenFalse.changeWorkerIncrement();
         },
       ),
     );

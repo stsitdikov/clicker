@@ -1,73 +1,254 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
+import 'package:clicker/logic/autoclick_logic.dart';
+import 'package:clicker/logic/click_row_logic.dart';
+import 'package:clicker/logic/manager_logic.dart';
+import 'package:clicker/logic/money_logic.dart';
+import 'package:clicker/logic/worker_logic.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:clicker/logic/constants.dart';
 
 class ClickerBrain extends ChangeNotifier {
-  double money = 0.0;
-  double mainIncrement = 1.2;
-  double upgradeClickCost = 5;
+  MoneyLogic moneyLogic;
+  ClickRowLogic clickRowLogic;
+  AutoClickLogic autoClickLogic;
+  WorkerLogic workerLogic;
+  ManagerLogic managerLogic;
 
-  bool autoClickVisible = false;
-  bool autoClickAnimation = false;
-  double moneyToShowAutoClick = 10;
-  double autoClickCost = 10;
-  int autoClickNumber = 0;
-  Duration autoClickerDuration = Duration(seconds: 3);
+  ClickerBrain(this.moneyLogic, this.clickRowLogic, this.autoClickLogic,
+      this.workerLogic, this.managerLogic);
 
-  double clickAmount = 1.0;
-  bool clickUpgradeVisible = false;
+  String getMoneyString() {
+    return NumberFormat.compact().format(getMoney());
+  }
+
+  double getMoney() {
+    return moneyLogic.getMoney();
+  }
+
+  void clearBox() {
+    Box box = Hive.box<double>(kClickerBrainBox);
+    box.clear();
+  }
+
+  // click row
+
+  String getClickAmount() {
+    return NumberFormat.compact().format(clickRowLogic.getClickAmount());
+  }
+
+  String getClickCost() {
+    return NumberFormat.compact().format(clickRowLogic.getClickCost());
+  }
+
+  double getClickIncrement() {
+    return clickRowLogic.getClickIncrement();
+  }
 
   void clickIncreaseMoney() {
-    money = money + clickAmount;
+    moneyLogic.clickIncreaseMoney();
     notifyListeners();
   }
 
-  void clickUpgradeCost() {
-    if (money >= upgradeClickCost) {
-      money = money - upgradeClickCost;
-      upgradeClickCost = upgradeClickCost * mainIncrement;
-      clickAmount = clickAmount * mainIncrement;
+  void clickUpgrade() {
+    if (moneyLogic.canUpgrade(clickRowLogic.getClickCost())) {
+      moneyLogic.decreaseMoney(clickRowLogic.getClickCost());
+      clickRowLogic.clickUpgrade();
       notifyListeners();
-    }
-  }
-
-  void buyAutoClicker() {
-    if (money >= autoClickCost) {
-      money = money - autoClickCost;
-      autoClickCost = autoClickCost * mainIncrement;
-      autoClickNumber++;
-      notifyListeners();
-      if (autoClickNumber == 1) {
-        autoClicker();
-        autoClickAnimation = true;
-      }
-      ;
-    }
-  }
-
-  void autoClicker() {
-    if (autoClickNumber > 0) {
-      Timer.periodic(
-        autoClickerDuration,
-        (timer) {
-          money = money + autoClickNumber * clickAmount;
-          notifyListeners();
-        },
-      );
     }
   }
 
   bool isClickUpgradeVisible() {
-    if (clickUpgradeVisible == false && money >= upgradeClickCost) {
-      clickUpgradeVisible = true;
+    return clickRowLogic.isClickUpgradeVisible(getMoney());
+  }
+
+  void changeClickIncrement() {
+    clickRowLogic.updateClickIncrement();
+    notifyListeners();
+  }
+
+  // autoclicker
+
+  String getAutoClickNumber() {
+    return NumberFormat.compact().format(autoClickLogic.getAutoClickNumber());
+  }
+
+  String getAutoClickCost() {
+    return NumberFormat.compact().format(autoClickLogic.getAutoClickCost());
+  }
+
+  double getAutoClickIncrement() {
+    return autoClickLogic.getAutoClickIncrement();
+  }
+
+  Duration getAutoClickDuration() {
+    return autoClickLogic.autoClickerDuration;
+  }
+
+  bool shouldStartAutoClickAnimation() {
+    return autoClickLogic.shouldStartAutoClickAnimation();
+  }
+
+  bool shouldAnimateAutoClick() {
+    return autoClickLogic.shouldAnimateAutoClick() == 1;
+  }
+
+  void buyAutoClicker(controller) {
+    if (moneyLogic.canUpgrade(autoClickLogic.getAutoClickCost())) {
+      moneyLogic.decreaseMoney(autoClickLogic.getAutoClickCost());
+      autoClickLogic.buyAutoClicker(workerLogic.workerNumber);
+      notifyListeners();
+      if (shouldStartAutoClickAnimation()) {
+        controller.forward();
+        autoClickTimer(controller);
+      }
     }
-    return clickUpgradeVisible;
+  }
+
+  double wasAutoClickInitiated = 0;
+
+  void autoClickTimer(controller) {
+    wasAutoClickInitiated++;
+    Timer.periodic(
+      autoClickLogic.autoClickerDuration,
+      (timer) {
+        moneyLogic.autoClickIncreaseMoney();
+        controller.reset();
+        controller.forward();
+        notifyListeners();
+      },
+    );
+  }
+
+  void initialAutoClickTimer(controller) {
+    if (autoClickLogic.shouldAnimateAutoClick() == 1 &&
+        wasAutoClickInitiated == 0) {
+      autoClickTimer(controller);
+      wasAutoClickInitiated++;
+    }
   }
 
   bool isAutoClickVisible() {
-    if (autoClickVisible == false && money >= moneyToShowAutoClick) {
-      autoClickVisible = true;
+    return autoClickLogic.isAutoClickVisible(getMoney());
+  }
+
+  void updateAutoClickIncrement() {
+    autoClickLogic.updateAutoClickIncrement();
+    notifyListeners();
+  }
+
+  // worker
+
+  String getWorkerNumber() {
+    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
+        .get('workerNumber', defaultValue: kDefaultWorkerNumber));
+  }
+
+  String getWorkerCost() {
+    return NumberFormat.compact().format(Hive.box<double>(kClickerBrainBox)
+        .get('workerCost', defaultValue: kDefaultWorkerCost));
+  }
+
+  double getWorkerIncrement() {
+    return Hive.box<double>(kClickerBrainBox).get('workerIncrement',
+        defaultValue: kDefaultWorkerIncrement) as double;
+  }
+
+  Duration getWorkerDuration() {
+    return workerLogic.workerDuration;
+  }
+
+  bool shouldStartWorkerAnimation() {
+    return workerLogic.shouldStartWorkerAnimation();
+  }
+
+  void buyWorker() {
+    if (moneyLogic.canUpgrade(Hive.box<double>(kClickerBrainBox)
+        .get('workerCost', defaultValue: kDefaultWorkerCost))) {
+      moneyLogic.decreaseMoney(Hive.box<double>(kClickerBrainBox)
+          .get('workerCost', defaultValue: kDefaultWorkerCost));
+      workerLogic.updateWorkerCostOne();
+      workerLogic.workerCostIncrease();
+      workerLogic.workerNumberIncrease();
+      notifyListeners();
+      if (shouldStartWorkerAnimation()) {
+        workerTimer();
+      }
     }
-    return autoClickVisible;
+  }
+
+  void workerTimer() {
+    Timer.periodic(
+      workerLogic.workerDuration,
+      (timer) {
+        autoClickLogic.autoClickNumberIncrease(workerLogic.workerNumber);
+        notifyListeners();
+      },
+    );
+  }
+
+  bool isWorkerVisible() {
+    return workerLogic.isWorkerVisible();
+  }
+
+  void changeWorkerIncrement() {
+    workerLogic.updateWorkerIncrement();
+    notifyListeners();
+  }
+
+  // manager
+
+  String getManagerNumber() {
+    return NumberFormat.compact().format(managerLogic.managerNumber);
+  }
+
+  String getManagerCost() {
+    return NumberFormat.compact().format(managerLogic.managerCost);
+  }
+
+  String getManagerIncrement() {
+    return managerLogic.managerIncrement.toStringAsFixed(0);
+  }
+
+  Duration getManagerDuration() {
+    return managerLogic.managerDuration;
+  }
+
+  bool shouldStartManagerAnimation() {
+    return managerLogic.shouldStartManagerAnimation();
+  }
+
+  void buyManager() {
+    if (moneyLogic.canUpgrade(managerLogic.managerCost)) {
+      moneyLogic.decreaseMoney(managerLogic.managerCost);
+      managerLogic.updateManagerCostOne();
+      managerLogic.managerCostIncrease();
+      managerLogic.managerNumberIncrease();
+      notifyListeners();
+      if (shouldStartManagerAnimation()) {
+        managerTimer();
+      }
+    }
+  }
+
+  void managerTimer() {
+    Timer.periodic(
+      managerLogic.managerDuration,
+      (timer) {
+        workerLogic.workerNumberIncrease();
+        notifyListeners();
+      },
+    );
+  }
+
+  bool isManagerVisible() {
+    return managerLogic.isManagerVisible();
+  }
+
+  void changeManagerIncrement() {
+    managerLogic.updateManagerIncrement();
+    notifyListeners();
   }
 }
