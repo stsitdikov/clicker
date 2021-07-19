@@ -21,11 +21,10 @@ class ClickRowLogic {
       box.get('clickIncrement', defaultValue: kDefaultClickIncrement) as double;
 
   double clickUpgradeVisible() =>
-      box.get('clickUpgradeVisible', defaultValue: kDefaultClickUpgradeVisible)
-          as double;
+      box.get('clickUpgradeVisible', defaultValue: 0.0) as double;
 
-  double initialClickUpgradeDone() => box.get('initialClickUpgradeDone',
-      defaultValue: kDefaultInitialClickUpgradeDone) as double;
+  double initialClickUpgradeDone() =>
+      box.get('initialClickUpgradeDone', defaultValue: 0.0) as double;
 
   // functions
 

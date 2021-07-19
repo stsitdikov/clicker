@@ -18,16 +18,14 @@ class AutoClickLogic {
           as double;
 
   double autoClickNumber() =>
-      box.get('autoClickNumber', defaultValue: kDefaultAutoClickNumber)
-          as double;
+      box.get('autoClickNumber', defaultValue: 0.0) as double;
 
   double autoClickIncrement() =>
       box.get('autoClickIncrement', defaultValue: kDefaultAutoClickIncrement)
           as double;
 
   double autoClickVisible() =>
-      box.get('autoClickVisible', defaultValue: kDefaultAutoClickVisible)
-          as double;
+      box.get('autoClickVisible', defaultValue: 0.0) as double;
 
   double shouldAnimateAutoClick() =>
       box.get('shouldAnimateAutoClick', defaultValue: 0.0) as double;

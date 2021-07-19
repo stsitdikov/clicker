@@ -17,14 +17,14 @@ class ManagerLogic {
       box.get('managerCostOne', defaultValue: kDefaultManagerCostOne) as double;
 
   double managerNumber() =>
-      box.get('managerNumber', defaultValue: kDefaultManagerNumber) as double;
+      box.get('managerNumber', defaultValue: 0.0) as double;
 
   double managerIncrement() =>
       box.get('managerIncrement', defaultValue: kDefaultManagerIncrement)
           as double;
 
   double managerVisible() =>
-      box.get('managerVisible', defaultValue: kDefaultManagerVisible) as double;
+      box.get('managerVisible', defaultValue: 0.0) as double;
 
   double shouldAnimateManager() =>
       box.get('shouldAnimateManager', defaultValue: 0.0) as double;

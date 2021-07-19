@@ -16,15 +16,14 @@ class WorkerLogic {
   double workerCostOne() =>
       box.get('workerCostOne', defaultValue: kDefaultWorkerCostOne) as double;
 
-  double workerNumber() =>
-      box.get('workerNumber', defaultValue: kDefaultWorkerNumber) as double;
+  double workerNumber() => box.get('workerNumber', defaultValue: 0.0) as double;
 
   double workerIncrement() =>
       box.get('workerIncrement', defaultValue: kDefaultWorkerIncrement)
           as double;
 
   double workerVisible() =>
-      box.get('workerVisible', defaultValue: kDefaultWorkerVisible) as double;
+      box.get('workerVisible', defaultValue: 0.0) as double;
 
   double shouldAnimateWorker() =>
       box.get('shouldAnimateWorker', defaultValue: 0.0) as double;
