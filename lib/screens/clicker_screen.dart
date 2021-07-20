@@ -1,4 +1,5 @@
 import 'package:clicker/components/autoclick_row.dart';
+import 'package:clicker/components/ceo_row.dart';
 import 'package:clicker/components/click_row.dart';
 import 'package:clicker/components/manager_row.dart';
 import 'package:clicker/components/worker_row.dart';
@@ -44,6 +45,15 @@ class _ClickerScreenState extends State<ClickerScreen>
     curve: Curves.linear,
   );
 
+  late final AnimationController ceoController = AnimationController(
+    duration: Provider.of<ClickerBrain>(context).getCeoDuration(),
+    vsync: this,
+  );
+  late final Animation<double> ceoAnimation = CurvedAnimation(
+    parent: ceoController,
+    curve: Curves.linear,
+  );
+
   @override
   void dispose() {
     super.dispose();
@@ -62,12 +72,27 @@ class _ClickerScreenState extends State<ClickerScreen>
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<ClickerBrain>(context)
-        .initialAutoClickTimer(autoClickController);
+    var clickerBrain = Provider.of<ClickerBrain>(context);
 
-    Provider.of<ClickerBrain>(context).initialWorkerTimer(workerController);
+    clickerBrain.initialAutoClickTimer(autoClickController);
+    clickerBrain.initialWorkerTimer(workerController);
+    clickerBrain.initialManagerTimer(managerController);
+    clickerBrain.initialCeoTimer(ceoController);
 
-    Provider.of<ClickerBrain>(context).initialManagerTimer(managerController);
+    int listFlex = 1;
+
+    List<Widget> listOfRows = [
+      // CeoRow(ceoAnimation, ceoController),
+      // ManagerRow(managerAnimation, managerController),
+      // WorkerRow(workerAnimation, workerController),
+      // AutoClickRow(autoClickAnimation, autoClickController),
+      ClickRow(),
+    ];
+
+    if (clickerBrain.isAutoClickVisible()) {
+      listOfRows.add(AutoClickRow(autoClickAnimation, autoClickController));
+      listFlex = 2;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -77,20 +102,18 @@ class _ClickerScreenState extends State<ClickerScreen>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
+            flex: 4,
             child: MoneyDisplay(),
           ),
-          Consumer<ClickerBrain>(
-            builder: (context, clickerBrain, child) {
-              return ListView(
+          Expanded(
+            flex: listFlex,
+            child: Scrollbar(
+              child: ListView(
                 shrinkWrap: true,
-                children: [
-                  ManagerRow(managerAnimation, managerController),
-                  WorkerRow(workerAnimation, workerController),
-                  AutoClickRow(autoClickAnimation, autoClickController),
-                  ClickRow(),
-                ],
-              );
-            },
+                reverse: true,
+                children: listOfRows,
+              ),
+            ),
           ),
         ],
       ),

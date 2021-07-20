@@ -35,3 +35,10 @@ const double kWorkerNumberToShowManager = 5;
 const double kDefaultManagerCost = 10;
 const double kDefaultManagerCostOne = 10;
 const double kDefaultManagerIncrement = 1;
+
+// ceo constants
+
+const double kManagerNumberToShowCeo = 5;
+const double kDefaultCeoCost = 10;
+const double kDefaultCeoCostOne = 10;
+const double kDefaultCeoIncrement = 1;

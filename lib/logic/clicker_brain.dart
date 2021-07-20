@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:clicker/logic/autoclick_logic.dart';
+import 'package:clicker/logic/ceo_logic.dart';
 import 'package:clicker/logic/click_row_logic.dart';
 import 'package:clicker/logic/manager_logic.dart';
 import 'package:clicker/logic/money_logic.dart';
@@ -16,9 +17,10 @@ class ClickerBrain extends ChangeNotifier {
   AutoClickLogic autoClickLogic;
   WorkerLogic workerLogic;
   ManagerLogic managerLogic;
+  CeoLogic ceoLogic;
 
   ClickerBrain(this.moneyLogic, this.clickRowLogic, this.autoClickLogic,
-      this.workerLogic, this.managerLogic);
+      this.workerLogic, this.managerLogic, this.ceoLogic);
 
   String getMoneyString() => NumberFormat.compact().format(getMoney());
 
@@ -219,6 +221,58 @@ class ClickerBrain extends ChangeNotifier {
 
   void updateManagerIncrement() {
     managerLogic.updateManagerIncrement();
+    notifyListeners();
+  }
+
+  // ceo
+
+  String getCeoNumber() => NumberFormat.compact().format(ceoLogic.ceoNumber());
+
+  String getCeoCost() => NumberFormat.compact().format(ceoLogic.ceoCost());
+
+  double getCeoIncrement() => ceoLogic.ceoIncrement();
+
+  Duration getCeoDuration() => ceoLogic.ceoDuration;
+
+  bool shouldAnimateCeo() => ceoLogic.shouldAnimateCeo() == 1;
+
+  void buyCeo(controller) {
+    if (moneyLogic.canUpgrade(ceoLogic.ceoCost())) {
+      moneyLogic.decreaseMoney(ceoLogic.ceoCost());
+      ceoLogic.buyCeo();
+      notifyListeners();
+      if (shouldAnimateCeo() && wasCeoInitiated == 0) {
+        controller.forward();
+        ceoTimer(controller);
+      }
+    }
+  }
+
+  double wasCeoInitiated = 0;
+
+  void ceoTimer(controller) {
+    wasCeoInitiated++;
+    Timer.periodic(
+      ceoLogic.ceoDuration,
+      (timer) {
+        managerLogic.ceoBuysManagers(ceoLogic.ceoNumber());
+        controller.reset();
+        controller.forward();
+        notifyListeners();
+      },
+    );
+  }
+
+  void initialCeoTimer(controller) {
+    if (shouldAnimateCeo() && wasCeoInitiated == 0) {
+      ceoTimer(controller);
+    }
+  }
+
+  bool isCeoVisible() => ceoLogic.isCeoVisible(managerLogic.managerNumber());
+
+  void updateCeoIncrement() {
+    ceoLogic.updateCeoIncrement();
     notifyListeners();
   }
 }

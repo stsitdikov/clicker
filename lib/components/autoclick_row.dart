@@ -15,21 +15,17 @@ class AutoClickRow extends StatelessWidget {
     var clickerBrainListenFalse =
         Provider.of<ClickerBrain>(context, listen: false);
 
-    return Visibility(
-      visible: clickerBrain.isAutoClickVisible(),
-      child: ReusableProgressRow(
-        animation: animation,
-        title: clickerBrain.getAutoClickNumber() + ' x  AutoClicker',
-        onUpgradeTap: () {
-          clickerBrainListenFalse.buyAutoClicker(controller);
-        },
-        upgradeCost: clickerBrain.getAutoClickCost(),
-        incrementNumber:
-            clickerBrain.getAutoClickIncrement().toStringAsFixed(0),
-        onIncrementTap: () {
-          clickerBrainListenFalse.updateAutoClickIncrement();
-        },
-      ),
+    return ReusableProgressRow(
+      animation: animation,
+      title: clickerBrain.getAutoClickNumber() + ' x  AutoClicker',
+      onUpgradeTap: () {
+        clickerBrainListenFalse.buyAutoClicker(controller);
+      },
+      upgradeCost: clickerBrain.getAutoClickCost(),
+      incrementNumber: clickerBrain.getAutoClickIncrement().toStringAsFixed(0),
+      onIncrementTap: () {
+        clickerBrainListenFalse.updateAutoClickIncrement();
+      },
     );
   }
 }
