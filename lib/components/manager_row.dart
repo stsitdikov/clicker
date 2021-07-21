@@ -15,20 +15,17 @@ class ManagerRow extends StatelessWidget {
     var clickerBrainListenFalse =
         Provider.of<ClickerBrain>(context, listen: false);
 
-    return Visibility(
-      visible: clickerBrain.isManagerVisible(),
-      child: ReusableProgressRow(
-        animation: animation,
-        title: clickerBrain.getManagerNumber() + ' x  Manager',
-        onUpgradeTap: () {
-          clickerBrainListenFalse.buyManager(controller);
-        },
-        upgradeCost: clickerBrain.getManagerCost(),
-        incrementNumber: clickerBrain.getManagerIncrement().toStringAsFixed(0),
-        onIncrementTap: () {
-          clickerBrainListenFalse.updateManagerIncrement();
-        },
-      ),
+    return ReusableProgressRow(
+      animation: animation,
+      title: clickerBrain.getManagerNumber() + ' x  Manager',
+      onUpgradeTap: () {
+        clickerBrainListenFalse.buyManager(controller);
+      },
+      upgradeCost: clickerBrain.getManagerCost(),
+      incrementNumber: clickerBrain.getManagerIncrement().toStringAsFixed(0),
+      onIncrementTap: () {
+        clickerBrainListenFalse.updateManagerIncrement();
+      },
     );
   }
 }

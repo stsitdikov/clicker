@@ -82,16 +82,26 @@ class _ClickerScreenState extends State<ClickerScreen>
     int listFlex = 1;
 
     List<Widget> listOfRows = [
-      // CeoRow(ceoAnimation, ceoController),
-      // ManagerRow(managerAnimation, managerController),
-      // WorkerRow(workerAnimation, workerController),
-      // AutoClickRow(autoClickAnimation, autoClickController),
       ClickRow(),
     ];
 
     if (clickerBrain.isAutoClickVisible()) {
       listOfRows.add(AutoClickRow(autoClickAnimation, autoClickController));
       listFlex = 2;
+    }
+
+    if (clickerBrain.isWorkerVisible()) {
+      listOfRows.add(WorkerRow(workerAnimation, workerController));
+      listFlex = 3;
+    }
+
+    if (clickerBrain.isManagerVisible()) {
+      listOfRows.add(ManagerRow(managerAnimation, managerController));
+      listFlex = 4;
+    }
+
+    if (clickerBrain.isCeoVisible()) {
+      listOfRows.add(CeoRow(ceoAnimation, ceoController));
     }
 
     return Scaffold(

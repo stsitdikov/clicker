@@ -15,20 +15,17 @@ class CeoRow extends StatelessWidget {
     var clickerBrainListenFalse =
         Provider.of<ClickerBrain>(context, listen: false);
 
-    return Visibility(
-      visible: clickerBrain.isCeoVisible(),
-      child: ReusableProgressRow(
-        animation: animation,
-        title: clickerBrain.getCeoNumber() + ' x  CEO',
-        onUpgradeTap: () {
-          clickerBrainListenFalse.buyCeo(controller);
-        },
-        upgradeCost: clickerBrain.getCeoCost(),
-        incrementNumber: clickerBrain.getCeoIncrement().toStringAsFixed(0),
-        onIncrementTap: () {
-          clickerBrainListenFalse.updateCeoIncrement();
-        },
-      ),
+    return ReusableProgressRow(
+      animation: animation,
+      title: clickerBrain.getCeoNumber() + ' x  CEO',
+      onUpgradeTap: () {
+        clickerBrainListenFalse.buyCeo(controller);
+      },
+      upgradeCost: clickerBrain.getCeoCost(),
+      incrementNumber: clickerBrain.getCeoIncrement().toStringAsFixed(0),
+      onIncrementTap: () {
+        clickerBrainListenFalse.updateCeoIncrement();
+      },
     );
   }
 }

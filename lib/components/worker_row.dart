@@ -15,20 +15,17 @@ class WorkerRow extends StatelessWidget {
     var clickerBrainListenFalse =
         Provider.of<ClickerBrain>(context, listen: false);
 
-    return Visibility(
-      visible: clickerBrain.isWorkerVisible(),
-      child: ReusableProgressRow(
-        animation: animation,
-        title: clickerBrain.getWorkerNumber() + ' x  Worker',
-        onUpgradeTap: () {
-          clickerBrainListenFalse.buyWorker(controller);
-        },
-        upgradeCost: clickerBrain.getWorkerCost(),
-        incrementNumber: clickerBrain.getWorkerIncrement().toStringAsFixed(0),
-        onIncrementTap: () {
-          clickerBrainListenFalse.updateWorkerIncrement();
-        },
-      ),
+    return ReusableProgressRow(
+      animation: animation,
+      title: clickerBrain.getWorkerNumber() + ' x  Worker',
+      onUpgradeTap: () {
+        clickerBrainListenFalse.buyWorker(controller);
+      },
+      upgradeCost: clickerBrain.getWorkerCost(),
+      incrementNumber: clickerBrain.getWorkerIncrement().toStringAsFixed(0),
+      onIncrementTap: () {
+        clickerBrainListenFalse.updateWorkerIncrement();
+      },
     );
   }
 }
