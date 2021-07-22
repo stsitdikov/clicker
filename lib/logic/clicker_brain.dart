@@ -26,7 +26,22 @@ class ClickerBrain extends ChangeNotifier {
 
   double getMoney() => moneyLogic.money();
 
-  void clearBox() => Hive.box<double>(kClickerBrainBox).clear();
+  Box box = Hive.box<double>(kClickerBrainBox);
+
+  void clearBox() => box.clear();
+
+  double listFlex() => box.get('listFlex', defaultValue: 1.0);
+
+  double itemCount() => box.get('itemCount', defaultValue: 1.0);
+
+  void increaseListFlex() {
+    if (listFlex() < 4.0) {
+      box.put('listFlex', (listFlex() + 1.0));
+      box.put('itemCount', (itemCount() + 1.0));
+    } else if (listFlex() == 4.0) {
+      box.put('itemCount', (itemCount() + 1.0));
+    }
+  }
 
   // click row
 

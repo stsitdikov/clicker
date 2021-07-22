@@ -68,26 +68,26 @@ class _ClickerScreenState extends State<ClickerScreen>
   void initState() {
     super.initState();
     box = Hive.box(kClickerBrainBox);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      addRows();
+    });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    var clickerBrain = Provider.of<ClickerBrain>(context);
+  GlobalKey<AnimatedListState> key = GlobalKey();
 
-    clickerBrain.initialAutoClickTimer(autoClickController);
-    clickerBrain.initialWorkerTimer(workerController);
-    clickerBrain.initialManagerTimer(managerController);
-    clickerBrain.initialCeoTimer(ceoController);
+  late var clickerBrain = Provider.of<ClickerBrain>(context);
 
-    int listFlex = 1;
+  int listFlex = 1;
 
-    List<Widget> listOfRows = [
-      ClickRow(),
-    ];
+  List<Widget> listOfRows = [
+    ClickRow(),
+  ];
 
+  void addRows() {
     if (clickerBrain.isAutoClickVisible()) {
       listOfRows.add(AutoClickRow(autoClickAnimation, autoClickController));
       listFlex = 2;
+      key.currentState!.insertItem(1, duration: Duration(seconds: 1));
     }
 
     if (clickerBrain.isWorkerVisible()) {
@@ -103,6 +103,14 @@ class _ClickerScreenState extends State<ClickerScreen>
     if (clickerBrain.isCeoVisible()) {
       listOfRows.add(CeoRow(ceoAnimation, ceoController));
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    clickerBrain.initialAutoClickTimer(autoClickController);
+    clickerBrain.initialWorkerTimer(workerController);
+    clickerBrain.initialManagerTimer(managerController);
+    clickerBrain.initialCeoTimer(ceoController);
 
     return Scaffold(
       appBar: AppBar(
@@ -118,10 +126,22 @@ class _ClickerScreenState extends State<ClickerScreen>
           Expanded(
             flex: listFlex,
             child: Scrollbar(
-              child: ListView(
-                shrinkWrap: true,
+              // child: ListView(
+              //   shrinkWrap: true,
+              //   reverse: true,
+              //   children: listOfRows,
+              // ),
+              child: AnimatedList(
                 reverse: true,
-                children: listOfRows,
+                key: key,
+                initialItemCount: listOfRows.length,
+                itemBuilder: (_, index, animation) {
+                  return SizeTransition(
+                    key: UniqueKey(),
+                    sizeFactor: animation,
+                    child: listOfRows[index],
+                  );
+                },
               ),
             ),
           ),

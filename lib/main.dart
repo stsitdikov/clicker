@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           AutoClickLogic(), WorkerLogic(), ManagerLogic(), CeoLogic()),
       child: MaterialApp(
         // theme: ThemeData.dark(),
-        home: AnimatedListSample(),
+        home: ClickerScreen2(),
       ),
     );
   }
