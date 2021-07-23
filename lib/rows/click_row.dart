@@ -1,8 +1,8 @@
-import 'package:clicker/custom_widgets/increment_container.dart';
+import 'package:clicker/components/increment_container.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:clicker/custom_widgets/upgrade_container.dart';
+import 'package:clicker/components/upgrade_container.dart';
 import 'package:clicker/logic/constants.dart';
 
 class ClickRow extends StatelessWidget {
@@ -13,7 +13,7 @@ class ClickRow extends StatelessWidget {
         Provider.of<ClickerBrain>(context, listen: false);
 
     return Container(
-      height: 70.0,
+      height: 60.0,
       child: Row(
         children: [
           Expanded(

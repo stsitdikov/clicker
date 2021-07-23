@@ -1,7 +1,7 @@
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'reusable_progress_row.dart';
+import '../components/reusable_progress_row.dart';
 
 class CeoRow extends StatelessWidget {
   final Animation<double> animation;

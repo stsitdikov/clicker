@@ -1,8 +1,8 @@
-import 'package:clicker/components/autoclick_row.dart';
-import 'package:clicker/components/ceo_row.dart';
-import 'package:clicker/components/click_row.dart';
-import 'package:clicker/components/manager_row.dart';
-import 'package:clicker/components/worker_row.dart';
+import 'package:clicker/rows/autoclick_row.dart';
+import 'package:clicker/rows/ceo_row.dart';
+import 'package:clicker/rows/click_row.dart';
+import 'package:clicker/rows/manager_row.dart';
+import 'package:clicker/rows/worker_row.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
@@ -129,6 +129,23 @@ class _ClickerScreenState extends State<ClickerScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text('Clicker'),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(.60),
+        selectedFontSize: 14.0,
+        unselectedFontSize: 10.0,
+        backgroundColor: Colors.lightBlue,
+        onTap: (value) {},
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: 'Main'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.upgrade_outlined), label: 'Upgrades'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.info_outline), label: 'Info'),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,13 +1,13 @@
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'reusable_progress_row.dart';
+import '../components/reusable_progress_row.dart';
 
-class ManagerRow extends StatelessWidget {
+class AutoClickRow extends StatelessWidget {
   final Animation<double> animation;
   final AnimationController controller;
 
-  ManagerRow(this.animation, this.controller);
+  AutoClickRow(this.animation, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +17,14 @@ class ManagerRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getManagerNumber() + ' x  Manager',
+      title: clickerBrain.getAutoClickNumber() + ' x  AutoClicker',
       onUpgradeTap: () {
-        clickerBrainListenFalse.buyManager(controller);
+        clickerBrainListenFalse.buyAutoClicker(controller);
       },
-      upgradeCost: clickerBrain.getManagerCost(),
-      incrementNumber: clickerBrain.getManagerIncrement().toStringAsFixed(0),
+      upgradeCost: clickerBrain.getAutoClickCost(),
+      incrementNumber: clickerBrain.getAutoClickIncrement().toStringAsFixed(0),
       onIncrementTap: () {
-        clickerBrainListenFalse.updateManagerIncrement();
+        clickerBrainListenFalse.updateAutoClickIncrement();
       },
     );
   }

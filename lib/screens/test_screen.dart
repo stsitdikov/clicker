@@ -1,8 +1,8 @@
-import 'package:clicker/components/autoclick_row.dart';
-import 'package:clicker/components/ceo_row.dart';
-import 'package:clicker/components/click_row.dart';
-import 'package:clicker/components/manager_row.dart';
-import 'package:clicker/components/worker_row.dart';
+import 'package:clicker/rows/autoclick_row.dart';
+import 'package:clicker/rows/ceo_row.dart';
+import 'package:clicker/rows/click_row.dart';
+import 'package:clicker/rows/manager_row.dart';
+import 'package:clicker/rows/worker_row.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
