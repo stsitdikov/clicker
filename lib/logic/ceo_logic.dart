@@ -32,13 +32,22 @@ class CeoLogic {
   // functions
 
   void buyCeo() {
-    if (initialCeoUpgradeDone() == 1.0) {
+    if (ceoIncrement() == 1.0) {
+      if (initialCeoUpgradeDone() == 1.0) {
+        updateCeoCostOne();
+      }
+      ceoCostIncrease();
+      ceoNumberIncrease();
+      if (initialCeoUpgradeDone() == 0.0) {
+        box.put('initialCeoUpgradeDone', 1.0);
+      }
+    } else {
       updateCeoCostOne();
-    }
-    ceoCostIncrease();
-    ceoNumberIncrease();
-    if (initialCeoUpgradeDone() == 0.0) {
-      box.put('initialCeoUpgradeDone', 1.0);
+      ceoCostIncrease();
+      ceoNumberIncrease();
+      if (initialCeoUpgradeDone() == 1.0) {
+        box.put('initialCeoUpgradeDone', 0.0);
+      }
     }
   }
 

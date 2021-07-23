@@ -36,13 +36,22 @@ class AutoClickLogic {
   // functions
 
   void buyAutoClicker() {
-    if (initialAutoClickUpgradeDone() == 1.0) {
+    if (autoClickIncrement() == 1.0) {
+      if (initialAutoClickUpgradeDone() == 1.0) {
+        updateAutoClickCostOne();
+      }
+      autoClickCostIncrease();
+      autoClickNumberIncrease();
+      if (initialAutoClickUpgradeDone() == 0.0) {
+        box.put('initialAutoClickUpgradeDone', 1.0);
+      }
+    } else {
       updateAutoClickCostOne();
-    }
-    autoClickCostIncrease();
-    autoClickNumberIncrease();
-    if (initialAutoClickUpgradeDone() == 0.0) {
-      box.put('initialAutoClickUpgradeDone', 1.0);
+      autoClickCostIncrease();
+      autoClickNumberIncrease();
+      if (initialAutoClickUpgradeDone() == 1.0) {
+        box.put('initialAutoClickUpgradeDone', 0.0);
+      }
     }
   }
 

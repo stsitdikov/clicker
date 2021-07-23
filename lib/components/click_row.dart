@@ -7,9 +7,6 @@ import 'package:clicker/logic/constants.dart';
 class ClickRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    bool isUpgradeVisible =
-        Provider.of<ClickerBrain>(context).isClickUpgradeVisible();
-
     return Container(
       height: 70.0,
       child: Row(
@@ -35,48 +32,42 @@ class ClickRow extends StatelessWidget {
               ),
             ),
           ),
-          Visibility(
-            visible: isUpgradeVisible,
-            child: Expanded(
-              child: GestureDetector(
-                onTap: () => Provider.of<ClickerBrain>(context, listen: false)
-                    .changeClickIncrement(),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey,
-                    border: Border(
-                      top: BorderSide(color: kBorderColor),
-                      right: BorderSide(color: kBorderColor),
-                    ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () => Provider.of<ClickerBrain>(context, listen: false)
+                  .changeClickIncrement(),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.blueGrey,
+                  border: Border(
+                    top: BorderSide(color: kBorderColor),
+                    right: BorderSide(color: kBorderColor),
                   ),
-                  child: Center(
-                    child: Text(
-                      'x ' +
-                          Provider.of<ClickerBrain>(context)
-                              .getClickIncrement()
-                              .toStringAsFixed(0),
-                      style: TextStyle(fontSize: 20.0),
-                    ),
+                ),
+                child: Center(
+                  child: Text(
+                    'x ' +
+                        Provider.of<ClickerBrain>(context)
+                            .getClickIncrement()
+                            .toStringAsFixed(0),
+                    style: TextStyle(fontSize: 20.0),
                   ),
                 ),
               ),
             ),
           ),
-          Visibility(
-            visible: isUpgradeVisible,
-            child: Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Provider.of<ClickerBrain>(context, listen: false)
-                      .clickUpgrade();
-                },
-                child: UpgradeContainer(
-                  Provider.of<ClickerBrain>(context).getClickCost(),
-                  Border(
-                    top: BorderSide(color: kBorderColor),
-                    right: BorderSide(color: kBorderColor),
-                    bottom: BorderSide(color: kBorderColor),
-                  ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                Provider.of<ClickerBrain>(context, listen: false)
+                    .clickUpgrade();
+              },
+              child: UpgradeContainer(
+                Provider.of<ClickerBrain>(context).getClickCost(),
+                Border(
+                  top: BorderSide(color: kBorderColor),
+                  right: BorderSide(color: kBorderColor),
+                  bottom: BorderSide(color: kBorderColor),
                 ),
               ),
             ),

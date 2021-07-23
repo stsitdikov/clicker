@@ -35,13 +35,22 @@ class ManagerLogic {
   // functions
 
   void buyManager() {
-    if (initialManagerUpgradeDone() == 1.0) {
+    if (managerIncrement() == 1.0) {
+      if (initialManagerUpgradeDone() == 1.0) {
+        updateManagerCostOne();
+      }
+      managerCostIncrease();
+      managerNumberIncrease();
+      if (initialManagerUpgradeDone() == 0.0) {
+        box.put('initialManagerUpgradeDone', 1.0);
+      }
+    } else {
       updateManagerCostOne();
-    }
-    managerCostIncrease();
-    managerNumberIncrease();
-    if (initialManagerUpgradeDone() == 0.0) {
-      box.put('initialManagerUpgradeDone', 1.0);
+      managerCostIncrease();
+      managerNumberIncrease();
+      if (initialManagerUpgradeDone() == 1.0) {
+        box.put('initialManagerUpgradeDone', 0.0);
+      }
     }
   }
 

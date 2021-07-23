@@ -66,9 +66,6 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  bool isClickUpgradeVisible() =>
-      clickRowLogic.isClickUpgradeVisible(getMoney());
-
   void changeClickIncrement() {
     clickRowLogic.updateClickIncrement();
     notifyListeners();

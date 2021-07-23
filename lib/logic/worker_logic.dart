@@ -34,13 +34,22 @@ class WorkerLogic {
   // functions
 
   void buyWorker() {
-    if (initialWorkerUpgradeDone() == 1.0) {
+    if (workerIncrement() == 1.0) {
+      if (initialWorkerUpgradeDone() == 1.0) {
+        updateWorkerCostOne();
+      }
+      workerCostIncrease();
+      workerNumberIncrease();
+      if (initialWorkerUpgradeDone() == 0.0) {
+        box.put('initialWorkerUpgradeDone', 1.0);
+      }
+    } else {
       updateWorkerCostOne();
-    }
-    workerCostIncrease();
-    workerNumberIncrease();
-    if (initialWorkerUpgradeDone() == 0.0) {
-      box.put('initialWorkerUpgradeDone', 1.0);
+      workerCostIncrease();
+      workerNumberIncrease();
+      if (initialWorkerUpgradeDone() == 1.0) {
+        box.put('initialWorkerUpgradeDone', 0.0);
+      }
     }
   }
 

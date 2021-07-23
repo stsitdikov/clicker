@@ -20,22 +20,28 @@ class ClickRowLogic {
   double clickIncrement() =>
       box.get('clickIncrement', defaultValue: kDefaultClickIncrement) as double;
 
-  double clickUpgradeVisible() =>
-      box.get('clickUpgradeVisible', defaultValue: 0.0) as double;
-
   double initialClickUpgradeDone() =>
       box.get('initialClickUpgradeDone', defaultValue: 0.0) as double;
 
   // functions
 
   void clickUpgrade() {
-    if (initialClickUpgradeDone() == 1.0) {
+    if (clickIncrement() == 1.0) {
+      if (initialClickUpgradeDone() == 1.0) {
+        updateClickCostOne();
+      }
+      clickCostIncrease();
+      upgradeClickAmount();
+      if (initialClickUpgradeDone() == 0.0) {
+        box.put('initialClickUpgradeDone', 1.0);
+      }
+    } else {
       updateClickCostOne();
-    }
-    clickCostIncrease();
-    upgradeClickAmount();
-    if (initialClickUpgradeDone() == 0.0) {
-      box.put('initialClickUpgradeDone', 1.0);
+      clickCostIncrease();
+      upgradeClickAmount();
+      if (initialClickUpgradeDone() == 1.0) {
+        box.put('initialClickUpgradeDone', 0.0);
+      }
     }
   }
 
@@ -54,13 +60,6 @@ class ClickRowLogic {
     double newClickAmount =
         clickAmount() * pow(kMainIncrement, clickIncrement());
     box.put('clickAmount', newClickAmount);
-  }
-
-  bool isClickUpgradeVisible(money) {
-    if (clickUpgradeVisible() == 0.0 && money >= clickCost()) {
-      box.put('clickUpgradeVisible', 1.0);
-    }
-    return clickUpgradeVisible() == 1.0;
   }
 
   void updateClickIncrement() {
