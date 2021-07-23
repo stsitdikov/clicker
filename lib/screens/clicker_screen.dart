@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
+import 'dart:async';
 
 class ClickerScreen extends StatefulWidget {
   @override
@@ -18,8 +19,12 @@ class ClickerScreen extends StatefulWidget {
 
 class _ClickerScreenState extends State<ClickerScreen>
     with TickerProviderStateMixin {
+  GlobalKey<AnimatedListState> key = GlobalKey();
+
+  late var clickerBrain = Provider.of<ClickerBrain>(context);
+
   late final AnimationController autoClickController = AnimationController(
-    duration: Provider.of<ClickerBrain>(context).getAutoClickDuration(),
+    duration: clickerBrain.getAutoClickDuration(),
     vsync: this,
   );
   late final Animation<double> autoClickAnimation = CurvedAnimation(
@@ -28,7 +33,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController workerController = AnimationController(
-    duration: Provider.of<ClickerBrain>(context).getWorkerDuration(),
+    duration: clickerBrain.getWorkerDuration(),
     vsync: this,
   );
   late final Animation<double> workerAnimation = CurvedAnimation(
@@ -37,7 +42,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController managerController = AnimationController(
-    duration: Provider.of<ClickerBrain>(context).getManagerDuration(),
+    duration: clickerBrain.getManagerDuration(),
     vsync: this,
   );
   late final Animation<double> managerAnimation = CurvedAnimation(
@@ -46,7 +51,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController ceoController = AnimationController(
-    duration: Provider.of<ClickerBrain>(context).getCeoDuration(),
+    duration: clickerBrain.getCeoDuration(),
     vsync: this,
   );
   late final Animation<double> ceoAnimation = CurvedAnimation(
@@ -54,12 +59,15 @@ class _ClickerScreenState extends State<ClickerScreen>
     curve: Curves.linear,
   );
 
+  ScrollController scrollController = ScrollController();
+
   @override
   void dispose() {
     super.dispose();
     autoClickController.dispose();
     workerController.dispose();
     managerController.dispose();
+    ceoController.dispose();
   }
 
   late Box<double> box;
@@ -68,42 +76,12 @@ class _ClickerScreenState extends State<ClickerScreen>
   void initState() {
     super.initState();
     box = Hive.box(kClickerBrainBox);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      addRows();
-    });
   }
 
-  GlobalKey<AnimatedListState> key = GlobalKey();
-
-  late var clickerBrain = Provider.of<ClickerBrain>(context);
-
-  int listFlex = 1;
-
-  List<Widget> listOfRows = [
-    ClickRow(),
-  ];
-
-  void addRows() {
-    if (clickerBrain.isAutoClickVisible()) {
-      listOfRows.add(AutoClickRow(autoClickAnimation, autoClickController));
-      listFlex = 2;
-      key.currentState!.insertItem(1, duration: Duration(seconds: 1));
-    }
-
-    if (clickerBrain.isWorkerVisible()) {
-      listOfRows.add(WorkerRow(workerAnimation, workerController));
-      listFlex = 3;
-    }
-
-    if (clickerBrain.isManagerVisible()) {
-      listOfRows.add(ManagerRow(managerAnimation, managerController));
-      listFlex = 4;
-    }
-
-    if (clickerBrain.isCeoVisible()) {
-      listOfRows.add(CeoRow(ceoAnimation, ceoController));
-    }
-  }
+  bool showedAutoClick = false;
+  bool showedWorker = false;
+  bool showedManager = false;
+  bool showedCeo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +89,42 @@ class _ClickerScreenState extends State<ClickerScreen>
     clickerBrain.initialWorkerTimer(workerController);
     clickerBrain.initialManagerTimer(managerController);
     clickerBrain.initialCeoTimer(ceoController);
+
+    List<Widget> listOfRows = [
+      ClickRow(),
+      AutoClickRow(autoClickAnimation, autoClickController),
+      WorkerRow(workerAnimation, workerController),
+      ManagerRow(managerAnimation, managerController),
+      CeoRow(ceoAnimation, ceoController),
+    ];
+
+    if (clickerBrain.isAutoClickVisible() && showedAutoClick == false) {
+      key.currentState?.insertItem(1, duration: Duration(seconds: 1));
+      showedAutoClick = true;
+      clickerBrain.increaseListFlex();
+    }
+
+    if (clickerBrain.isWorkerVisible() && showedWorker == false) {
+      key.currentState?.insertItem(2, duration: Duration(seconds: 1));
+      showedWorker = true;
+      clickerBrain.increaseListFlex();
+    }
+
+    if (clickerBrain.isManagerVisible() && showedManager == false) {
+      key.currentState?.insertItem(3, duration: Duration(seconds: 1));
+      showedManager = true;
+      clickerBrain.increaseListFlex();
+    }
+
+    if (clickerBrain.isCeoVisible() && showedCeo == false) {
+      key.currentState?.insertItem(4);
+      showedCeo = true;
+      clickerBrain.increaseListFlex();
+      Timer(Duration(milliseconds: 350), () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: Duration(seconds: 1), curve: Curves.linear);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -124,23 +138,24 @@ class _ClickerScreenState extends State<ClickerScreen>
             child: MoneyDisplay(),
           ),
           Expanded(
-            flex: listFlex,
+            flex: clickerBrain.listFlex().toInt(),
             child: Scrollbar(
-              // child: ListView(
-              //   shrinkWrap: true,
-              //   reverse: true,
-              //   children: listOfRows,
-              // ),
               child: AnimatedList(
+                controller: scrollController,
                 reverse: true,
                 key: key,
-                initialItemCount: listOfRows.length,
+                initialItemCount: clickerBrain.itemCount().toInt(),
+                shrinkWrap: true,
                 itemBuilder: (_, index, animation) {
-                  return SizeTransition(
-                    key: UniqueKey(),
-                    sizeFactor: animation,
-                    child: listOfRows[index],
-                  );
+                  if (index < listOfRows.length) {
+                    return SizeTransition(
+                      key: UniqueKey(),
+                      sizeFactor: animation,
+                      child: listOfRows[index],
+                    );
+                  } else {
+                    return Container();
+                  }
                 },
               ),
             ),

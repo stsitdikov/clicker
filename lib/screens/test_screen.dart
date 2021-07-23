@@ -6,10 +6,12 @@ import 'package:clicker/components/worker_row.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:clicker/components/money_display.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
+import 'dart:async';
 
 class ClickerScreen2 extends StatefulWidget {
   @override
@@ -57,6 +59,8 @@ class _ClickerScreen2State extends State<ClickerScreen2>
     parent: ceoController,
     curve: Curves.linear,
   );
+
+  ScrollController scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -114,9 +118,13 @@ class _ClickerScreen2State extends State<ClickerScreen2>
     }
 
     if (clickerBrain.isCeoVisible() && showedCeo == false) {
-      key.currentState?.insertItem(4, duration: Duration(seconds: 1));
+      key.currentState?.insertItem(4);
       showedCeo = true;
       clickerBrain.increaseListFlex();
+      Timer(Duration(milliseconds: 350), () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: Duration(seconds: 1), curve: Curves.linear);
+      });
     }
 
     return Scaffold(
@@ -133,12 +141,8 @@ class _ClickerScreen2State extends State<ClickerScreen2>
           Expanded(
             flex: clickerBrain.listFlex().toInt(),
             child: Scrollbar(
-              // child: ListView(
-              //   shrinkWrap: true,
-              //   reverse: true,
-              //   children: listOfRows,
-              // ),
               child: AnimatedList(
+                controller: scrollController,
                 reverse: true,
                 key: key,
                 initialItemCount: clickerBrain.itemCount().toInt(),
