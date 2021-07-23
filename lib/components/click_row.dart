@@ -1,3 +1,4 @@
+import 'package:clicker/custom_widgets/increment_container.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,10 @@ import 'package:clicker/logic/constants.dart';
 class ClickRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var clickerBrain = Provider.of<ClickerBrain>(context);
+    var clickerBrainListenFalse =
+        Provider.of<ClickerBrain>(context, listen: false);
+
     return Container(
       height: 70.0,
       child: Row(
@@ -15,8 +20,7 @@ class ClickRow extends StatelessWidget {
             flex: 3,
             child: GestureDetector(
               onTap: () {
-                Provider.of<ClickerBrain>(context, listen: false)
-                    .clickIncreaseMoney();
+                clickerBrainListenFalse.clickIncreaseMoney();
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -25,7 +29,7 @@ class ClickRow extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Click (${Provider.of<ClickerBrain>(context).getClickAmount()} \$)',
+                    'Click (${clickerBrain.getClickAmount()} \$)',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ),
@@ -34,24 +38,13 @@ class ClickRow extends StatelessWidget {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: () => Provider.of<ClickerBrain>(context, listen: false)
-                  .changeClickIncrement(),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  border: Border(
-                    top: BorderSide(color: kBorderColor),
-                    right: BorderSide(color: kBorderColor),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'x ' +
-                        Provider.of<ClickerBrain>(context)
-                            .getClickIncrement()
-                            .toStringAsFixed(0),
-                    style: TextStyle(fontSize: 20.0),
-                  ),
+              onTap: () => clickerBrainListenFalse.changeClickIncrement(),
+              child: IncrementContainer(
+                clickerBrain.getClickIncrement().toStringAsFixed(0),
+                Border(
+                  top: BorderSide(color: kBorderColor),
+                  right: BorderSide(color: kBorderColor),
+                  bottom: BorderSide(color: kBorderColor),
                 ),
               ),
             ),
@@ -59,11 +52,10 @@ class ClickRow extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                Provider.of<ClickerBrain>(context, listen: false)
-                    .clickUpgrade();
+                clickerBrainListenFalse.clickUpgrade();
               },
               child: UpgradeContainer(
-                Provider.of<ClickerBrain>(context).getClickCost(),
+                clickerBrain.getClickCost(),
                 Border(
                   top: BorderSide(color: kBorderColor),
                   right: BorderSide(color: kBorderColor),
