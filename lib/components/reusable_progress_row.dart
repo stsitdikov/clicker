@@ -22,7 +22,7 @@ class ReusableProgressRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60.0,
+      height: kRowHeight,
       child: Row(
         children: [
           Expanded(

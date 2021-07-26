@@ -35,12 +35,16 @@ class ClickerBrain extends ChangeNotifier {
   double itemCount() => box.get('itemCount', defaultValue: 1.0);
 
   void increaseListFlex() {
-    if (listFlex() < 4.0) {
+    if (listFlex() < 3.0) {
       box.put('listFlex', (listFlex() + 1.0));
       box.put('itemCount', (itemCount() + 1.0));
-    } else if (listFlex() == 4.0) {
+    } else if (listFlex() == 3.0) {
       box.put('itemCount', (itemCount() + 1.0));
     }
+  }
+
+  bool isFirstLaunch() {
+    return getMoney() == 0.0;
   }
 
   // click row
@@ -115,6 +119,7 @@ class ClickerBrain extends ChangeNotifier {
   void initialAutoClickTimer(controller) {
     if (autoClickLogic.shouldAnimateAutoClick() == 1 &&
         wasAutoClickInitiated == 0) {
+      controller.forward();
       autoClickTimer(controller);
     }
   }
@@ -169,6 +174,7 @@ class ClickerBrain extends ChangeNotifier {
 
   void initialWorkerTimer(controller) {
     if (shouldAnimateWorker() && wasWorkerInitiated == 0) {
+      controller.forward();
       workerTimer(controller);
     }
   }
@@ -224,6 +230,7 @@ class ClickerBrain extends ChangeNotifier {
 
   void initialManagerTimer(controller) {
     if (shouldAnimateManager() && wasManagerInitiated == 0) {
+      controller.forward();
       managerTimer(controller);
     }
   }
@@ -277,6 +284,7 @@ class ClickerBrain extends ChangeNotifier {
 
   void initialCeoTimer(controller) {
     if (shouldAnimateCeo() && wasCeoInitiated == 0) {
+      controller.forward();
       ceoTimer(controller);
     }
   }

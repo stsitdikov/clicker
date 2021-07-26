@@ -99,36 +99,40 @@ class _ClickerScreenState extends State<ClickerScreen>
     ];
 
     if (clickerBrain.isAutoClickVisible() && showedAutoClick == false) {
-      key.currentState?.insertItem(1, duration: Duration(seconds: 1));
+      key.currentState?.insertItem(1, duration: kShowRowDuration);
       showedAutoClick = true;
       clickerBrain.increaseListFlex();
     }
 
     if (clickerBrain.isWorkerVisible() && showedWorker == false) {
-      key.currentState?.insertItem(2, duration: Duration(seconds: 1));
+      key.currentState?.insertItem(2, duration: kShowRowDuration);
       showedWorker = true;
       clickerBrain.increaseListFlex();
     }
 
     if (clickerBrain.isManagerVisible() && showedManager == false) {
-      key.currentState?.insertItem(3, duration: Duration(seconds: 1));
+      key.currentState?.insertItem(3, duration: kShowRowDuration);
       showedManager = true;
       clickerBrain.increaseListFlex();
+      Timer(kShowRowDuration, () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: kShowRowDuration, curve: Curves.linear);
+      });
     }
 
     if (clickerBrain.isCeoVisible() && showedCeo == false) {
-      key.currentState?.insertItem(4);
+      key.currentState?.insertItem(4, duration: kShowRowDuration);
       showedCeo = true;
       clickerBrain.increaseListFlex();
-      Timer(Duration(milliseconds: 350), () {
+      Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,
-            duration: Duration(seconds: 1), curve: Curves.linear);
+            duration: kShowRowDuration, curve: Curves.linear);
       });
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clicker'),
+        title: Text(kAppName),
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -136,7 +140,6 @@ class _ClickerScreenState extends State<ClickerScreen>
         unselectedItemColor: Colors.white.withOpacity(.60),
         selectedFontSize: 14.0,
         unselectedFontSize: 10.0,
-        backgroundColor: Colors.lightBlue,
         onTap: (value) {},
         items: [
           BottomNavigationBarItem(
@@ -151,7 +154,7 @@ class _ClickerScreenState extends State<ClickerScreen>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            flex: 4,
+            flex: 3,
             child: MoneyDisplay(),
           ),
           Expanded(

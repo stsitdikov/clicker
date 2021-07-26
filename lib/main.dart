@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'screens/clicker_screen.dart';
 import 'screens/test_screen.dart';
+import 'screens/launch_screen.dart';
 
 import 'package:clicker/logic/constants.dart';
 import 'logic/clicker_brain.dart';
@@ -28,8 +29,17 @@ class MyApp extends StatelessWidget {
       create: (_) => ClickerBrain(MoneyLogic(), ClickRowLogic(),
           AutoClickLogic(), WorkerLogic(), ManagerLogic(), CeoLogic()),
       child: MaterialApp(
-        // theme: ThemeData.dark(),
-        home: ClickerScreen(),
+        theme: ThemeData.dark(),
+        initialRoute: Hive.box<double>(kClickerBrainBox)
+                    .get('money', defaultValue: 0.0) ==
+                0.0
+            ? kClickerScreenName
+            : kLaunchScreenName,
+        routes: {
+          kClickerScreenName: (context) => ClickerScreen(),
+          kTestScreenName: (context) => TestScreen(),
+          kLaunchScreenName: (context) => LaunchScreen(),
+        },
       ),
     );
   }

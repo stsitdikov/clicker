@@ -13,7 +13,7 @@ class ClickRow extends StatelessWidget {
         Provider.of<ClickerBrain>(context, listen: false);
 
     return Container(
-      height: 60.0,
+      height: kRowHeight,
       child: Row(
         children: [
           Expanded(

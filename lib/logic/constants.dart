@@ -4,9 +4,18 @@ const Color kBorderColor = Colors.black;
 const Duration kShowButtonDuration = Duration(milliseconds: 500);
 const String kClickerBrainBox = 'clicker_brain_box';
 
+// screen names
+
+const String kClickerScreenName = 'ClickerScreen';
+const String kTestScreenName = 'TestScreen';
+const String kLaunchScreenName = 'LaunchScreen';
+
 // main constants
 
+const String kAppName = 'Clicker';
 const double kMainIncrement = 1.2;
+const double kRowHeight = 70.0;
+const Duration kShowRowDuration = Duration(milliseconds: 500);
 
 // click row constants
 
