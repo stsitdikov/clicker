@@ -1,16 +1,22 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'dart:async';
+
+import 'package:clicker/logic/clicker_brain.dart';
+import 'package:clicker/logic/constants.dart';
+
+import 'tabs/upgrade_tab.dart';
+import 'tabs/info_tab.dart';
+
 import 'package:clicker/rows/autoclick_row.dart';
 import 'package:clicker/rows/ceo_row.dart';
 import 'package:clicker/rows/click_row.dart';
 import 'package:clicker/rows/manager_row.dart';
 import 'package:clicker/rows/worker_row.dart';
-import 'package:clicker/logic/clicker_brain.dart';
-import 'package:flutter/material.dart';
+
 import 'package:clicker/components/money_display.dart';
-import 'package:provider/provider.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:clicker/logic/constants.dart';
-import 'dart:async';
 
 class ClickerScreen extends StatefulWidget {
   @override
@@ -19,7 +25,7 @@ class ClickerScreen extends StatefulWidget {
 
 class _ClickerScreenState extends State<ClickerScreen>
     with TickerProviderStateMixin {
-  GlobalKey<AnimatedListState> key = GlobalKey();
+  GlobalKey<AnimatedListState> rowsKey = GlobalKey();
 
   late var clickerBrain = Provider.of<ClickerBrain>(context);
 
@@ -61,6 +67,8 @@ class _ClickerScreenState extends State<ClickerScreen>
 
   ScrollController scrollController = ScrollController();
 
+  int selectedIndex = 0;
+
   @override
   void dispose() {
     super.dispose();
@@ -99,19 +107,19 @@ class _ClickerScreenState extends State<ClickerScreen>
     ];
 
     if (clickerBrain.isAutoClickVisible() && showedAutoClick == false) {
-      key.currentState?.insertItem(1, duration: kShowRowDuration);
+      rowsKey.currentState?.insertItem(1, duration: kShowRowDuration);
       showedAutoClick = true;
       clickerBrain.increaseListFlex();
     }
 
     if (clickerBrain.isWorkerVisible() && showedWorker == false) {
-      key.currentState?.insertItem(2, duration: kShowRowDuration);
+      rowsKey.currentState?.insertItem(2, duration: kShowRowDuration);
       showedWorker = true;
       clickerBrain.increaseListFlex();
     }
 
     if (clickerBrain.isManagerVisible() && showedManager == false) {
-      key.currentState?.insertItem(3, duration: kShowRowDuration);
+      rowsKey.currentState?.insertItem(3, duration: kShowRowDuration);
       showedManager = true;
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
@@ -121,12 +129,28 @@ class _ClickerScreenState extends State<ClickerScreen>
     }
 
     if (clickerBrain.isCeoVisible() && showedCeo == false) {
-      key.currentState?.insertItem(4, duration: kShowRowDuration);
+      rowsKey.currentState?.insertItem(4, duration: kShowRowDuration);
       showedCeo = true;
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,
             duration: kShowRowDuration, curve: Curves.linear);
+      });
+    }
+
+    List<Widget> tabs = <Widget>[
+      RowsTab(
+          clickerBrain: clickerBrain,
+          scrollController: scrollController,
+          rowsKey: rowsKey,
+          listOfRows: listOfRows),
+      UpgradeTab(),
+      InfoTab(),
+    ];
+
+    void onTabTapped(int index) {
+      setState(() {
+        selectedIndex = index;
       });
     }
 
@@ -140,7 +164,6 @@ class _ClickerScreenState extends State<ClickerScreen>
         unselectedItemColor: Colors.white.withOpacity(.60),
         selectedFontSize: 14.0,
         unselectedFontSize: 10.0,
-        onTap: (value) {},
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined), label: 'Main'),
@@ -149,39 +172,60 @@ class _ClickerScreenState extends State<ClickerScreen>
           BottomNavigationBarItem(
               icon: Icon(Icons.info_outline), label: 'Info'),
         ],
+        currentIndex: selectedIndex,
+        onTap: onTabTapped,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            flex: 3,
-            child: MoneyDisplay(),
-          ),
-          Expanded(
-            flex: clickerBrain.listFlex().toInt(),
-            child: Scrollbar(
-              child: AnimatedList(
-                controller: scrollController,
-                reverse: true,
-                key: key,
-                initialItemCount: clickerBrain.itemCount().toInt(),
-                shrinkWrap: true,
-                itemBuilder: (_, index, animation) {
-                  if (index < listOfRows.length) {
-                    return SizeTransition(
-                      key: UniqueKey(),
-                      sizeFactor: animation,
-                      child: listOfRows[index],
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-              ),
+      body: tabs.elementAt(selectedIndex),
+    );
+  }
+}
+
+class RowsTab extends StatelessWidget {
+  const RowsTab({
+    required this.clickerBrain,
+    required this.scrollController,
+    required this.rowsKey,
+    required this.listOfRows,
+  });
+
+  final ClickerBrain clickerBrain;
+  final ScrollController scrollController;
+  final GlobalKey<AnimatedListState> rowsKey;
+  final List<Widget> listOfRows;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          flex: 3,
+          child: MoneyDisplay(),
+        ),
+        Expanded(
+          flex: clickerBrain.listFlex().toInt(),
+          child: Scrollbar(
+            child: AnimatedList(
+              controller: scrollController,
+              reverse: true,
+              key: rowsKey,
+              initialItemCount: clickerBrain.itemCount().toInt(),
+              shrinkWrap: true,
+              itemBuilder: (_, index, animation) {
+                if (index < listOfRows.length) {
+                  return SizeTransition(
+                    key: UniqueKey(),
+                    sizeFactor: animation,
+                    child: listOfRows[index],
+                  );
+                } else {
+                  return Container();
+                }
+              },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

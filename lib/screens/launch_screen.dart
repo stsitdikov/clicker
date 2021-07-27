@@ -15,10 +15,13 @@ class LaunchScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Welcome back! \n\nAre you ready to continue?',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 30.0),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.0),
+              child: Text(
+                'Welcome back! \n\nAre you ready to continue?',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 30.0),
+              ),
             ),
             SizedBox(
               height: 30.0,

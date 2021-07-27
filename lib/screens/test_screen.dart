@@ -14,45 +14,24 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
 import 'dart:async';
 
-class TestScreen extends StatelessWidget {
-  const TestScreen({Key? key}) : super(key: key);
+enum TabItem { red, green, blue }
+
+class TestScreen extends StatefulWidget {
+  @override
+  State<TestScreen> createState() => _TestScreenState();
+}
+
+class _TestScreenState extends State<TestScreen> {
+  TabItem currentTab = TabItem.red;
+
+  void _selectTab(TabItem tabItem) {
+    setState(() {
+      currentTab = tabItem;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Clicker'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Welcome back! \n\nAre you ready to continue?',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 30.0),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => ClickerScreen()),
-                (Route<dynamic> route) => false,
-              ),
-              style: ElevatedButton.styleFrom(primary: Colors.teal),
-              child: Padding(
-                padding: EdgeInsets.all(6.0),
-                child: Text(
-                  'Let\'s go!',
-                  style: TextStyle(fontSize: 30.0),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return Scaffold();
   }
 }

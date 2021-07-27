@@ -30,11 +30,13 @@ class MyApp extends StatelessWidget {
           AutoClickLogic(), WorkerLogic(), ManagerLogic(), CeoLogic()),
       child: MaterialApp(
         theme: ThemeData.dark(),
+        title: kAppName,
         initialRoute: Hive.box<double>(kClickerBrainBox)
                     .get('money', defaultValue: 0.0) ==
                 0.0
             ? kClickerScreenName
             : kLaunchScreenName,
+        // initialRoute: kTestScreenName,
         routes: {
           kClickerScreenName: (context) => ClickerScreen(),
           kTestScreenName: (context) => TestScreen(),
