@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:clicker/logic/constants.dart';
+import 'package:clicker/logic/clicker_brain.dart';
 
 import 'tabs/main_tab.dart';
 import 'tabs/upgrade_tab.dart';
@@ -11,13 +13,74 @@ class ClickerScreen extends StatefulWidget {
   _ClickerScreenState createState() => _ClickerScreenState();
 }
 
-class _ClickerScreenState extends State<ClickerScreen> {
+class _ClickerScreenState extends State<ClickerScreen>
+    with TickerProviderStateMixin {
   int selectedIndex = 0;
+
+  late var clickerBrain = Provider.of<ClickerBrain>(context);
+
+  late final AnimationController autoClickController = AnimationController(
+    duration: clickerBrain.getAutoClickDuration(),
+    vsync: this,
+  );
+  late final Animation<double> autoClickAnimation = CurvedAnimation(
+    parent: autoClickController,
+    curve: Curves.linear,
+  );
+
+  late final AnimationController workerController = AnimationController(
+    duration: clickerBrain.getWorkerDuration(),
+    vsync: this,
+  );
+  late final Animation<double> workerAnimation = CurvedAnimation(
+    parent: workerController,
+    curve: Curves.linear,
+  );
+
+  late final AnimationController managerController = AnimationController(
+    duration: clickerBrain.getManagerDuration(),
+    vsync: this,
+  );
+  late final Animation<double> managerAnimation = CurvedAnimation(
+    parent: managerController,
+    curve: Curves.linear,
+  );
+
+  late final AnimationController ceoController = AnimationController(
+    duration: clickerBrain.getCeoDuration(),
+    vsync: this,
+  );
+  late final Animation<double> ceoAnimation = CurvedAnimation(
+    parent: ceoController,
+    curve: Curves.linear,
+  );
+
+  @override
+  void dispose() {
+    super.dispose();
+    autoClickController.dispose();
+    workerController.dispose();
+    managerController.dispose();
+    ceoController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<AnimationController> animationControllerList = [
+      autoClickController,
+      workerController,
+      managerController,
+      ceoController,
+    ];
+    List<Animation<double>> animationList = [
+      autoClickAnimation,
+      workerAnimation,
+      managerAnimation,
+      ceoAnimation,
+    ];
+
     List<Widget> tabs = <Widget>[
-      MainTab(),
+      MainTab(animationControllerList, animationList),
       UpgradeTab(),
       InfoTab(),
     ];

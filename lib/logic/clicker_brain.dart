@@ -126,6 +126,13 @@ class ClickerBrain extends ChangeNotifier {
 
   bool isAutoClickVisible() => autoClickLogic.isAutoClickVisible(getMoney());
 
+  double showedAutoClick() =>
+      box.get('showedAutoClick', defaultValue: 0.0) as double;
+
+  void updateShowedAutoClick() {
+    box.put('showedAutoClick', 1.0);
+  }
+
   void updateAutoClickIncrement() {
     autoClickLogic.updateAutoClickIncrement();
     notifyListeners();
@@ -181,6 +188,12 @@ class ClickerBrain extends ChangeNotifier {
 
   bool isWorkerVisible() =>
       workerLogic.isWorkerVisible(autoClickLogic.autoClickNumber());
+
+  double showedWorker() => box.get('showedWorker', defaultValue: 0.0) as double;
+
+  void updateShowedWorker() {
+    box.put('showedWorker', 1.0);
+  }
 
   void updateWorkerIncrement() {
     workerLogic.updateWorkerIncrement();
@@ -238,6 +251,13 @@ class ClickerBrain extends ChangeNotifier {
   bool isManagerVisible() =>
       managerLogic.isManagerVisible(workerLogic.workerNumber());
 
+  double showedManager() =>
+      box.get('showedManager', defaultValue: 0.0) as double;
+
+  void updateShowedManager() {
+    box.put('showedManager', 1.0);
+  }
+
   void updateManagerIncrement() {
     managerLogic.updateManagerIncrement();
     notifyListeners();
@@ -290,6 +310,12 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   bool isCeoVisible() => ceoLogic.isCeoVisible(managerLogic.managerNumber());
+
+  double showedCeo() => box.get('showedCeo', defaultValue: 0.0) as double;
+
+  void updateShowedCeo() {
+    box.put('showedCeo', 1.0);
+  }
 
   void updateCeoIncrement() {
     ceoLogic.updateCeoIncrement();

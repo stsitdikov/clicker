@@ -13,99 +13,53 @@ import 'package:clicker/rows/manager_row.dart';
 import 'package:clicker/rows/worker_row.dart';
 
 class MainTab extends StatefulWidget {
+  final List<AnimationController> animationControllerList;
+  final List<Animation<double>> animationList;
+  MainTab(this.animationControllerList, this.animationList);
+
   @override
   State<MainTab> createState() => _MainTabState();
 }
 
-class _MainTabState extends State<MainTab> with TickerProviderStateMixin {
-  late var clickerBrain = Provider.of<ClickerBrain>(context);
-
+class _MainTabState extends State<MainTab> {
   ScrollController scrollController = ScrollController();
 
   GlobalKey<AnimatedListState> rowsKey = GlobalKey();
-
-  late final AnimationController autoClickController = AnimationController(
-    duration: clickerBrain.getAutoClickDuration(),
-    vsync: this,
-  );
-  late final Animation<double> autoClickAnimation = CurvedAnimation(
-    parent: autoClickController,
-    curve: Curves.linear,
-  );
-
-  late final AnimationController workerController = AnimationController(
-    duration: clickerBrain.getWorkerDuration(),
-    vsync: this,
-  );
-  late final Animation<double> workerAnimation = CurvedAnimation(
-    parent: workerController,
-    curve: Curves.linear,
-  );
-
-  late final AnimationController managerController = AnimationController(
-    duration: clickerBrain.getManagerDuration(),
-    vsync: this,
-  );
-  late final Animation<double> managerAnimation = CurvedAnimation(
-    parent: managerController,
-    curve: Curves.linear,
-  );
-
-  late final AnimationController ceoController = AnimationController(
-    duration: clickerBrain.getCeoDuration(),
-    vsync: this,
-  );
-  late final Animation<double> ceoAnimation = CurvedAnimation(
-    parent: ceoController,
-    curve: Curves.linear,
-  );
-
-  @override
-  void dispose() {
-    super.dispose();
-    autoClickController.dispose();
-    workerController.dispose();
-    managerController.dispose();
-    ceoController.dispose();
-  }
-
-  bool showedAutoClick = false;
-  bool showedWorker = false;
-  bool showedManager = false;
-  bool showedCeo = false;
 
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
 
-    clickerBrain.initialAutoClickTimer(autoClickController);
-    clickerBrain.initialWorkerTimer(workerController);
-    clickerBrain.initialManagerTimer(managerController);
-    clickerBrain.initialCeoTimer(ceoController);
+    clickerBrain.initialAutoClickTimer(widget.animationControllerList[0]);
+    clickerBrain.initialWorkerTimer(widget.animationControllerList[1]);
+    clickerBrain.initialManagerTimer(widget.animationControllerList[2]);
+    clickerBrain.initialCeoTimer(widget.animationControllerList[3]);
 
     List<Widget> listOfRows = [
       ClickRow(),
-      AutoClickRow(autoClickAnimation, autoClickController),
-      WorkerRow(workerAnimation, workerController),
-      ManagerRow(managerAnimation, managerController),
-      CeoRow(ceoAnimation, ceoController),
+      AutoClickRow(widget.animationList[0], widget.animationControllerList[0]),
+      WorkerRow(widget.animationList[1], widget.animationControllerList[1]),
+      ManagerRow(widget.animationList[2], widget.animationControllerList[2]),
+      CeoRow(widget.animationList[3], widget.animationControllerList[3]),
     ];
 
-    if (clickerBrain.isAutoClickVisible() && showedAutoClick == false) {
+    if (clickerBrain.isAutoClickVisible() &&
+        clickerBrain.showedAutoClick() == 0.0) {
       rowsKey.currentState?.insertItem(1, duration: kShowRowDuration);
-      showedAutoClick = true;
+      clickerBrain.updateShowedAutoClick();
       clickerBrain.increaseListFlex();
     }
 
-    if (clickerBrain.isWorkerVisible() && showedWorker == false) {
+    if (clickerBrain.isWorkerVisible() && clickerBrain.showedWorker() == 0.0) {
       rowsKey.currentState?.insertItem(2, duration: kShowRowDuration);
-      showedWorker = true;
+      clickerBrain.updateShowedWorker();
       clickerBrain.increaseListFlex();
     }
 
-    if (clickerBrain.isManagerVisible() && showedManager == false) {
+    if (clickerBrain.isManagerVisible() &&
+        clickerBrain.showedManager() == 0.0) {
       rowsKey.currentState?.insertItem(3, duration: kShowRowDuration);
-      showedManager = true;
+      clickerBrain.updateShowedManager();
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,
@@ -113,9 +67,9 @@ class _MainTabState extends State<MainTab> with TickerProviderStateMixin {
       });
     }
 
-    if (clickerBrain.isCeoVisible() && showedCeo == false) {
+    if (clickerBrain.isCeoVisible() && clickerBrain.showedCeo() == 0.0) {
       rowsKey.currentState?.insertItem(4, duration: kShowRowDuration);
-      showedCeo = true;
+      clickerBrain.updateShowedCeo();
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,
