@@ -4,6 +4,8 @@ const Color kBorderColor = Colors.black;
 const Duration kShowButtonDuration = Duration(milliseconds: 500);
 const String kClickerBrainBox = 'clicker_brain_box';
 
+const TextStyle kInfoTextStyle = TextStyle(fontSize: 20.0, height: 1.35);
+
 // screen names
 
 const String kClickerScreenName = 'ClickerScreen';
