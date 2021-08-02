@@ -22,7 +22,7 @@ class MoneyDisplay extends StatelessWidget {
           margin: EdgeInsets.symmetric(horizontal: 20.0),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.green[500],
+            color: Colors.green[600],
           ),
           child: Center(
             child: Text(
