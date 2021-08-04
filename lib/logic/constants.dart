@@ -33,6 +33,9 @@ const double kDefaultAutoClickCost = 10;
 const double kDefaultAutoClickCostOne = 10;
 const double kDefaultAutoClickIncrement = 1;
 
+const double kDefaultAutoClickDurationMilliseconds = 3000;
+const double kDefaultAutoClickDecreaseDurationCost = 100;
+
 // worker constants
 
 const double kAutoClickNumberToShowWorker = 5;

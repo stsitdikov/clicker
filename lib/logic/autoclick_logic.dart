@@ -6,8 +6,6 @@ import 'package:clicker/logic/constants.dart';
 class AutoClickLogic {
   Box box = Hive.box<double>(kClickerBrainBox);
 
-  Duration autoClickerDuration = Duration(seconds: 3);
-
   // getters
 
   double autoClickCost() =>
@@ -32,6 +30,14 @@ class AutoClickLogic {
 
   double initialAutoClickUpgradeDone() =>
       box.get('initialAutoClickUpgradeDone', defaultValue: 0.0) as double;
+
+  double autoClickDurationMilliseconds() =>
+      box.get('autoClickerDurationSeconds',
+          defaultValue: kDefaultAutoClickDurationMilliseconds);
+
+  double autoClickDecreaseDurationCost() =>
+      box.get('autoClickDecreaseDurationCost',
+          defaultValue: kDefaultAutoClickDecreaseDurationCost);
 
   // functions
 
@@ -105,4 +111,11 @@ class AutoClickLogic {
     }
     box.put('autoClickCost', newAutoClickCost);
   }
+
+  void decreaseAutoClickDuration() => box.put(
+      'autoClickerDurationSeconds', (autoClickDurationMilliseconds() - 1000));
+
+  void increaseAutoClickDecreaseDurationCost() => box.put(
+      'autoClickDecreaseDurationCost',
+      (autoClickDecreaseDurationCost() * kMainIncrement));
 }

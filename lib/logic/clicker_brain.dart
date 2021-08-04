@@ -85,7 +85,14 @@ class ClickerBrain extends ChangeNotifier {
 
   double getAutoClickIncrement() => autoClickLogic.autoClickIncrement();
 
-  Duration getAutoClickDuration() => autoClickLogic.autoClickerDuration;
+  Duration getAutoClickDuration() => Duration(
+      milliseconds: autoClickLogic.autoClickDurationMilliseconds().toInt());
+
+  String getAutoClickDurationString() =>
+      (autoClickLogic.autoClickDurationMilliseconds() / 1000).toString();
+
+  String getAutoClickDecreaseDurationCost() => NumberFormat.compact()
+      .format(autoClickLogic.autoClickDecreaseDurationCost());
 
   bool shouldAnimateAutoClick() => autoClickLogic.shouldAnimateAutoClick() == 1;
 
@@ -96,17 +103,18 @@ class ClickerBrain extends ChangeNotifier {
       notifyListeners();
       if (shouldAnimateAutoClick() && wasAutoClickInitiated == 0) {
         controller.forward();
-        autoClickTimer(controller);
+        autoClickTimerFunction(controller);
       }
     }
   }
 
   double wasAutoClickInitiated = 0;
 
-  void autoClickTimer(controller) {
+  void autoClickTimerFunction(controller) {
     wasAutoClickInitiated++;
-    Timer.periodic(
-      autoClickLogic.autoClickerDuration,
+    Timer autoClickTimer = Timer.periodic(
+      Duration(
+          milliseconds: autoClickLogic.autoClickDurationMilliseconds().toInt()),
       (timer) {
         moneyLogic.autoClickIncreaseMoney();
         controller.reset();
@@ -120,7 +128,7 @@ class ClickerBrain extends ChangeNotifier {
     if (autoClickLogic.shouldAnimateAutoClick() == 1 &&
         wasAutoClickInitiated == 0) {
       controller.forward();
-      autoClickTimer(controller);
+      autoClickTimerFunction(controller);
     }
   }
 
@@ -136,6 +144,15 @@ class ClickerBrain extends ChangeNotifier {
   void updateAutoClickIncrement() {
     autoClickLogic.updateAutoClickIncrement();
     notifyListeners();
+  }
+
+  void decreaseAutoClickDuration() {
+    if (moneyLogic.canUpgrade(autoClickLogic.autoClickDecreaseDurationCost())) {
+      moneyLogic.decreaseMoney(autoClickLogic.autoClickDecreaseDurationCost());
+      autoClickLogic.decreaseAutoClickDuration();
+      autoClickLogic.increaseAutoClickDecreaseDurationCost();
+      notifyListeners();
+    }
   }
 
   // worker
