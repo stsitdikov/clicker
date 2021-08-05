@@ -81,7 +81,7 @@ class _ClickerScreenState extends State<ClickerScreen>
 
     List<Widget> tabs = <Widget>[
       MainTab(animationControllerList, animationList),
-      UpgradeTab(autoClickController),
+      UpgradeTab(),
       InfoTab(),
     ];
 

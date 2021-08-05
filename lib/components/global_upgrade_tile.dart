@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:clicker/logic/clicker_brain.dart';
-import 'package:clicker/screens/clicker_screen.dart';
 
 class GlobalUpgradeTile extends StatelessWidget {
-  final AnimationController autoClickController;
-  GlobalUpgradeTile(this.autoClickController);
-
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
@@ -17,7 +13,6 @@ class GlobalUpgradeTile extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           clickerBrain.decreaseAutoClickDuration();
-          autoClickController.reset();
         },
         child: Container(
           decoration: BoxDecoration(
