@@ -29,7 +29,7 @@ class LaunchScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () => Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => ClickerScreen()),
+                MaterialPageRoute(builder: (context) => ClickerScreen(0)),
                 (Route<dynamic> route) => false,
               ),
               style: ElevatedButton.styleFrom(primary: Colors.teal),
@@ -45,6 +45,5 @@ class LaunchScreen extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

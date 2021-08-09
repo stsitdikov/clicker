@@ -9,13 +9,15 @@ import 'tabs/upgrade_tab.dart';
 import 'tabs/info_tab.dart';
 
 class ClickerScreen extends StatefulWidget {
+  final int initialIndex;
+  ClickerScreen(this.initialIndex);
   @override
   _ClickerScreenState createState() => _ClickerScreenState();
 }
 
 class _ClickerScreenState extends State<ClickerScreen>
     with TickerProviderStateMixin {
-  int selectedIndex = 0;
+  late int selectedIndex = widget.initialIndex;
 
   late var clickerBrain = Provider.of<ClickerBrain>(context);
 
@@ -57,15 +59,17 @@ class _ClickerScreenState extends State<ClickerScreen>
 
   @override
   void dispose() {
-    super.dispose();
     autoClickController.dispose();
     workerController.dispose();
     managerController.dispose();
     ceoController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    clickerBrain.launchIsNormal();
+
     List<AnimationController> animationControllerList = [
       autoClickController,
       workerController,

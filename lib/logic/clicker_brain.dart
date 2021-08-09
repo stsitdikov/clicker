@@ -43,8 +43,19 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  bool isFirstLaunch() {
-    return getMoney() == 0.0;
+  double isLaunchFromGlobalUpgrade() =>
+      box.get('isLaunchFromGlobalUpgrade', defaultValue: 0.0);
+
+  void launchIsFromGlobalUpgrade() {
+    if (isLaunchFromGlobalUpgrade() == 0.0) {
+      box.put('isLaunchFromGlobalUpgrade', 1.0);
+    }
+  }
+
+  void launchIsNormal() {
+    if (isLaunchFromGlobalUpgrade() == 1.0) {
+      box.put('isLaunchFromGlobalUpgrade', 0.0);
+    }
   }
 
   // click row
@@ -110,9 +121,23 @@ class ClickerBrain extends ChangeNotifier {
 
   double wasAutoClickInitiated = 0;
 
+  // void autoClickTimerFunction(controller) {
+  //   wasAutoClickInitiated++;
+  //   Timer.periodic(
+  //     Duration(
+  //         milliseconds: autoClickLogic.autoClickDurationMilliseconds().toInt()),
+  //     (timer) {
+  //       moneyLogic.autoClickIncreaseMoney();
+  //       controller.reset();
+  //       controller.forward();
+  //       notifyListeners();
+  //     },
+  //   );
+  // }
+
   void autoClickTimerFunction(controller) {
     wasAutoClickInitiated++;
-    Timer autoClickTimer = Timer.periodic(
+    Timer.periodic(
       Duration(
           milliseconds: autoClickLogic.autoClickDurationMilliseconds().toInt()),
       (timer) {

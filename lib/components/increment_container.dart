@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:clicker/logic/constants.dart';
 
 class IncrementContainer extends StatelessWidget {
   const IncrementContainer(this.incrementNumber, this.border);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 
 import 'package:clicker/logic/clicker_brain.dart';
@@ -13,6 +14,8 @@ class GlobalUpgradeTile extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           clickerBrain.decreaseAutoClickDuration();
+          clickerBrain.launchIsFromGlobalUpgrade();
+          Phoenix.rebirth(context);
         },
         child: Container(
           decoration: BoxDecoration(
