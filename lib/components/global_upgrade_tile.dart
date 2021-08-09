@@ -5,6 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 
 class GlobalUpgradeTile extends StatelessWidget {
+  final List<AnimationController> animationControllerList;
+  GlobalUpgradeTile(this.animationControllerList);
+
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
@@ -13,8 +16,7 @@ class GlobalUpgradeTile extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GestureDetector(
         onTap: () {
-          clickerBrain.decreaseAutoClickDuration();
-          clickerBrain.launchIsFromGlobalUpgrade();
+          clickerBrain.decreaseAutoClickDuration(animationControllerList[0]);
           Phoenix.rebirth(context);
         },
         child: Container(
