@@ -160,15 +160,18 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canDecreaseAutoClickDuration() {
+    return moneyLogic
+        .canUpgrade(autoClickLogic.autoClickDecreaseDurationCost());
+  }
+
   void decreaseAutoClickDuration(controller) {
-    if (moneyLogic.canUpgrade(autoClickLogic.autoClickDecreaseDurationCost())) {
-      moneyLogic.decreaseMoney(autoClickLogic.autoClickDecreaseDurationCost());
-      autoClickLogic.decreaseAutoClickDuration();
-      autoClickLogic.increaseAutoClickDecreaseDurationCost();
-      launchIsFromGlobalUpgrade();
-      autoClickTimer.cancel();
-      notifyListeners();
-    }
+    moneyLogic.decreaseMoney(autoClickLogic.autoClickDecreaseDurationCost());
+    autoClickLogic.decreaseAutoClickDuration();
+    autoClickLogic.increaseAutoClickDecreaseDurationCost();
+    launchIsFromGlobalUpgrade();
+    autoClickTimer.cancel();
+    notifyListeners();
   }
 
   // worker

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 
 import 'package:clicker/logic/clicker_brain.dart';
 
 class GlobalUpgradeTile extends StatelessWidget {
-  final List<AnimationController> animationControllerList;
-  GlobalUpgradeTile(this.animationControllerList);
+  final onTap;
+  final String duration;
+  final String title;
+  final String cost;
+
+  GlobalUpgradeTile(
+      {required this.onTap,
+      required this.duration,
+      required this.title,
+      required this.cost});
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +22,7 @@ class GlobalUpgradeTile extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GestureDetector(
-        onTap: () {
-          clickerBrain.decreaseAutoClickDuration(animationControllerList[0]);
-          Phoenix.rebirth(context);
-        },
+        onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
             color: Colors.teal,
@@ -33,7 +37,7 @@ class GlobalUpgradeTile extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: Text(
-                    '${clickerBrain.getAutoClickDurationString()}\n\nsec',
+                    '$duration\n\nsec',
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -48,7 +52,7 @@ class GlobalUpgradeTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
-                        'AutoClicker',
+                        title,
                         style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.bold,
