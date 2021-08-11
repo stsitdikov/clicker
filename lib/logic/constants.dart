@@ -43,6 +43,9 @@ const double kDefaultWorkerCost = 10;
 const double kDefaultWorkerCostOne = 10;
 const double kDefaultWorkerIncrement = 1;
 
+const double kDefaultWorkerDurationMilliseconds = 10000;
+const double kDefaultWorkerDecreaseDurationCost = 1000;
+
 // manager constants
 
 const double kWorkerNumberToShowManager = 5;

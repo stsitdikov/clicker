@@ -18,6 +18,17 @@ class UpgradeTab extends StatelessWidget {
       children: [
         GlobalUpgradeTile(
           onTap: () {
+            if (clickerBrain.canDecreaseWorkerDuration()) {
+              clickerBrain.decreaseWorkerDuration(animationControllerList[1]);
+              Phoenix.rebirth(context);
+            }
+          },
+          duration: clickerBrain.getWorkerDurationString(),
+          title: 'Worker',
+          cost: clickerBrain.getWorkerDecreaseDurationCost(),
+        ),
+        GlobalUpgradeTile(
+          onTap: () {
             if (clickerBrain.canDecreaseAutoClickDuration()) {
               clickerBrain
                   .decreaseAutoClickDuration(animationControllerList[0]);

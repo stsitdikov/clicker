@@ -6,8 +6,6 @@ import 'package:clicker/logic/constants.dart';
 class WorkerLogic {
   Box box = Hive.box<double>(kClickerBrainBox);
 
-  Duration workerDuration = Duration(seconds: 10);
-
   // getters
 
   double workerCost() =>
@@ -30,6 +28,12 @@ class WorkerLogic {
 
   double initialWorkerUpgradeDone() =>
       box.get('initialWorkerUpgradeDone', defaultValue: 0.0) as double;
+
+  double workerDurationMilliseconds() => box.get('workerDurationMilliseconds',
+      defaultValue: kDefaultWorkerDurationMilliseconds);
+
+  double workerDecreaseDurationCost() => box.get('workerDecreaseDurationCost',
+      defaultValue: kDefaultWorkerDecreaseDurationCost);
 
   // functions
 
@@ -104,4 +108,11 @@ class WorkerLogic {
     }
     box.put('workerCost', newWorkerCost);
   }
+
+  void decreaseWorkerDuration() => box.put(
+      'workerDurationMilliseconds', (workerDurationMilliseconds() - 5000));
+
+  void increaseWorkerDecreaseDurationCost() => box.put(
+      'workerDecreaseDurationCost',
+      (workerDecreaseDurationCost() * kMainIncrement));
 }

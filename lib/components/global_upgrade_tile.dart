@@ -72,7 +72,7 @@ class GlobalUpgradeTile extends StatelessWidget {
               ),
               Expanded(
                 child: Center(
-                  child: Text(clickerBrain.getAutoClickDecreaseDurationCost()),
+                  child: Text(cost),
                 ),
               ),
             ],

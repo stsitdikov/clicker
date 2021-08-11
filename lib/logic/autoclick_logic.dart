@@ -32,7 +32,7 @@ class AutoClickLogic {
       box.get('initialAutoClickUpgradeDone', defaultValue: 0.0) as double;
 
   double autoClickDurationMilliseconds() =>
-      box.get('autoClickerDurationSeconds',
+      box.get('autoClickDurationMilliseconds',
           defaultValue: kDefaultAutoClickDurationMilliseconds);
 
   double autoClickDecreaseDurationCost() =>
@@ -112,8 +112,8 @@ class AutoClickLogic {
     box.put('autoClickCost', newAutoClickCost);
   }
 
-  void decreaseAutoClickDuration() => box.put(
-      'autoClickerDurationSeconds', (autoClickDurationMilliseconds() - 1000));
+  void decreaseAutoClickDuration() => box.put('autoClickDurationMilliseconds',
+      (autoClickDurationMilliseconds() - 1000));
 
   void increaseAutoClickDecreaseDurationCost() => box.put(
       'autoClickDecreaseDurationCost',
