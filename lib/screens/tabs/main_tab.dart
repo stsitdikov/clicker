@@ -36,11 +36,24 @@ class _MainTabState extends State<MainTab> {
     ManagerRow(widget.animationList[2], widget.animationControllerList[2]),
     BlockedRow(),
     CeoRow(widget.animationList[3], widget.animationControllerList[3]),
+    BlockedRow(),
   ];
 
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
+
+    Widget transition(_, index, animation) {
+      if (index < listOfRows.length) {
+        return SizeTransition(
+          key: UniqueKey(),
+          sizeFactor: animation,
+          child: listOfRows[index],
+        );
+      } else {
+        return Container();
+      }
+    }
 
     clickerBrain.initialAutoClickTimer(widget.animationControllerList[0]);
     clickerBrain.initialWorkerTimer(widget.animationControllerList[1]);
@@ -60,6 +73,10 @@ class _MainTabState extends State<MainTab> {
       rowsKey.currentState?.insertItem(2, duration: kShowRowDuration);
       clickerBrain.updateShowedWorker();
       clickerBrain.increaseListFlex();
+      Timer(kShowRowDuration, () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: kShowRowDuration, curve: Curves.linear);
+      });
     }
 
     if (clickerBrain.isManagerVisible() &&
@@ -77,6 +94,10 @@ class _MainTabState extends State<MainTab> {
     if (clickerBrain.isCeoVisible() && clickerBrain.showedCeo() == 0.0) {
       listOfRows.removeAt(4);
       rowsKey.currentState?.insertItem(4, duration: kShowRowDuration);
+      rowsKey.currentState?.removeItem(
+        5,
+        (context, animation) => transition(context, 5, animation),
+      );
       clickerBrain.updateShowedCeo();
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
@@ -101,17 +122,7 @@ class _MainTabState extends State<MainTab> {
               key: rowsKey,
               initialItemCount: clickerBrain.itemCount().toInt(),
               shrinkWrap: true,
-              itemBuilder: (_, index, animation) {
-                if (index < listOfRows.length) {
-                  return SizeTransition(
-                    key: UniqueKey(),
-                    sizeFactor: animation,
-                    child: listOfRows[index],
-                  );
-                } else {
-                  return Container();
-                }
-              },
+              itemBuilder: transition,
             ),
           ),
         ),
