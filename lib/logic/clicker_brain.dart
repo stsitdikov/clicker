@@ -30,9 +30,9 @@ class ClickerBrain extends ChangeNotifier {
 
   void clearBox() => box.clear();
 
-  double listFlex() => box.get('listFlex', defaultValue: 1.0);
+  double listFlex() => box.get('listFlex', defaultValue: 2.0);
 
-  double itemCount() => box.get('itemCount', defaultValue: 1.0);
+  double itemCount() => box.get('itemCount', defaultValue: 2.0);
 
   void increaseListFlex() {
     if (listFlex() < 3.0) {

@@ -26,6 +26,18 @@ class _MainTabState extends State<MainTab> {
 
   GlobalKey<AnimatedListState> rowsKey = GlobalKey();
 
+  late List<Widget> listOfRows = [
+    ClickRow(),
+    BlockedRow(),
+    AutoClickRow(widget.animationList[0], widget.animationControllerList[0]),
+    BlockedRow(),
+    WorkerRow(widget.animationList[1], widget.animationControllerList[1]),
+    BlockedRow(),
+    ManagerRow(widget.animationList[2], widget.animationControllerList[2]),
+    BlockedRow(),
+    CeoRow(widget.animationList[3], widget.animationControllerList[3]),
+  ];
+
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
@@ -35,22 +47,16 @@ class _MainTabState extends State<MainTab> {
     clickerBrain.initialManagerTimer(widget.animationControllerList[2]);
     clickerBrain.initialCeoTimer(widget.animationControllerList[3]);
 
-    List<Widget> listOfRows = [
-      ClickRow(),
-      AutoClickRow(widget.animationList[0], widget.animationControllerList[0]),
-      WorkerRow(widget.animationList[1], widget.animationControllerList[1]),
-      ManagerRow(widget.animationList[2], widget.animationControllerList[2]),
-      CeoRow(widget.animationList[3], widget.animationControllerList[3]),
-    ];
-
     if (clickerBrain.isAutoClickVisible() &&
         clickerBrain.showedAutoClick() == 0.0) {
+      listOfRows.removeAt(1);
       rowsKey.currentState?.insertItem(1, duration: kShowRowDuration);
       clickerBrain.updateShowedAutoClick();
       clickerBrain.increaseListFlex();
     }
 
     if (clickerBrain.isWorkerVisible() && clickerBrain.showedWorker() == 0.0) {
+      listOfRows.removeAt(2);
       rowsKey.currentState?.insertItem(2, duration: kShowRowDuration);
       clickerBrain.updateShowedWorker();
       clickerBrain.increaseListFlex();
@@ -58,6 +64,7 @@ class _MainTabState extends State<MainTab> {
 
     if (clickerBrain.isManagerVisible() &&
         clickerBrain.showedManager() == 0.0) {
+      listOfRows.removeAt(3);
       rowsKey.currentState?.insertItem(3, duration: kShowRowDuration);
       clickerBrain.updateShowedManager();
       clickerBrain.increaseListFlex();
@@ -68,6 +75,7 @@ class _MainTabState extends State<MainTab> {
     }
 
     if (clickerBrain.isCeoVisible() && clickerBrain.showedCeo() == 0.0) {
+      listOfRows.removeAt(4);
       rowsKey.currentState?.insertItem(4, duration: kShowRowDuration);
       clickerBrain.updateShowedCeo();
       clickerBrain.increaseListFlex();
@@ -108,6 +116,16 @@ class _MainTabState extends State<MainTab> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class BlockedRow extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: kRowHeight,
+      color: Colors.black,
     );
   }
 }
