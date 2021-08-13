@@ -43,6 +43,10 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
+  double firstLaunch() => box.get('firstLaunch', defaultValue: 1.0);
+
+  void notFirstLaunch() => box.put('firstLaunch', (firstLaunch() + 1.0));
+
   double isLaunchFromGlobalUpgrade() =>
       box.get('isLaunchFromGlobalUpgrade', defaultValue: 0.0);
 

@@ -28,15 +28,10 @@ class _MainTabState extends State<MainTab> {
 
   late List<Widget> listOfRows = [
     ClickRow(),
-    BlockedRow(),
     AutoClickRow(widget.animationList[0], widget.animationControllerList[0]),
-    BlockedRow(),
     WorkerRow(widget.animationList[1], widget.animationControllerList[1]),
-    BlockedRow(),
     ManagerRow(widget.animationList[2], widget.animationControllerList[2]),
-    BlockedRow(),
     CeoRow(widget.animationList[3], widget.animationControllerList[3]),
-    BlockedRow(),
   ];
 
   @override
@@ -53,6 +48,19 @@ class _MainTabState extends State<MainTab> {
       } else {
         return Container();
       }
+    }
+
+    void addBlockedRows() {
+      listOfRows.insert(1, BlockedRow());
+      listOfRows.insert(3, BlockedRow());
+      listOfRows.insert(5, BlockedRow());
+      listOfRows.insert(7, BlockedRow());
+      listOfRows.insert(9, BlockedRow());
+    }
+
+    if (clickerBrain.firstLaunch() == 1.0) {
+      addBlockedRows();
+      clickerBrain.notFirstLaunch();
     }
 
     clickerBrain.initialAutoClickTimer(widget.animationControllerList[0]);
