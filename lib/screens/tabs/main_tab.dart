@@ -6,6 +6,7 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/logic/constants.dart';
 
 import 'package:clicker/components/money_display.dart';
+import 'package:clicker/rows/blocked_row.dart';
 import 'package:clicker/rows/autoclick_row.dart';
 import 'package:clicker/rows/ceo_row.dart';
 import 'package:clicker/rows/click_row.dart';
@@ -135,16 +136,6 @@ class _MainTabState extends State<MainTab> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class BlockedRow extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: kRowHeight,
-      color: Colors.black,
     );
   }
 }
