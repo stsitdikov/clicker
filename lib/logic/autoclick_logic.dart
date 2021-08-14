@@ -105,9 +105,10 @@ class AutoClickLogic {
   }
 
   void incrementalAutoClickCost() {
-    double newAutoClickCost = 0;
+    double newAutoClickCost = autoClickCostOne();
     for (var i = 1; i <= autoClickIncrement(); i++) {
-      newAutoClickCost = autoClickCostOne() * pow(kMainIncrement, i);
+      newAutoClickCost =
+          newAutoClickCost + autoClickCostOne() * pow(kMainIncrement, i);
     }
     box.put('autoClickCost', newAutoClickCost);
   }

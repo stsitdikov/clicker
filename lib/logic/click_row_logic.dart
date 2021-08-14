@@ -78,9 +78,9 @@ class ClickRowLogic {
   }
 
   void incrementalClickCost() {
-    double newClickCost = 0;
+    double newClickCost = clickCostOne();
     for (var i = 1; i <= clickIncrement(); i++) {
-      newClickCost = clickCostOne() * pow(kMainIncrement, i);
+      newClickCost = newClickCost + clickCostOne() * pow(kMainIncrement, i);
     }
     box.put('clickCost', newClickCost);
   }
