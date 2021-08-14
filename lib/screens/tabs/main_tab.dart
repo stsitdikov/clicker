@@ -29,11 +29,18 @@ class _MainTabState extends State<MainTab> {
 
   late List<Widget> listOfRows = [
     ClickRow(),
+    BlockedRow(),
     AutoClickRow(widget.animationList[0], widget.animationControllerList[0]),
+    BlockedRow(),
     WorkerRow(widget.animationList[1], widget.animationControllerList[1]),
+    BlockedRow(),
     ManagerRow(widget.animationList[2], widget.animationControllerList[2]),
+    BlockedRow(),
     CeoRow(widget.animationList[3], widget.animationControllerList[3]),
+    BlockedRow(),
   ];
+
+  late int removedBlockedRows = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -51,23 +58,27 @@ class _MainTabState extends State<MainTab> {
       }
     }
 
-    void addBlockedRows() {
-      listOfRows.insert(1, BlockedRow());
-      listOfRows.insert(3, BlockedRow());
-      listOfRows.insert(5, BlockedRow());
-      listOfRows.insert(7, BlockedRow());
-      listOfRows.insert(9, BlockedRow());
-    }
-
-    if (clickerBrain.firstLaunch() == 1.0) {
-      addBlockedRows();
-      clickerBrain.notFirstLaunch();
-    }
-
     clickerBrain.initialAutoClickTimer(widget.animationControllerList[0]);
     clickerBrain.initialWorkerTimer(widget.animationControllerList[1]);
     clickerBrain.initialManagerTimer(widget.animationControllerList[2]);
     clickerBrain.initialCeoTimer(widget.animationControllerList[3]);
+
+    if (removedBlockedRows == 0) {
+      if (clickerBrain.showedAutoClick() == 1.0) {
+        listOfRows.removeAt(1);
+      }
+      if (clickerBrain.showedWorker() == 1.0) {
+        listOfRows.removeAt(2);
+      }
+      if (clickerBrain.showedManager() == 1.0) {
+        listOfRows.removeAt(3);
+      }
+      if (clickerBrain.showedCeo() == 1.0) {
+        listOfRows.removeAt(4);
+        listOfRows.removeAt(5);
+      }
+      removedBlockedRows++;
+    }
 
     if (clickerBrain.isAutoClickVisible() &&
         clickerBrain.showedAutoClick() == 0.0) {
