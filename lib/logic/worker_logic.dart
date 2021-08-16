@@ -65,7 +65,7 @@ class WorkerLogic {
 
   void workerCostIncrease() {
     box.put('workerCost', workerCostOne());
-    incrementalWorkerCost();
+    incrementalWorkerCost(0.0);
   }
 
   void workerNumberIncrease() {
@@ -90,21 +90,21 @@ class WorkerLogic {
     if (workerIncrement() == 1.0) {
       box.put('workerIncrement', 10.0);
       box.put('workerCostOne', workerCost());
-      incrementalWorkerCost();
+      incrementalWorkerCost(workerCostOne());
     } else if (workerIncrement() == 10.0) {
       box.put('workerIncrement', 100.0);
       box.put('workerCost', workerCostOne());
-      incrementalWorkerCost();
+      incrementalWorkerCost(workerCostOne());
     } else if (workerIncrement() == 100.0) {
       box.put('workerIncrement', 1.0);
       box.put('workerCost', workerCostOne());
     }
   }
 
-  void incrementalWorkerCost() {
-    double newWorkerCost = 0;
+  void incrementalWorkerCost(newValue) {
+    double newWorkerCost = newValue;
     for (var i = 1; i <= workerIncrement(); i++) {
-      newWorkerCost = workerCostOne() * pow(kMainIncrement, i);
+      newWorkerCost = newWorkerCost + workerCostOne() * pow(kMainIncrement, i);
     }
     box.put('workerCost', newWorkerCost);
   }

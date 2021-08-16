@@ -69,7 +69,7 @@ class AutoClickLogic {
 
   void autoClickCostIncrease() {
     box.put('autoClickCost', autoClickCostOne());
-    incrementalAutoClickCost();
+    incrementalAutoClickCost(0.0);
   }
 
   void autoClickNumberIncrease() {
@@ -93,19 +93,19 @@ class AutoClickLogic {
     if (autoClickIncrement() == 1.0) {
       box.put('autoClickIncrement', 10.0);
       box.put('autoClickCostOne', autoClickCost());
-      incrementalAutoClickCost();
+      incrementalAutoClickCost(autoClickCostOne());
     } else if (autoClickIncrement() == 10.0) {
       box.put('autoClickIncrement', 100.0);
       box.put('autoClickCost', autoClickCostOne());
-      incrementalAutoClickCost();
+      incrementalAutoClickCost(autoClickCostOne());
     } else if (autoClickIncrement() == 100.0) {
       box.put('autoClickIncrement', 1.0);
       box.put('autoClickCost', autoClickCostOne());
     }
   }
 
-  void incrementalAutoClickCost() {
-    double newAutoClickCost = autoClickCostOne();
+  void incrementalAutoClickCost(newValue) {
+    double newAutoClickCost = newValue;
     for (var i = 1; i <= autoClickIncrement(); i++) {
       newAutoClickCost =
           newAutoClickCost + autoClickCostOne() * pow(kMainIncrement, i);

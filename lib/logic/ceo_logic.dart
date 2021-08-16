@@ -58,7 +58,7 @@ class CeoLogic {
 
   void ceoCostIncrease() {
     box.put('ceoCost', ceoCostOne());
-    incrementalCeoCost();
+    incrementalCeoCost(0.0);
   }
 
   void ceoNumberIncrease() {
@@ -83,21 +83,21 @@ class CeoLogic {
     if (ceoIncrement() == 1.0) {
       box.put('ceoIncrement', 10.0);
       box.put('ceoCostOne', ceoCost());
-      incrementalCeoCost();
+      incrementalCeoCost(ceoCostOne());
     } else if (ceoIncrement() == 10.0) {
       box.put('ceoIncrement', 100.0);
       box.put('ceoCost', ceoCostOne());
-      incrementalCeoCost();
+      incrementalCeoCost(ceoCostOne());
     } else if (ceoIncrement() == 100.0) {
       box.put('ceoIncrement', 1.0);
       box.put('ceoCost', ceoCostOne());
     }
   }
 
-  void incrementalCeoCost() {
-    double newCeoCost = 0;
+  void incrementalCeoCost(newValue) {
+    double newCeoCost = newValue;
     for (var i = 1; i <= ceoIncrement(); i++) {
-      newCeoCost = ceoCostOne() * pow(kMainIncrement, i);
+      newCeoCost = newCeoCost + ceoCostOne() * pow(kMainIncrement, i);
     }
     box.put('ceoCost', newCeoCost);
   }

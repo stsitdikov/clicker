@@ -47,13 +47,13 @@ class ClickRowLogic {
 
   void updateClickCostOne() {
     double newClickCostOne =
-        (clickCostOne() * pow(kMainIncrement, clickIncrement()));
+        clickCostOne() * pow(kMainIncrement, clickIncrement());
     box.put('clickCostOne', newClickCostOne);
   }
 
   void clickCostIncrease() {
     box.put('clickCost', clickCostOne());
-    incrementalClickCost();
+    incrementalClickCost(0.0);
   }
 
   void upgradeClickAmount() {
@@ -66,19 +66,19 @@ class ClickRowLogic {
     if (clickIncrement() == 1.0) {
       box.put('clickIncrement', 10.0);
       box.put('clickCostOne', clickCost());
-      incrementalClickCost();
+      incrementalClickCost(clickCostOne());
     } else if (clickIncrement() == 10.0) {
       box.put('clickIncrement', 100.0);
       box.put('clickCost', clickCostOne());
-      incrementalClickCost();
+      incrementalClickCost(clickCostOne());
     } else if (clickIncrement() == 100.0) {
       box.put('clickIncrement', 1.0);
       box.put('clickCost', clickCostOne());
     }
   }
 
-  void incrementalClickCost() {
-    double newClickCost = clickCostOne();
+  void incrementalClickCost(newValue) {
+    double newClickCost = newValue;
     for (var i = 1; i <= clickIncrement(); i++) {
       newClickCost = newClickCost + clickCostOne() * pow(kMainIncrement, i);
     }

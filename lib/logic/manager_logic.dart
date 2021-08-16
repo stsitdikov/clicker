@@ -62,7 +62,7 @@ class ManagerLogic {
 
   void managerCostIncrease() {
     box.put('managerCost', managerCostOne());
-    incrementalManagerCost();
+    incrementalManagerCost(0.0);
   }
 
   void managerNumberIncrease() {
@@ -86,21 +86,22 @@ class ManagerLogic {
     if (managerIncrement() == 1.0) {
       box.put('managerIncrement', 10.0);
       box.put('managerCostOne', managerCost());
-      incrementalManagerCost();
+      incrementalManagerCost(managerCostOne());
     } else if (managerIncrement() == 10.0) {
       box.put('managerIncrement', 100.0);
       box.put('managerCost', managerCostOne());
-      incrementalManagerCost();
+      incrementalManagerCost(managerCostOne());
     } else if (managerIncrement() == 100.0) {
       box.put('managerIncrement', 1.0);
       box.put('managerCost', managerCostOne());
     }
   }
 
-  void incrementalManagerCost() {
-    double newManagerCost = 0;
+  void incrementalManagerCost(newValue) {
+    double newManagerCost = newValue;
     for (var i = 1; i <= managerIncrement(); i++) {
-      newManagerCost = managerCostOne() * pow(kMainIncrement, i);
+      newManagerCost =
+          newManagerCost + managerCostOne() * pow(kMainIncrement, i);
     }
     box.put('managerCost', newManagerCost);
   }
