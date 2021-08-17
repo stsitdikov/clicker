@@ -35,6 +35,7 @@ const double kDefaultAutoClickIncrement = 1;
 
 const double kDefaultAutoClickDurationMilliseconds = 3000;
 const double kDefaultAutoClickDecreaseDurationCost = 100;
+const double kDecreaseAutoClickDurationBy = 1000;
 
 // worker constants
 
@@ -45,6 +46,7 @@ const double kDefaultWorkerIncrement = 1;
 
 const double kDefaultWorkerDurationMilliseconds = 10000;
 const double kDefaultWorkerDecreaseDurationCost = 1000;
+const double kDecreaseWorkerDurationBy = 5000;
 
 // manager constants
 

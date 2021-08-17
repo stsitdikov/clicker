@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
@@ -6,25 +5,35 @@ import 'package:clicker/logic/constants.dart';
 class WorkerLogic {
   Box box = Hive.box<double>(kClickerBrainBox);
 
+  // box names
+
+  String workerNumberString = 'workerNumber';
+  String workerCostString = 'workerCost';
+  String workerCostOneString = 'workerCostOne';
+  String workerIncrementString = 'workerIncrement';
+  String shouldAnimateWorkerString = 'shouldAnimateWorker';
+
   // getters
 
+  double workerNumber() =>
+      box.get(workerNumberString, defaultValue: 0.0) as double;
+
   double workerCost() =>
-      box.get('workerCost', defaultValue: kDefaultWorkerCost) as double;
+      box.get(workerCostString, defaultValue: kDefaultWorkerCost) as double;
 
   double workerCostOne() =>
-      box.get('workerCostOne', defaultValue: kDefaultWorkerCostOne) as double;
-
-  double workerNumber() => box.get('workerNumber', defaultValue: 0.0) as double;
+      box.get(workerCostOneString, defaultValue: kDefaultWorkerCostOne)
+          as double;
 
   double workerIncrement() =>
-      box.get('workerIncrement', defaultValue: kDefaultWorkerIncrement)
+      box.get(workerIncrementString, defaultValue: kDefaultWorkerIncrement)
           as double;
 
   double workerVisible() =>
       box.get('workerVisible', defaultValue: 0.0) as double;
 
   double shouldAnimateWorker() =>
-      box.get('shouldAnimateWorker', defaultValue: 0.0) as double;
+      box.get(shouldAnimateWorkerString, defaultValue: 0.0) as double;
 
   double initialWorkerUpgradeDone() =>
       box.get('initialWorkerUpgradeDone', defaultValue: 0.0) as double;
@@ -37,44 +46,6 @@ class WorkerLogic {
 
   // functions
 
-  void buyWorker() {
-    if (workerIncrement() == 1.0) {
-      if (initialWorkerUpgradeDone() == 1.0) {
-        updateWorkerCostOne();
-      }
-      workerCostIncrease();
-      workerNumberIncrease();
-      if (initialWorkerUpgradeDone() == 0.0) {
-        box.put('initialWorkerUpgradeDone', 1.0);
-      }
-    } else {
-      updateWorkerCostOne();
-      workerCostIncrease();
-      workerNumberIncrease();
-      if (initialWorkerUpgradeDone() == 1.0) {
-        box.put('initialWorkerUpgradeDone', 0.0);
-      }
-    }
-  }
-
-  void updateWorkerCostOne() {
-    double newWorkerCostOne =
-        workerCostOne() * pow(kMainIncrement, workerIncrement());
-    box.put('workerCostOne', newWorkerCostOne);
-  }
-
-  void workerCostIncrease() {
-    box.put('workerCost', workerCostOne());
-    incrementalWorkerCost(0.0);
-  }
-
-  void workerNumberIncrease() {
-    box.put('workerNumber', (workerNumber() + workerIncrement()));
-    if (shouldAnimateWorker() == 0.0) {
-      box.put('shouldAnimateWorker', 1.0);
-    }
-  }
-
   void managerBuysWorkers(managerNumber) =>
       box.put('workerNumber', (workerNumber() + managerNumber));
 
@@ -86,31 +57,8 @@ class WorkerLogic {
     return workerVisible() == 1.0;
   }
 
-  void updateWorkerIncrement() {
-    if (workerIncrement() == 1.0) {
-      box.put('workerIncrement', 10.0);
-      box.put('workerCostOne', workerCost());
-      incrementalWorkerCost(workerCostOne());
-    } else if (workerIncrement() == 10.0) {
-      box.put('workerIncrement', 100.0);
-      box.put('workerCost', workerCostOne());
-      incrementalWorkerCost(workerCostOne());
-    } else if (workerIncrement() == 100.0) {
-      box.put('workerIncrement', 1.0);
-      box.put('workerCost', workerCostOne());
-    }
-  }
-
-  void incrementalWorkerCost(newValue) {
-    double newWorkerCost = newValue;
-    for (var i = 1; i <= workerIncrement(); i++) {
-      newWorkerCost = newWorkerCost + workerCostOne() * pow(kMainIncrement, i);
-    }
-    box.put('workerCost', newWorkerCost);
-  }
-
-  void decreaseWorkerDuration() => box.put(
-      'workerDurationMilliseconds', (workerDurationMilliseconds() - 5000));
+  void decreaseWorkerDuration() => box.put('workerDurationMilliseconds',
+      (workerDurationMilliseconds() - kDecreaseWorkerDurationBy));
 
   void increaseWorkerDecreaseDurationCost() => box.put(
       'workerDecreaseDurationCost',

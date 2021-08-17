@@ -66,7 +66,7 @@ class BlockedRow extends StatelessWidget {
                   children: [
                     Icon(Icons.lock),
                     Text(
-                      'Need more money to unlock',
+                      'Need to progress further',
                       style: TextStyle(fontSize: 15.0),
                     ),
                   ],

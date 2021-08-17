@@ -161,17 +161,12 @@ class ClickerBrain extends ChangeNotifier {
           boxNumberName: autoClickLogic.autoClickNumberString,
           boxShouldAnimate: autoClickLogic.shouldAnimateAutoClickString);
       notifyListeners();
-      if (shouldAnimateAutoClick() == 1.0 && wasAutoClickInitiated == 0) {
-        wasAutoClickInitiated++;
-        controller.forward();
-        autoClickTimerStart(controller);
-      }
+      initialAutoClickTimer(controller);
     }
   }
 
   void initialAutoClickTimer(controller) {
-    if (autoClickLogic.shouldAnimateAutoClick() == 1 &&
-        wasAutoClickInitiated == 0) {
+    if (shouldAnimateAutoClick() == 1.0 && wasAutoClickInitiated == 0) {
       wasAutoClickInitiated++;
       controller.forward();
       autoClickTimerStart(controller);
@@ -231,39 +226,41 @@ class ClickerBrain extends ChangeNotifier {
   String getWorkerDecreaseDurationCost() =>
       NumberFormat.compact().format(workerLogic.workerDecreaseDurationCost());
 
-  bool shouldAnimateWorker() => workerLogic.shouldAnimateWorker() == 1;
-
-  void buyWorker(controller) {
-    if (moneyLogic.canUpgrade(workerLogic.workerCost())) {
-      moneyLogic.decreaseMoney(workerLogic.workerCost());
-      workerLogic.buyWorker();
-      notifyListeners();
-      if (shouldAnimateWorker() && wasWorkerInitiated == 0) {
-        wasWorkerInitiated++;
-        controller.forward();
-        workerTimerStart(controller);
-      }
-    }
-  }
+  double shouldAnimateWorker() => workerLogic.shouldAnimateWorker();
 
   double wasWorkerInitiated = 0;
 
   Timer workerTimer = Timer(Duration(milliseconds: 0), () {});
 
   void workerTimerStart(controller) {
-    workerTimer = Timer.periodic(
-      getWorkerDuration(),
-      (timer) {
-        autoClickLogic.workerBuysAutoClicks(workerLogic.workerNumber());
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
+    clickerFunctions.timerStart(
+        controller,
+        workerTimer,
+        getWorkerDuration(),
+        () => autoClickLogic.workerBuysAutoClicks(workerLogic.workerNumber()),
+        () => notifyListeners());
+  }
+
+  void buyWorker(controller) {
+    if (moneyLogic.canUpgrade(workerLogic.workerCost())) {
+      moneyLogic.decreaseMoney(workerLogic.workerCost());
+      clickerFunctions.upgradeRow(
+          isClickRow: false,
+          increment: getWorkerIncrement(),
+          costOne: workerLogic.workerCostOne(),
+          shouldAnimate: shouldAnimateWorker(),
+          numberToChange: workerLogic.workerNumber(),
+          boxCostOneName: workerLogic.workerCostOneString,
+          boxCostName: workerLogic.workerCostString,
+          boxNumberName: workerLogic.workerNumberString,
+          boxShouldAnimate: workerLogic.shouldAnimateWorkerString);
+      notifyListeners();
+      initialWorkerTimer(controller);
+    }
   }
 
   void initialWorkerTimer(controller) {
-    if (shouldAnimateWorker() && wasWorkerInitiated == 0) {
+    if (shouldAnimateWorker() == 1.0 && wasWorkerInitiated == 0) {
       wasWorkerInitiated++;
       controller.forward();
       workerTimerStart(controller);
@@ -280,7 +277,13 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void updateWorkerIncrement() {
-    workerLogic.updateWorkerIncrement();
+    clickerFunctions.updateIncrement(
+        increment: getWorkerIncrement(),
+        cost: workerLogic.workerCost(),
+        costOne: workerLogic.workerCostOne(),
+        boxIncrementName: workerLogic.workerIncrementString,
+        boxCostName: workerLogic.workerCostString,
+        boxCostOneName: workerLogic.workerCostOneString);
     notifyListeners();
   }
 
