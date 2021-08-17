@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:clicker/logic/constants.dart';
@@ -6,30 +5,35 @@ import 'package:clicker/logic/constants.dart';
 class AutoClickLogic {
   Box box = Hive.box<double>(kClickerBrainBox);
 
+  // box names
+
+  String autoClickNumberString = 'autoClickNumber';
+  String autoClickCostString = 'autoClickCost';
+  String autoClickCostOneString = 'autoClickCostOne';
+  String autoClickIncrementString = 'autoClickIncrement';
+  String shouldAnimateAutoClickString = 'shouldAnimateAutoClick';
+
   // getters
 
+  double autoClickNumber() =>
+      box.get(autoClickNumberString, defaultValue: 0.0) as double;
+
   double autoClickCost() =>
-      box.get('autoClickCost', defaultValue: kDefaultAutoClickCost) as double;
+      box.get(autoClickCostString, defaultValue: kDefaultAutoClickCost)
+          as double;
 
   double autoClickCostOne() =>
-      box.get('autoClickCostOne', defaultValue: kDefaultAutoClickCostOne)
+      box.get(autoClickCostOneString, defaultValue: kDefaultAutoClickCostOne)
           as double;
 
-  double autoClickNumber() =>
-      box.get('autoClickNumber', defaultValue: 0.0) as double;
-
-  double autoClickIncrement() =>
-      box.get('autoClickIncrement', defaultValue: kDefaultAutoClickIncrement)
-          as double;
+  double autoClickIncrement() => box.get(autoClickIncrementString,
+      defaultValue: kDefaultAutoClickIncrement) as double;
 
   double autoClickVisible() =>
       box.get('autoClickVisible', defaultValue: 0.0) as double;
 
   double shouldAnimateAutoClick() =>
-      box.get('shouldAnimateAutoClick', defaultValue: 0.0) as double;
-
-  double initialAutoClickUpgradeDone() =>
-      box.get('initialAutoClickUpgradeDone', defaultValue: 0.0) as double;
+      box.get(shouldAnimateAutoClickString, defaultValue: 0.0) as double;
 
   double autoClickDurationMilliseconds() =>
       box.get('autoClickDurationMilliseconds',
@@ -41,76 +45,14 @@ class AutoClickLogic {
 
   // functions
 
-  void buyAutoClicker() {
-    if (autoClickIncrement() == 1.0) {
-      if (initialAutoClickUpgradeDone() == 1.0) {
-        updateAutoClickCostOne();
-      }
-      autoClickCostIncrease();
-      autoClickNumberIncrease();
-      if (initialAutoClickUpgradeDone() == 0.0) {
-        box.put('initialAutoClickUpgradeDone', 1.0);
-      }
-    } else {
-      updateAutoClickCostOne();
-      autoClickCostIncrease();
-      autoClickNumberIncrease();
-      if (initialAutoClickUpgradeDone() == 1.0) {
-        box.put('initialAutoClickUpgradeDone', 0.0);
-      }
-    }
-  }
-
-  void updateAutoClickCostOne() {
-    double newAutoClickCostOne =
-        autoClickCostOne() * pow(kMainIncrement, autoClickIncrement());
-    box.put('autoClickCostOne', newAutoClickCostOne);
-  }
-
-  void autoClickCostIncrease() {
-    box.put('autoClickCost', autoClickCostOne());
-    incrementalAutoClickCost(0.0);
-  }
-
-  void autoClickNumberIncrease() {
-    box.put('autoClickNumber', (autoClickNumber() + autoClickIncrement()));
-    if (shouldAnimateAutoClick() == 0.0) {
-      box.put('shouldAnimateAutoClick', 1.0);
-    }
-  }
-
   void workerBuysAutoClicks(workerNumber) =>
-      box.put('autoClickNumber', (autoClickNumber() + workerNumber));
+      box.put(autoClickNumberString, (autoClickNumber() + workerNumber));
 
   bool isAutoClickVisible(money) {
     if (autoClickVisible() == 0.0 && money >= kMoneyToShowAutoClick) {
       box.put('autoClickVisible', 1.0);
     }
     return autoClickVisible() == 1.0;
-  }
-
-  void updateAutoClickIncrement() {
-    if (autoClickIncrement() == 1.0) {
-      box.put('autoClickIncrement', 10.0);
-      box.put('autoClickCostOne', autoClickCost());
-      incrementalAutoClickCost(autoClickCostOne());
-    } else if (autoClickIncrement() == 10.0) {
-      box.put('autoClickIncrement', 100.0);
-      box.put('autoClickCost', autoClickCostOne());
-      incrementalAutoClickCost(autoClickCostOne());
-    } else if (autoClickIncrement() == 100.0) {
-      box.put('autoClickIncrement', 1.0);
-      box.put('autoClickCost', autoClickCostOne());
-    }
-  }
-
-  void incrementalAutoClickCost(newValue) {
-    double newAutoClickCost = newValue;
-    for (var i = 1; i <= autoClickIncrement(); i++) {
-      newAutoClickCost =
-          newAutoClickCost + autoClickCostOne() * pow(kMainIncrement, i);
-    }
-    box.put('autoClickCost', newAutoClickCost);
   }
 
   void decreaseAutoClickDuration() => box.put('autoClickDurationMilliseconds',

@@ -8,23 +8,36 @@ class ClickerFunctions {
   Box box = Hive.box<double>(kClickerBrainBox);
 
   void upgradeRow({
+    required bool isClickRow,
     required double increment,
     required double costOne,
+    required double shouldAnimate,
     required double numberToChange,
     required String boxCostOneName,
     required String boxCostName,
     required String boxNumberName,
+    required String boxShouldAnimate,
   }) {
     if (increment == 1.0) {
       updateCostOne(boxCostOneName, costOne, increment);
       costIncrease(boxCostName, (costOne * increment));
       incrementalCost(0.0, increment, costOne, boxCostName);
-      updateNumber(boxNumberName, numberToChange, increment);
+      if (isClickRow == true) {
+        updateNumberClickRow(boxNumberName, numberToChange, increment);
+      } else {
+        updateNumber(boxNumberName, numberToChange, increment, shouldAnimate,
+            boxShouldAnimate);
+      }
     } else {
       updateCostOne(boxCostOneName, costOne, increment);
       costIncrease(boxCostName, costOne);
       incrementalCost(0.0, increment, costOne, boxCostName);
-      updateNumber(boxNumberName, numberToChange, increment);
+      if (isClickRow == true) {
+        updateNumberClickRow(boxNumberName, numberToChange, increment);
+      } else {
+        updateNumber(boxNumberName, numberToChange, increment, shouldAnimate,
+            boxShouldAnimate);
+      }
     }
   }
 
@@ -33,8 +46,16 @@ class ClickerFunctions {
 
   void costIncrease(boxCostName, costOne) => box.put(boxCostName, costOne);
 
-  void updateNumber(boxNumberName, numberToChange, increment) =>
+  void updateNumberClickRow(boxNumberName, numberToChange, increment) =>
       box.put(boxNumberName, numberToChange * pow(kMainIncrement, increment));
+
+  void updateNumber(boxNumberName, numberToChange, increment, shouldAnimate,
+      boxShouldAnimate) {
+    box.put(boxNumberName, numberToChange + increment);
+    if (shouldAnimate == 0.0) {
+      box.put(boxShouldAnimate, 1.0);
+    }
+  }
 
   void updateIncrement({
     required double increment,

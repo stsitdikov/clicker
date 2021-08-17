@@ -88,7 +88,10 @@ class ClickerBrain extends ChangeNotifier {
     if (moneyLogic.canUpgrade(clickRowLogic.clickCost())) {
       moneyLogic.decreaseMoney(clickRowLogic.clickCost());
       clickerFunctions.upgradeRow(
-        increment: clickRowLogic.clickIncrement(),
+        isClickRow: true,
+        shouldAnimate: 1.0,
+        boxShouldAnimate: 'null',
+        increment: getClickIncrement(),
         costOne: clickRowLogic.clickCostOne(),
         numberToChange: clickRowLogic.clickAmount(),
         boxCostOneName: clickRowLogic.clickCostOneString,
@@ -101,7 +104,7 @@ class ClickerBrain extends ChangeNotifier {
 
   void changeClickIncrement() {
     clickerFunctions.updateIncrement(
-        increment: clickRowLogic.clickIncrement(),
+        increment: getClickIncrement(),
         cost: clickRowLogic.clickCost(),
         costOne: clickRowLogic.clickCostOne(),
         boxIncrementName: clickRowLogic.clickIncrementString,
@@ -129,14 +132,23 @@ class ClickerBrain extends ChangeNotifier {
   String getAutoClickDecreaseDurationCost() => NumberFormat.compact()
       .format(autoClickLogic.autoClickDecreaseDurationCost());
 
-  bool shouldAnimateAutoClick() => autoClickLogic.shouldAnimateAutoClick() == 1;
+  double shouldAnimateAutoClick() => autoClickLogic.shouldAnimateAutoClick();
 
   void buyAutoClicker(controller) {
     if (moneyLogic.canUpgrade(autoClickLogic.autoClickCost())) {
       moneyLogic.decreaseMoney(autoClickLogic.autoClickCost());
-      autoClickLogic.buyAutoClicker();
+      clickerFunctions.upgradeRow(
+          isClickRow: false,
+          increment: getAutoClickIncrement(),
+          costOne: autoClickLogic.autoClickCostOne(),
+          shouldAnimate: shouldAnimateAutoClick(),
+          numberToChange: autoClickLogic.autoClickNumber(),
+          boxCostOneName: autoClickLogic.autoClickCostOneString,
+          boxCostName: autoClickLogic.autoClickCostString,
+          boxNumberName: autoClickLogic.autoClickNumberString,
+          boxShouldAnimate: autoClickLogic.shouldAnimateAutoClickString);
       notifyListeners();
-      if (shouldAnimateAutoClick() && wasAutoClickInitiated == 0) {
+      if (shouldAnimateAutoClick() == 1.0 && wasAutoClickInitiated == 0) {
         wasAutoClickInitiated++;
         controller.forward();
         autoClickTimerStart(controller);
@@ -179,7 +191,14 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void updateAutoClickIncrement() {
-    autoClickLogic.updateAutoClickIncrement();
+    // autoClickLogic.updateAutoClickIncrement();
+    clickerFunctions.updateIncrement(
+        increment: getAutoClickIncrement(),
+        cost: autoClickLogic.autoClickCost(),
+        costOne: autoClickLogic.autoClickCostOne(),
+        boxIncrementName: autoClickLogic.autoClickIncrementString,
+        boxCostName: autoClickLogic.autoClickCostString,
+        boxCostOneName: autoClickLogic.autoClickCostOneString);
     notifyListeners();
   }
 
