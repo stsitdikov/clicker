@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:clicker/logic/constants.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -6,18 +5,25 @@ import 'package:hive_flutter/hive_flutter.dart';
 class ManagerLogic {
   Box box = Hive.box<double>(kClickerBrainBox);
 
-  Duration managerDuration = Duration(seconds: 30);
+  // box names
+
+  String managerNumberString = 'managerNumber';
+  String managerCostString = 'managerCost';
+  String managerCostOneString = 'managerCostOne';
+  String managerIncrementString = 'managerIncrement';
+  String shouldAnimateManagerString = 'shouldAnimateManager';
 
   // getters
 
+  double managerNumber() =>
+      box.get(managerNumberString, defaultValue: 0.0) as double;
+
   double managerCost() =>
-      box.get('managerCost', defaultValue: kDefaultManagerCost) as double;
+      box.get(managerCostString, defaultValue: kDefaultManagerCost) as double;
 
   double managerCostOne() =>
-      box.get('managerCostOne', defaultValue: kDefaultManagerCostOne) as double;
-
-  double managerNumber() =>
-      box.get('managerNumber', defaultValue: 0.0) as double;
+      box.get(managerCostOneString, defaultValue: kDefaultManagerCostOne)
+          as double;
 
   double managerIncrement() =>
       box.get('managerIncrement', defaultValue: kDefaultManagerIncrement)
@@ -29,48 +35,13 @@ class ManagerLogic {
   double shouldAnimateManager() =>
       box.get('shouldAnimateManager', defaultValue: 0.0) as double;
 
-  double initialManagerUpgradeDone() =>
-      box.get('initialManagerUpgradeDone', defaultValue: 0.0) as double;
+  double managerDurationMilliseconds() => box.get('managerDurationMilliseconds',
+      defaultValue: kDefaultManagerDurationMilliseconds);
+
+  double managerDecreaseDurationCost() => box.get('managerDecreaseDurationCost',
+      defaultValue: kDefaultManagerDecreaseDurationCost);
 
   // functions
-
-  void buyManager() {
-    if (managerIncrement() == 1.0) {
-      if (initialManagerUpgradeDone() == 1.0) {
-        updateManagerCostOne();
-      }
-      managerCostIncrease();
-      managerNumberIncrease();
-      if (initialManagerUpgradeDone() == 0.0) {
-        box.put('initialManagerUpgradeDone', 1.0);
-      }
-    } else {
-      updateManagerCostOne();
-      managerCostIncrease();
-      managerNumberIncrease();
-      if (initialManagerUpgradeDone() == 1.0) {
-        box.put('initialManagerUpgradeDone', 0.0);
-      }
-    }
-  }
-
-  void updateManagerCostOne() {
-    double newManagerCostOne =
-        managerCostOne() * pow(kMainIncrement, managerIncrement());
-    box.put('managerCostOne', newManagerCostOne);
-  }
-
-  void managerCostIncrease() {
-    box.put('managerCost', managerCostOne());
-    incrementalManagerCost(0.0);
-  }
-
-  void managerNumberIncrease() {
-    box.put('managerNumber', (managerNumber() + managerIncrement()));
-    if (shouldAnimateManager() == 0.0) {
-      box.put('shouldAnimateManager', 1.0);
-    }
-  }
 
   void ceoBuysManagers(ceoNumber) =>
       box.put('managerNumber', (managerNumber() + ceoNumber));
@@ -80,29 +51,5 @@ class ManagerLogic {
       box.put('managerVisible', 1.0);
     }
     return managerVisible() == 1.0;
-  }
-
-  void updateManagerIncrement() {
-    if (managerIncrement() == 1.0) {
-      box.put('managerIncrement', 10.0);
-      box.put('managerCostOne', managerCost());
-      incrementalManagerCost(managerCostOne());
-    } else if (managerIncrement() == 10.0) {
-      box.put('managerIncrement', 100.0);
-      box.put('managerCost', managerCostOne());
-      incrementalManagerCost(managerCostOne());
-    } else if (managerIncrement() == 100.0) {
-      box.put('managerIncrement', 1.0);
-      box.put('managerCost', managerCostOne());
-    }
-  }
-
-  void incrementalManagerCost(newValue) {
-    double newManagerCost = newValue;
-    for (var i = 1; i <= managerIncrement(); i++) {
-      newManagerCost =
-          newManagerCost + managerCostOne() * pow(kMainIncrement, i);
-    }
-    box.put('managerCost', newManagerCost);
   }
 }

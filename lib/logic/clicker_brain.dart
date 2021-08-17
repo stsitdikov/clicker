@@ -67,6 +67,7 @@ class ClickerBrain extends ChangeNotifier {
   void cancelTimers() {
     autoClickTimer.cancel();
     workerTimer.cancel();
+    managerTimer.cancel();
   }
 
   // click row
@@ -310,41 +311,52 @@ class ClickerBrain extends ChangeNotifier {
 
   double getManagerIncrement() => managerLogic.managerIncrement();
 
-  Duration getManagerDuration() => managerLogic.managerDuration;
+  Duration getManagerDuration() => Duration(
+      milliseconds: managerLogic.managerDurationMilliseconds().toInt());
 
-  bool shouldAnimateManager() => managerLogic.shouldAnimateManager() == 1;
+  String getManagerDurationString() =>
+      (managerLogic.managerDurationMilliseconds() / 1000).toString();
+
+  String getManagerDecreaseDurationCost() =>
+      NumberFormat.compact().format(managerLogic.managerDecreaseDurationCost());
+
+  double shouldAnimateManager() => managerLogic.shouldAnimateManager();
+
+  double wasManagerInitiated = 0;
+
+  Timer managerTimer = Timer(Duration(milliseconds: 0), () {});
+
+  void managerTimerStart(controller) {
+    clickerFunctions.timerStart(
+        controller,
+        managerTimer,
+        getManagerDuration(),
+        () => workerLogic.managerBuysWorkers(managerLogic.managerNumber()),
+        () => notifyListeners());
+  }
 
   void buyManager(controller) {
     if (moneyLogic.canUpgrade(managerLogic.managerCost())) {
       moneyLogic.decreaseMoney(managerLogic.managerCost());
-      managerLogic.buyManager();
+      clickerFunctions.upgradeRow(
+          isClickRow: false,
+          increment: getManagerIncrement(),
+          costOne: managerLogic.managerCostOne(),
+          shouldAnimate: shouldAnimateManager(),
+          numberToChange: managerLogic.managerNumber(),
+          boxCostOneName: managerLogic.managerCostOneString,
+          boxCostName: managerLogic.managerCostString,
+          boxNumberName: managerLogic.managerNumberString,
+          boxShouldAnimate: managerLogic.shouldAnimateManagerString);
       notifyListeners();
-      if (shouldAnimateManager() && wasManagerInitiated == 0) {
-        controller.forward();
-        managerTimer(controller);
-      }
+      initialManagerTimer(controller);
     }
   }
 
-  double wasManagerInitiated = 0;
-
-  void managerTimer(controller) {
-    wasManagerInitiated++;
-    Timer.periodic(
-      managerLogic.managerDuration,
-      (timer) {
-        workerLogic.managerBuysWorkers(managerLogic.managerNumber());
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
-  }
-
   void initialManagerTimer(controller) {
-    if (shouldAnimateManager() && wasManagerInitiated == 0) {
+    if (shouldAnimateManager() == 1.0 && wasManagerInitiated == 0) {
       controller.forward();
-      managerTimer(controller);
+      managerTimerStart(controller);
     }
   }
 
@@ -359,7 +371,13 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void updateManagerIncrement() {
-    managerLogic.updateManagerIncrement();
+    clickerFunctions.updateIncrement(
+        increment: getManagerIncrement(),
+        cost: managerLogic.managerCost(),
+        costOne: managerLogic.managerCostOne(),
+        boxIncrementName: managerLogic.managerIncrementString,
+        boxCostName: managerLogic.managerCostString,
+        boxCostOneName: managerLogic.managerCostOneString);
     notifyListeners();
   }
 

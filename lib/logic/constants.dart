@@ -55,6 +55,10 @@ const double kDefaultManagerCost = 10;
 const double kDefaultManagerCostOne = 10;
 const double kDefaultManagerIncrement = 1;
 
+const double kDefaultManagerDurationMilliseconds = 30000;
+const double kDefaultManagerDecreaseDurationCost = 10000;
+const double kDecreaseManagerDurationBy = 10000;
+
 // ceo constants
 
 const double kManagerNumberToShowCeo = 5;

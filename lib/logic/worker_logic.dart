@@ -35,9 +35,6 @@ class WorkerLogic {
   double shouldAnimateWorker() =>
       box.get(shouldAnimateWorkerString, defaultValue: 0.0) as double;
 
-  double initialWorkerUpgradeDone() =>
-      box.get('initialWorkerUpgradeDone', defaultValue: 0.0) as double;
-
   double workerDurationMilliseconds() => box.get('workerDurationMilliseconds',
       defaultValue: kDefaultWorkerDurationMilliseconds);
 
