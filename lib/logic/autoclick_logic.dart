@@ -12,6 +12,7 @@ class AutoClickLogic {
   String autoClickCostOneString = 'autoClickCostOne';
   String autoClickIncrementString = 'autoClickIncrement';
   String shouldAnimateAutoClickString = 'shouldAnimateAutoClick';
+  String autoClickVisibleString = 'autoClickVisible';
 
   // getters
 
@@ -30,7 +31,7 @@ class AutoClickLogic {
       defaultValue: kDefaultAutoClickIncrement) as double;
 
   double autoClickVisible() =>
-      box.get('autoClickVisible', defaultValue: 0.0) as double;
+      box.get(autoClickVisibleString, defaultValue: 0.0) as double;
 
   double shouldAnimateAutoClick() =>
       box.get(shouldAnimateAutoClickString, defaultValue: 0.0) as double;

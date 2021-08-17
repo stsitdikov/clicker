@@ -134,6 +134,19 @@ class ClickerBrain extends ChangeNotifier {
 
   double shouldAnimateAutoClick() => autoClickLogic.shouldAnimateAutoClick();
 
+  double wasAutoClickInitiated = 0;
+
+  Timer autoClickTimer = Timer(Duration(milliseconds: 0), () {});
+
+  void autoClickTimerStart(controller) {
+    clickerFunctions.timerStart(
+        controller,
+        autoClickTimer,
+        getAutoClickDuration(),
+        () => moneyLogic.autoClickIncreaseMoney(),
+        () => notifyListeners());
+  }
+
   void buyAutoClicker(controller) {
     if (moneyLogic.canUpgrade(autoClickLogic.autoClickCost())) {
       moneyLogic.decreaseMoney(autoClickLogic.autoClickCost());
@@ -156,22 +169,6 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  double wasAutoClickInitiated = 0;
-
-  Timer autoClickTimer = Timer(Duration(milliseconds: 0), () {});
-
-  void autoClickTimerStart(controller) {
-    autoClickTimer = Timer.periodic(
-      getAutoClickDuration(),
-      (timer) {
-        moneyLogic.autoClickIncreaseMoney();
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
-  }
-
   void initialAutoClickTimer(controller) {
     if (autoClickLogic.shouldAnimateAutoClick() == 1 &&
         wasAutoClickInitiated == 0) {
@@ -191,7 +188,6 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void updateAutoClickIncrement() {
-    // autoClickLogic.updateAutoClickIncrement();
     clickerFunctions.updateIncrement(
         increment: getAutoClickIncrement(),
         cost: autoClickLogic.autoClickCost(),

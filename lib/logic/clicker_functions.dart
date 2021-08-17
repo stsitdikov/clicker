@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -85,5 +86,17 @@ class ClickerFunctions {
       newCost = newCost + costOne * pow(kMainIncrement, i);
     }
     box.put(boxCostName, newCost);
+  }
+
+  void timerStart(controller, timer, duration, function, notifyListeners) {
+    timer = Timer.periodic(
+      duration,
+      (timer) {
+        function();
+        controller.reset();
+        controller.forward();
+        notifyListeners();
+      },
+    );
   }
 }
