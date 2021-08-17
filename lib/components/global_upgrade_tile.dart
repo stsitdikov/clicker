@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:clicker/logic/clicker_brain.dart';
 
 class GlobalUpgradeTile extends StatelessWidget {
   final onTap;
@@ -17,8 +14,6 @@ class GlobalUpgradeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var clickerBrain = Provider.of<ClickerBrain>(context);
-
     return Padding(
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GestureDetector(

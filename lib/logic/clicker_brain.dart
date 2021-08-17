@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:clicker/logic/autoclick_logic.dart';
 import 'package:clicker/logic/ceo_logic.dart';
 import 'package:clicker/logic/click_row_logic.dart';
+import 'package:clicker/logic/clicker_functions.dart';
 import 'package:clicker/logic/manager_logic.dart';
 import 'package:clicker/logic/money_logic.dart';
 import 'package:clicker/logic/worker_logic.dart';
@@ -18,9 +19,10 @@ class ClickerBrain extends ChangeNotifier {
   WorkerLogic workerLogic;
   ManagerLogic managerLogic;
   CeoLogic ceoLogic;
+  ClickerFunctions clickerFunctions;
 
-  ClickerBrain(this.moneyLogic, this.clickRowLogic, this.autoClickLogic,
-      this.workerLogic, this.managerLogic, this.ceoLogic);
+  ClickerBrain(this.moneyLogic, this.clickerFunctions, this.clickRowLogic,
+      this.autoClickLogic, this.workerLogic, this.managerLogic, this.ceoLogic);
 
   String getMoneyString() => NumberFormat.compact().format(getMoney());
 
@@ -85,13 +87,26 @@ class ClickerBrain extends ChangeNotifier {
   void clickUpgrade() {
     if (moneyLogic.canUpgrade(clickRowLogic.clickCost())) {
       moneyLogic.decreaseMoney(clickRowLogic.clickCost());
-      clickRowLogic.clickUpgrade();
+      clickerFunctions.upgradeRow(
+        increment: clickRowLogic.clickIncrement(),
+        costOne: clickRowLogic.clickCostOne(),
+        numberToChange: clickRowLogic.clickAmount(),
+        boxCostOneName: clickRowLogic.clickCostOneString,
+        boxCostName: clickRowLogic.clickCostString,
+        boxNumberName: clickRowLogic.clickAmountString,
+      );
       notifyListeners();
     }
   }
 
   void changeClickIncrement() {
-    clickRowLogic.updateClickIncrement();
+    clickerFunctions.updateIncrement(
+        increment: clickRowLogic.clickIncrement(),
+        cost: clickRowLogic.clickCost(),
+        costOne: clickRowLogic.clickCostOne(),
+        boxIncrementName: clickRowLogic.clickIncrementString,
+        boxCostName: clickRowLogic.clickCostString,
+        boxCostOneName: clickRowLogic.clickCostOneString);
     notifyListeners();
   }
 

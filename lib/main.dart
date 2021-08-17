@@ -10,6 +10,7 @@ import 'screens/launch_screen.dart';
 
 import 'package:clicker/logic/constants.dart';
 import 'logic/clicker_brain.dart';
+import 'logic/clicker_functions.dart';
 import 'package:clicker/logic/money_logic.dart';
 import 'package:clicker/logic/click_row_logic.dart';
 import 'package:clicker/logic/autoclick_logic.dart';
@@ -27,8 +28,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ClickerBrain>(
-      create: (_) => ClickerBrain(MoneyLogic(), ClickRowLogic(),
-          AutoClickLogic(), WorkerLogic(), ManagerLogic(), CeoLogic()),
+      create: (_) => ClickerBrain(
+          MoneyLogic(),
+          ClickerFunctions(),
+          ClickRowLogic(),
+          AutoClickLogic(),
+          WorkerLogic(),
+          ManagerLogic(),
+          CeoLogic()),
       child: MaterialApp(
         theme: ThemeData.dark(),
         title: kAppName,
