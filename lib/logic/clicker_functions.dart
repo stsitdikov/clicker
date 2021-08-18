@@ -20,9 +20,10 @@ class ClickerFunctions {
     required String boxShouldAnimate,
   }) {
     if (increment == 1.0) {
-      updateCostOne(boxCostOneName, costOne, increment);
-      costIncrease(boxCostName, (costOne * increment));
-      incrementalCost(0.0, increment, costOne, boxCostName);
+      box.put(boxCostOneName, costOne * pow(kMainIncrement, increment));
+      box.put(boxCostName, costOne * pow(kMainIncrement, increment));
+      incrementalCost(
+          increment, costOne * pow(kMainIncrement, increment), boxCostName);
       if (isClickRow == true) {
         updateNumberClickRow(boxNumberName, numberToChange, increment);
       } else {
@@ -30,9 +31,10 @@ class ClickerFunctions {
             boxShouldAnimate);
       }
     } else {
-      updateCostOne(boxCostOneName, costOne, increment);
-      costIncrease(boxCostName, costOne);
-      incrementalCost(0.0, increment, costOne, boxCostName);
+      box.put(boxCostOneName, costOne * pow(kMainIncrement, increment));
+      box.put(boxCostName, costOne * pow(kMainIncrement, increment));
+      incrementalCost(
+          increment, costOne * pow(kMainIncrement, increment), boxCostName);
       if (isClickRow == true) {
         updateNumberClickRow(boxNumberName, numberToChange, increment);
       } else {
@@ -41,11 +43,6 @@ class ClickerFunctions {
       }
     }
   }
-
-  void updateCostOne(boxCostOneName, costOne, increment) =>
-      box.put(boxCostOneName, costOne * pow(kMainIncrement, increment));
-
-  void costIncrease(boxCostName, costOne) => box.put(boxCostName, costOne);
 
   void updateNumberClickRow(boxNumberName, numberToChange, increment) =>
       box.put(boxNumberName, numberToChange * pow(kMainIncrement, increment));
@@ -69,19 +66,19 @@ class ClickerFunctions {
     if (increment == 1.0) {
       box.put(boxIncrementName, 10.0);
       box.put(boxCostName, costOne);
-      incrementalCost(costOne, 10.0, costOne, boxCostName);
+      incrementalCost(10.0, costOne, boxCostName);
     } else if (increment == 10.0) {
       box.put(boxIncrementName, 100.0);
       box.put(boxCostName, costOne);
-      incrementalCost(costOne, 100.0, costOne, boxCostName);
+      incrementalCost(100.0, costOne, boxCostName);
     } else if (increment == 100.0) {
       box.put(boxIncrementName, 1.0);
       box.put(boxCostName, costOne);
     }
   }
 
-  void incrementalCost(newValue, increment, costOne, boxCostName) {
-    double newCost = newValue;
+  void incrementalCost(increment, costOne, boxCostName) {
+    double newCost = costOne;
     for (var i = 1; i <= increment; i++) {
       newCost = newCost + costOne * pow(kMainIncrement, i);
     }
