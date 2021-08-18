@@ -199,8 +199,10 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   bool canDecreaseAutoClickDuration() {
-    return moneyLogic
-        .canUpgrade(autoClickLogic.autoClickDecreaseDurationCost());
+    return (moneyLogic
+            .canUpgrade(autoClickLogic.autoClickDecreaseDurationCost()) &&
+        autoClickLogic.autoClickDurationMilliseconds() >
+            kDecreaseAutoClickDurationBy);
   }
 
   void decreaseAutoClickDuration(controller) {
@@ -296,7 +298,8 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   bool canDecreaseWorkerDuration() {
-    return moneyLogic.canUpgrade(workerLogic.workerDecreaseDurationCost());
+    return (moneyLogic.canUpgrade(workerLogic.workerDecreaseDurationCost()) &&
+        workerLogic.workerDurationMilliseconds() > kDecreaseWorkerDurationBy);
   }
 
   void decreaseWorkerDuration(controller) {
@@ -393,7 +396,9 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   bool canDecreaseManagerDuration() {
-    return moneyLogic.canUpgrade(managerLogic.managerDecreaseDurationCost());
+    return (moneyLogic.canUpgrade(managerLogic.managerDecreaseDurationCost()) &&
+        managerLogic.managerDurationMilliseconds() >
+            kDecreaseManagerDurationBy);
   }
 
   void decreaseManagerDuration(controller) {
@@ -486,7 +491,8 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   bool canDecreaseCeoDuration() {
-    return moneyLogic.canUpgrade(ceoLogic.ceoDecreaseDurationCost());
+    return (moneyLogic.canUpgrade(ceoLogic.ceoDecreaseDurationCost()) &&
+        ceoLogic.ceoDurationMilliseconds() > kDecreaseCeoDurationBy);
   }
 
   void decreaseCeoDuration(controller) {
