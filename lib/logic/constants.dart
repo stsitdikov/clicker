@@ -65,3 +65,7 @@ const double kManagerNumberToShowCeo = 5;
 const double kDefaultCeoCost = 10;
 const double kDefaultCeoCostOne = 10;
 const double kDefaultCeoIncrement = 1;
+
+const double kDefaultCeoDurationMilliseconds = 60000;
+const double kDefaultCeoDecreaseDurationCost = 100000;
+const double kDecreaseCeoDurationBy = 10000;

@@ -68,6 +68,7 @@ class ClickerBrain extends ChangeNotifier {
     autoClickTimer.cancel();
     workerTimer.cancel();
     managerTimer.cancel();
+    ceoTimer.cancel();
   }
 
   // click row
@@ -140,12 +141,15 @@ class ClickerBrain extends ChangeNotifier {
   Timer autoClickTimer = Timer(Duration(milliseconds: 0), () {});
 
   void autoClickTimerStart(controller) {
-    clickerFunctions.timerStart(
-        controller,
-        autoClickTimer,
-        getAutoClickDuration(),
-        () => moneyLogic.autoClickIncreaseMoney(),
-        () => notifyListeners());
+    autoClickTimer = Timer.periodic(
+      getAutoClickDuration(),
+      (timer) {
+        moneyLogic.autoClickIncreaseMoney();
+        controller.reset();
+        controller.forward();
+        notifyListeners();
+      },
+    );
   }
 
   void buyAutoClicker(controller) {
@@ -234,12 +238,15 @@ class ClickerBrain extends ChangeNotifier {
   Timer workerTimer = Timer(Duration(milliseconds: 0), () {});
 
   void workerTimerStart(controller) {
-    clickerFunctions.timerStart(
-        controller,
-        workerTimer,
-        getWorkerDuration(),
-        () => autoClickLogic.workerBuysAutoClicks(workerLogic.workerNumber()),
-        () => notifyListeners());
+    workerTimer = Timer.periodic(
+      getWorkerDuration(),
+      (timer) {
+        autoClickLogic.workerBuysAutoClicks(workerLogic.workerNumber());
+        controller.reset();
+        controller.forward();
+        notifyListeners();
+      },
+    );
   }
 
   void buyWorker(controller) {
@@ -327,12 +334,15 @@ class ClickerBrain extends ChangeNotifier {
   Timer managerTimer = Timer(Duration(milliseconds: 0), () {});
 
   void managerTimerStart(controller) {
-    clickerFunctions.timerStart(
-        controller,
-        managerTimer,
-        getManagerDuration(),
-        () => workerLogic.managerBuysWorkers(managerLogic.managerNumber()),
-        () => notifyListeners());
+    managerTimer = Timer.periodic(
+      getManagerDuration(),
+      (timer) {
+        workerLogic.managerBuysWorkers(managerLogic.managerNumber());
+        controller.reset();
+        controller.forward();
+        notifyListeners();
+      },
+    );
   }
 
   void buyManager(controller) {
@@ -355,6 +365,7 @@ class ClickerBrain extends ChangeNotifier {
 
   void initialManagerTimer(controller) {
     if (shouldAnimateManager() == 1.0 && wasManagerInitiated == 0) {
+      wasManagerInitiated++;
       controller.forward();
       managerTimerStart(controller);
     }
@@ -381,6 +392,19 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canDecreaseManagerDuration() {
+    return moneyLogic.canUpgrade(managerLogic.managerDecreaseDurationCost());
+  }
+
+  void decreaseManagerDuration(controller) {
+    moneyLogic.decreaseMoney(managerLogic.managerDecreaseDurationCost());
+    managerLogic.decreaseManagerDuration();
+    managerLogic.increaseManagerDecreaseDurationCost();
+    launchIsFromGlobalUpgrade();
+    cancelTimers();
+    notifyListeners();
+  }
+
   // ceo
 
   String getCeoNumber() => NumberFormat.compact().format(ceoLogic.ceoNumber());
@@ -389,28 +413,24 @@ class ClickerBrain extends ChangeNotifier {
 
   double getCeoIncrement() => ceoLogic.ceoIncrement();
 
-  Duration getCeoDuration() => ceoLogic.ceoDuration;
+  Duration getCeoDuration() =>
+      Duration(milliseconds: ceoLogic.ceoDurationMilliseconds().toInt());
 
-  bool shouldAnimateCeo() => ceoLogic.shouldAnimateCeo() == 1;
+  String getCeoDurationString() =>
+      (ceoLogic.ceoDurationMilliseconds() / 1000).toString();
 
-  void buyCeo(controller) {
-    if (moneyLogic.canUpgrade(ceoLogic.ceoCost())) {
-      moneyLogic.decreaseMoney(ceoLogic.ceoCost());
-      ceoLogic.buyCeo();
-      notifyListeners();
-      if (shouldAnimateCeo() && wasCeoInitiated == 0) {
-        controller.forward();
-        ceoTimer(controller);
-      }
-    }
-  }
+  String getCeoDecreaseDurationCost() =>
+      NumberFormat.compact().format(ceoLogic.ceoDecreaseDurationCost());
+
+  double shouldAnimateCeo() => ceoLogic.shouldAnimateCeo();
 
   double wasCeoInitiated = 0;
 
-  void ceoTimer(controller) {
-    wasCeoInitiated++;
-    Timer.periodic(
-      ceoLogic.ceoDuration,
+  Timer ceoTimer = Timer(Duration(milliseconds: 0), () {});
+
+  void ceoTimerStart(controller) {
+    ceoTimer = Timer.periodic(
+      getCeoDuration(),
       (timer) {
         managerLogic.ceoBuysManagers(ceoLogic.ceoNumber());
         controller.reset();
@@ -420,10 +440,29 @@ class ClickerBrain extends ChangeNotifier {
     );
   }
 
+  void buyCeo(controller) {
+    if (moneyLogic.canUpgrade(ceoLogic.ceoCost())) {
+      moneyLogic.decreaseMoney(ceoLogic.ceoCost());
+      clickerFunctions.upgradeRow(
+          isClickRow: false,
+          increment: getCeoIncrement(),
+          costOne: ceoLogic.ceoCostOne(),
+          shouldAnimate: ceoLogic.shouldAnimateCeo(),
+          numberToChange: ceoLogic.ceoNumber(),
+          boxCostOneName: ceoLogic.ceoCostOneString,
+          boxCostName: ceoLogic.ceoCostString,
+          boxNumberName: ceoLogic.ceoNumberString,
+          boxShouldAnimate: ceoLogic.shouldAnimateCeoString);
+      notifyListeners();
+      initialCeoTimer(controller);
+    }
+  }
+
   void initialCeoTimer(controller) {
-    if (shouldAnimateCeo() && wasCeoInitiated == 0) {
+    if (shouldAnimateCeo() == 1.0 && wasCeoInitiated == 0) {
+      wasCeoInitiated++;
       controller.forward();
-      ceoTimer(controller);
+      ceoTimerStart(controller);
     }
   }
 
@@ -436,7 +475,26 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void updateCeoIncrement() {
-    ceoLogic.updateCeoIncrement();
+    clickerFunctions.updateIncrement(
+        increment: getCeoIncrement(),
+        cost: ceoLogic.ceoCost(),
+        costOne: ceoLogic.ceoCostOne(),
+        boxIncrementName: ceoLogic.ceoIncrementString,
+        boxCostName: ceoLogic.ceoCostString,
+        boxCostOneName: ceoLogic.ceoCostOneString);
+    notifyListeners();
+  }
+
+  bool canDecreaseCeoDuration() {
+    return moneyLogic.canUpgrade(ceoLogic.ceoDecreaseDurationCost());
+  }
+
+  void decreaseCeoDuration(controller) {
+    moneyLogic.decreaseMoney(ceoLogic.ceoDecreaseDurationCost());
+    ceoLogic.decreaseCeoDuration();
+    ceoLogic.increaseCeoDecreaseDurationCost();
+    launchIsFromGlobalUpgrade();
+    cancelTimers();
     notifyListeners();
   }
 }

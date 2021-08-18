@@ -52,4 +52,11 @@ class ManagerLogic {
     }
     return managerVisible() == 1.0;
   }
+
+  void decreaseManagerDuration() => box.put('managerDurationMilliseconds',
+      (managerDurationMilliseconds() - kDecreaseManagerDurationBy));
+
+  void increaseManagerDecreaseDurationCost() => box.put(
+      'managerDecreaseDurationCost',
+      (managerDecreaseDurationCost() * kMainIncrement));
 }

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,8 +21,7 @@ class ClickerFunctions {
     if (increment == 1.0) {
       box.put(boxCostOneName, costOne * pow(kMainIncrement, increment));
       box.put(boxCostName, costOne * pow(kMainIncrement, increment));
-      incrementalCost(
-          increment, costOne * pow(kMainIncrement, increment), boxCostName);
+      incrementalCost(0.0, increment, costOne, boxCostName);
       if (isClickRow == true) {
         updateNumberClickRow(boxNumberName, numberToChange, increment);
       } else {
@@ -33,8 +31,8 @@ class ClickerFunctions {
     } else {
       box.put(boxCostOneName, costOne * pow(kMainIncrement, increment));
       box.put(boxCostName, costOne * pow(kMainIncrement, increment));
-      incrementalCost(
-          increment, costOne * pow(kMainIncrement, increment), boxCostName);
+      incrementalCost(costOne * pow(kMainIncrement, increment), increment,
+          costOne * pow(kMainIncrement, increment), boxCostName);
       if (isClickRow == true) {
         updateNumberClickRow(boxNumberName, numberToChange, increment);
       } else {
@@ -66,34 +64,22 @@ class ClickerFunctions {
     if (increment == 1.0) {
       box.put(boxIncrementName, 10.0);
       box.put(boxCostName, costOne);
-      incrementalCost(10.0, costOne, boxCostName);
+      incrementalCost(costOne, 10.0, costOne, boxCostName);
     } else if (increment == 10.0) {
       box.put(boxIncrementName, 100.0);
       box.put(boxCostName, costOne);
-      incrementalCost(100.0, costOne, boxCostName);
+      incrementalCost(costOne, 100.0, costOne, boxCostName);
     } else if (increment == 100.0) {
       box.put(boxIncrementName, 1.0);
       box.put(boxCostName, costOne);
     }
   }
 
-  void incrementalCost(increment, costOne, boxCostName) {
-    double newCost = costOne;
+  void incrementalCost(newValue, increment, costOne, boxCostName) {
+    double newCost = newValue;
     for (var i = 1; i <= increment; i++) {
       newCost = newCost + costOne * pow(kMainIncrement, i);
     }
     box.put(boxCostName, newCost);
-  }
-
-  void timerStart(controller, timer, duration, function, notifyListeners) {
-    timer = Timer.periodic(
-      duration,
-      (timer) {
-        function();
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
   }
 }
