@@ -17,6 +17,7 @@ const String kLaunchScreenName = 'LaunchScreen';
 const String kAppName = 'Clicker';
 const double kMainIncrement = 1.2;
 const double kRowHeight = 70.0;
+const double kGlobalUpgradeTileHeight = 100.0;
 const Duration kShowRowDuration = Duration(milliseconds: 500);
 
 // click row constants

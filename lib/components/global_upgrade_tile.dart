@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:clicker/logic/constants.dart';
+
 class GlobalUpgradeTile extends StatelessWidget {
   final onTap;
   final String duration;
@@ -14,64 +16,61 @@ class GlobalUpgradeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.teal,
-            borderRadius: BorderRadius.horizontal(
-              left: Radius.circular(15),
-              right: Radius.circular(15),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.teal,
+          borderRadius: BorderRadius.horizontal(
+            left: Radius.circular(15),
+            right: Radius.circular(15),
+          ),
+        ),
+        height: kGlobalUpgradeTileHeight,
+        child: Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  '$duration\n\nsec',
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-          ),
-          height: 100.0,
-          child: Row(
-            children: [
-              Expanded(
-                child: Center(
-                  child: Text(
-                    '$duration\n\nsec',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blueGrey,
-                      border: Border.symmetric(vertical: BorderSide())),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 3),
+            Expanded(
+              flex: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    border: Border.symmetric(vertical: BorderSide())),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 3),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        'Upgrade to reduce the duration?',
+                        style: TextStyle(fontSize: 16.0),
+                        textAlign: TextAlign.center,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          'Upgrade to reduce the duration?',
-                          style: TextStyle(fontSize: 16.0),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: Center(
-                  child: Text(cost),
-                ),
+            ),
+            Expanded(
+              child: Center(
+                child: Text(cost),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

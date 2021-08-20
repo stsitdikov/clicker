@@ -183,9 +183,7 @@ class ClickerBrain extends ChangeNotifier {
   double showedAutoClick() =>
       box.get('showedAutoClick', defaultValue: 0.0) as double;
 
-  void updateShowedAutoClick() {
-    box.put('showedAutoClick', 1.0);
-  }
+  void updateShowedAutoClick() => box.put('showedAutoClick', 1.0);
 
   void updateAutoClickIncrement() {
     clickerFunctions.updateIncrement(
@@ -198,9 +196,17 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canShowAutoClickGlobalUpgrade() =>
+      moneyLogic.canUpgrade(autoClickLogic.autoClickDecreaseDurationCost());
+
+  double showedAutoClickGlobalUpgrade() =>
+      box.get('showedAutoClickGlobalUpgrade', defaultValue: 0.0);
+
+  void updateShowedAutoClickGlobalUpgrade() =>
+      box.put('showedAutoClickGlobalUpgrade', 1.0);
+
   bool canDecreaseAutoClickDuration() {
-    return (moneyLogic
-            .canUpgrade(autoClickLogic.autoClickDecreaseDurationCost()) &&
+    return (canShowAutoClickGlobalUpgrade() &&
         autoClickLogic.autoClickDurationMilliseconds() >
             kDecreaseAutoClickDurationBy);
   }
@@ -297,8 +303,17 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canShowWorkerGlobalUpgrade() =>
+      moneyLogic.canUpgrade(workerLogic.workerDecreaseDurationCost());
+
+  double showedWorkerGlobalUpgrade() =>
+      box.get('showedWorkerGlobalUpgrade', defaultValue: 0.0);
+
+  void updateShowedWorkerGlobalUpgrade() =>
+      box.put('showedWorkerGlobalUpgrade', 1.0);
+
   bool canDecreaseWorkerDuration() {
-    return (moneyLogic.canUpgrade(workerLogic.workerDecreaseDurationCost()) &&
+    return (canShowWorkerGlobalUpgrade() &&
         workerLogic.workerDurationMilliseconds() > kDecreaseWorkerDurationBy);
   }
 
@@ -395,8 +410,17 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canShowManagerGlobalUpgrade() =>
+      moneyLogic.canUpgrade(managerLogic.managerDecreaseDurationCost());
+
+  double showedManagerGlobalUpgrade() =>
+      box.get('showedManagerGlobalUpgrade', defaultValue: 0.0);
+
+  void updateShowedManagerGlobalUpgrade() =>
+      box.put('showedManagerGlobalUpgrade', 1.0);
+
   bool canDecreaseManagerDuration() {
-    return (moneyLogic.canUpgrade(managerLogic.managerDecreaseDurationCost()) &&
+    return (canShowManagerGlobalUpgrade() &&
         managerLogic.managerDurationMilliseconds() >
             kDecreaseManagerDurationBy);
   }
@@ -490,8 +514,16 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool canShowCeoGlobalUpgrade() =>
+      moneyLogic.canUpgrade(ceoLogic.ceoDecreaseDurationCost());
+
+  double showedCeoGlobalUpgrade() =>
+      box.get('showedCeoGlobalUpgrade', defaultValue: 0.0);
+
+  void updateShowedCeoGlobalUpgrade() => box.put('showedCeoGlobalUpgrade', 1.0);
+
   bool canDecreaseCeoDuration() {
-    return (moneyLogic.canUpgrade(ceoLogic.ceoDecreaseDurationCost()) &&
+    return (canShowCeoGlobalUpgrade() &&
         ceoLogic.ceoDurationMilliseconds() > kDecreaseCeoDurationBy);
   }
 
