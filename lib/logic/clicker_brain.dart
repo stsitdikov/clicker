@@ -205,11 +205,9 @@ class ClickerBrain extends ChangeNotifier {
   void updateShowedAutoClickGlobalUpgrade() =>
       box.put('showedAutoClickGlobalUpgrade', 1.0);
 
-  bool canDecreaseAutoClickDuration() {
-    return (canShowAutoClickGlobalUpgrade() &&
-        autoClickLogic.autoClickDurationMilliseconds() >
-            kDecreaseAutoClickDurationBy);
-  }
+  bool canDecreaseAutoClickDuration() =>
+      autoClickLogic.autoClickDurationMilliseconds() >
+      kDecreaseAutoClickDurationBy;
 
   void decreaseAutoClickDuration(controller) {
     moneyLogic.decreaseMoney(autoClickLogic.autoClickDecreaseDurationCost());
@@ -312,10 +310,8 @@ class ClickerBrain extends ChangeNotifier {
   void updateShowedWorkerGlobalUpgrade() =>
       box.put('showedWorkerGlobalUpgrade', 1.0);
 
-  bool canDecreaseWorkerDuration() {
-    return (canShowWorkerGlobalUpgrade() &&
-        workerLogic.workerDurationMilliseconds() > kDecreaseWorkerDurationBy);
-  }
+  bool canDecreaseWorkerDuration() =>
+      workerLogic.workerDurationMilliseconds() > kDecreaseWorkerDurationBy;
 
   void decreaseWorkerDuration(controller) {
     moneyLogic.decreaseMoney(workerLogic.workerDecreaseDurationCost());
@@ -419,11 +415,8 @@ class ClickerBrain extends ChangeNotifier {
   void updateShowedManagerGlobalUpgrade() =>
       box.put('showedManagerGlobalUpgrade', 1.0);
 
-  bool canDecreaseManagerDuration() {
-    return (canShowManagerGlobalUpgrade() &&
-        managerLogic.managerDurationMilliseconds() >
-            kDecreaseManagerDurationBy);
-  }
+  bool canDecreaseManagerDuration() =>
+      managerLogic.managerDurationMilliseconds() > kDecreaseManagerDurationBy;
 
   void decreaseManagerDuration(controller) {
     moneyLogic.decreaseMoney(managerLogic.managerDecreaseDurationCost());
@@ -522,10 +515,8 @@ class ClickerBrain extends ChangeNotifier {
 
   void updateShowedCeoGlobalUpgrade() => box.put('showedCeoGlobalUpgrade', 1.0);
 
-  bool canDecreaseCeoDuration() {
-    return (canShowCeoGlobalUpgrade() &&
-        ceoLogic.ceoDurationMilliseconds() > kDecreaseCeoDurationBy);
-  }
+  bool canDecreaseCeoDuration() =>
+      ceoLogic.ceoDurationMilliseconds() > kDecreaseCeoDurationBy;
 
   void decreaseCeoDuration(controller) {
     moneyLogic.decreaseMoney(ceoLogic.ceoDecreaseDurationCost());

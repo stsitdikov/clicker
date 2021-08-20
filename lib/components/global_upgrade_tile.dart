@@ -7,17 +7,27 @@ class GlobalUpgradeTile extends StatelessWidget {
   final String duration;
   final String title;
   final String cost;
+  final bool canUpgradeMore;
 
   GlobalUpgradeTile(
       {required this.onTap,
       required this.duration,
       required this.title,
-      required this.cost});
+      required this.cost,
+      required this.canUpgradeMore});
 
   @override
   Widget build(BuildContext context) {
+    String textOfUpgrade = '';
+
+    if (canUpgradeMore == true) {
+      textOfUpgrade = 'Upgrade to reduce the duration?';
+    } else {
+      textOfUpgrade = 'Fully upgraded';
+    }
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: canUpgradeMore ? onTap : () {},
       child: Container(
         decoration: BoxDecoration(
           color: Colors.teal,
@@ -56,7 +66,7 @@ class GlobalUpgradeTile extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        'Upgrade to reduce the duration?',
+                        textOfUpgrade,
                         style: TextStyle(fontSize: 16.0),
                         textAlign: TextAlign.center,
                       ),
@@ -67,7 +77,7 @@ class GlobalUpgradeTile extends StatelessWidget {
             ),
             Expanded(
               child: Center(
-                child: Text(cost),
+                child: canUpgradeMore ? Text(cost) : Icon(Icons.all_inclusive),
               ),
             ),
           ],

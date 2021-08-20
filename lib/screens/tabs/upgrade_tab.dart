@@ -41,6 +41,7 @@ class UpgradeTab extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
+              canUpgradeMore: clickerBrain.canDecreaseCeoDuration(),
               onTap: () {
                 if (clickerBrain.canDecreaseCeoDuration()) {
                   clickerBrain.decreaseCeoDuration(animationControllerList[3]);
@@ -64,6 +65,7 @@ class UpgradeTab extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
+              canUpgradeMore: clickerBrain.canDecreaseManagerDuration(),
               onTap: () {
                 if (clickerBrain.canDecreaseManagerDuration()) {
                   clickerBrain
@@ -87,6 +89,7 @@ class UpgradeTab extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
+            canUpgradeMore: clickerBrain.canDecreaseWorkerDuration(),
             onTap: () {
               if (clickerBrain.canDecreaseWorkerDuration()) {
                 clickerBrain.decreaseWorkerDuration(animationControllerList[1]);
@@ -109,8 +112,10 @@ class UpgradeTab extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
+            canUpgradeMore: clickerBrain.canDecreaseAutoClickDuration(),
             onTap: () {
-              if (clickerBrain.canDecreaseAutoClickDuration()) {
+              if (clickerBrain.canDecreaseAutoClickDuration() &&
+                  clickerBrain.canShowAutoClickGlobalUpgrade()) {
                 clickerBrain
                     .decreaseAutoClickDuration(animationControllerList[0]);
                 Phoenix.rebirth(context);
