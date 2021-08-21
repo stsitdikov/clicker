@@ -64,34 +64,35 @@ class _MainTabState extends State<MainTab> {
     clickerBrain.initialCeoTimer(widget.animationControllerList[3]);
 
     if (removedBlockedRows == 0) {
-      if (clickerBrain.showedAutoClick() == 1.0) {
+      if (clickerBrain.showedRow(kAutoClickName) == 1.0) {
         listOfRows.removeAt(1);
       }
-      if (clickerBrain.showedWorker() == 1.0) {
+      if (clickerBrain.showedRow(kWorkerName) == 1.0) {
         listOfRows.removeAt(2);
       }
-      if (clickerBrain.showedManager() == 1.0) {
+      if (clickerBrain.showedRow(kManagerName) == 1.0) {
         listOfRows.removeAt(3);
       }
-      if (clickerBrain.showedCeo() == 1.0) {
+      if (clickerBrain.showedRow(kCeoName) == 1.0) {
         listOfRows.removeAt(4);
         listOfRows.removeAt(5);
       }
       removedBlockedRows++;
     }
 
-    if (clickerBrain.isAutoClickVisible() &&
-        clickerBrain.showedAutoClick() == 0.0) {
+    if (clickerBrain.isVisible(kAutoClickName) &&
+        clickerBrain.showedRow(kAutoClickName) == 0.0) {
       listOfRows.removeAt(1);
       rowsKey.currentState?.insertItem(1, duration: kShowRowDuration);
-      clickerBrain.updateShowedAutoClick();
+      clickerBrain.updateShowedRow(kAutoClickName);
       clickerBrain.increaseListFlex();
     }
 
-    if (clickerBrain.isWorkerVisible() && clickerBrain.showedWorker() == 0.0) {
+    if (clickerBrain.isVisible(kWorkerName) &&
+        clickerBrain.showedRow(kWorkerName) == 0.0) {
       listOfRows.removeAt(2);
       rowsKey.currentState?.insertItem(2, duration: kShowRowDuration);
-      clickerBrain.updateShowedWorker();
+      clickerBrain.updateShowedRow(kWorkerName);
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,
@@ -99,11 +100,11 @@ class _MainTabState extends State<MainTab> {
       });
     }
 
-    if (clickerBrain.isManagerVisible() &&
-        clickerBrain.showedManager() == 0.0) {
+    if (clickerBrain.isVisible(kManagerName) &&
+        clickerBrain.showedRow(kManagerName) == 0.0) {
       listOfRows.removeAt(3);
       rowsKey.currentState?.insertItem(3, duration: kShowRowDuration);
-      clickerBrain.updateShowedManager();
+      clickerBrain.updateShowedRow(kManagerName);
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,
@@ -111,14 +112,15 @@ class _MainTabState extends State<MainTab> {
       });
     }
 
-    if (clickerBrain.isCeoVisible() && clickerBrain.showedCeo() == 0.0) {
+    if (clickerBrain.isVisible(kCeoName) &&
+        clickerBrain.showedRow(kCeoName) == 0.0) {
       listOfRows.removeAt(4);
       rowsKey.currentState?.insertItem(4, duration: kShowRowDuration);
       rowsKey.currentState?.removeItem(
         5,
         (context, animation) => transition(context, 5, animation),
       );
-      clickerBrain.updateShowedCeo();
+      clickerBrain.updateShowedRow(kCeoName);
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,

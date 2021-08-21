@@ -22,6 +22,7 @@ const Duration kShowRowDuration = Duration(milliseconds: 500);
 
 // click row constants
 
+const String kClickName = 'Click';
 const double kDefaultClickAmount = 10;
 const double kDefaultClickCost = 10;
 const double kDefaultClickCostOne = 10;
@@ -29,6 +30,7 @@ const double kDefaultClickIncrement = 1;
 
 // autoclick constants
 
+const String kAutoClickName = 'AutoClick';
 const double kMoneyToShowAutoClick = 10;
 const double kDefaultAutoClickCost = 10;
 const double kDefaultAutoClickCostOne = 10;
@@ -40,6 +42,7 @@ const double kDecreaseAutoClickDurationBy = 1000;
 
 // worker constants
 
+const String kWorkerName = 'Worker';
 const double kAutoClickNumberToShowWorker = 5;
 const double kDefaultWorkerCost = 10;
 const double kDefaultWorkerCostOne = 10;
@@ -51,6 +54,7 @@ const double kDecreaseWorkerDurationBy = 5000;
 
 // manager constants
 
+const String kManagerName = 'Manager';
 const double kWorkerNumberToShowManager = 5;
 const double kDefaultManagerCost = 10;
 const double kDefaultManagerCostOne = 10;
@@ -62,6 +66,7 @@ const double kDecreaseManagerDurationBy = 10000;
 
 // ceo constants
 
+const String kCeoName = 'Ceo';
 const double kManagerNumberToShowCeo = 5;
 const double kDefaultCeoCost = 10;
 const double kDefaultCeoCostOne = 10;
@@ -70,3 +75,14 @@ const double kDefaultCeoIncrement = 1;
 const double kDefaultCeoDurationMilliseconds = 60000;
 const double kDefaultCeoDecreaseDurationCost = 100000;
 const double kDecreaseCeoDurationBy = 10000;
+
+// millionaire constants
+
+const double kManagerNumberToShowMillionaire = 5;
+const double kDefaultMillionaireCost = 10;
+const double kDefaultMillionaireCostOne = 10;
+const double kDefaultMillionaireIncrement = 1;
+
+const double kDefaultMillionaireDurationMilliseconds = 60000;
+const double kDefaultMillionaireDecreaseDurationCost = 100000;
+const double kDecreaseMillionaireDurationBy = 10000;

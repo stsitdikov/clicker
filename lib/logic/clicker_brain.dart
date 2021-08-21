@@ -71,15 +71,134 @@ class ClickerBrain extends ChangeNotifier {
     ceoTimer.cancel();
   }
 
+  String getCost(which) {
+    return NumberFormat.compact().format(whichCost(which));
+  }
+
+  double whichCost(which) {
+    if (which == kClickName) {
+      return clickRowLogic.clickCost();
+    } else if (which == kAutoClickName) {
+      return autoClickLogic.autoClickCost();
+    } else if (which == kWorkerName) {
+      return workerLogic.workerCost();
+    } else if (which == kManagerName) {
+      return managerLogic.managerCost();
+    } else if (which == kCeoName) {
+      return ceoLogic.ceoCost();
+    } else {
+      return 0.0;
+    }
+  }
+
+  double getIncrement(which) {
+    if (which == kClickName) {
+      return clickRowLogic.clickIncrement();
+    } else if (which == kAutoClickName) {
+      return autoClickLogic.autoClickIncrement();
+    } else if (which == kWorkerName) {
+      return workerLogic.workerIncrement();
+    } else if (which == kManagerName) {
+      return managerLogic.managerIncrement();
+    } else if (which == kCeoName) {
+      return ceoLogic.ceoIncrement();
+    } else {
+      return 0.0;
+    }
+  }
+
+  String getNumber(which) {
+    return NumberFormat.compact().format(whichNumber(which));
+  }
+
+  double whichNumber(which) {
+    if (which == kAutoClickName) {
+      return autoClickLogic.autoClickNumber();
+    } else if (which == kWorkerName) {
+      return workerLogic.workerNumber();
+    } else if (which == kManagerName) {
+      return managerLogic.managerNumber();
+    } else if (which == kCeoName) {
+      return ceoLogic.ceoNumber();
+    } else {
+      return 0.0;
+    }
+  }
+
+  Duration getDuration(which) =>
+      Duration(milliseconds: whichDuration(which).toInt());
+
+  String getDurationString(which) => (whichDuration(which) / 1000).toString();
+
+  double whichDuration(which) {
+    if (which == kAutoClickName) {
+      return autoClickLogic.autoClickDurationMilliseconds();
+    } else if (which == kWorkerName) {
+      return workerLogic.workerDurationMilliseconds();
+    } else if (which == kManagerName) {
+      return managerLogic.managerDurationMilliseconds();
+    } else if (which == kCeoName) {
+      return ceoLogic.ceoDurationMilliseconds();
+    } else {
+      return 0.0;
+    }
+  }
+
+  String getDecreaseDurationCost(which) {
+    return NumberFormat.compact().format(whichDecreaseDurationCost(which));
+  }
+
+  double whichDecreaseDurationCost(which) {
+    if (which == kAutoClickName) {
+      return autoClickLogic.autoClickDecreaseDurationCost();
+    } else if (which == kWorkerName) {
+      return workerLogic.workerDecreaseDurationCost();
+    } else if (which == kManagerName) {
+      return managerLogic.managerDecreaseDurationCost();
+    } else if (which == kCeoName) {
+      return ceoLogic.ceoDecreaseDurationCost();
+    } else {
+      return 0.0;
+    }
+  }
+
+  double shouldAnimate(which) {
+    if (which == kAutoClickName) {
+      return autoClickLogic.shouldAnimateAutoClick();
+    } else if (which == kWorkerName) {
+      return workerLogic.shouldAnimateWorker();
+    } else if (which == kManagerName) {
+      return managerLogic.shouldAnimateManager();
+    } else if (which == kCeoName) {
+      return ceoLogic.shouldAnimateCeo();
+    } else {
+      return 0.0;
+    }
+  }
+
+  bool isVisible(which) {
+    if (which == kAutoClickName) {
+      return autoClickLogic.isAutoClickVisible(getMoney());
+    } else if (which == kWorkerName) {
+      return workerLogic.isWorkerVisible(autoClickLogic.autoClickNumber());
+    } else if (which == kManagerName) {
+      return managerLogic.isManagerVisible(workerLogic.workerNumber());
+    } else if (which == kCeoName) {
+      return ceoLogic.isCeoVisible(managerLogic.managerNumber());
+    } else {
+      return false;
+    }
+  }
+
+  double showedRow(which) =>
+      box.get('showed$which', defaultValue: 0.0) as double;
+
+  void updateShowedRow(which) => box.put('showed$which', 1.0);
+
   // click row
 
   String getClickAmount() =>
       NumberFormat.compact().format(clickRowLogic.clickAmount());
-
-  String getClickCost() =>
-      NumberFormat.compact().format(clickRowLogic.clickCost());
-
-  double getClickIncrement() => clickRowLogic.clickIncrement();
 
   void clickIncreaseMoney() {
     moneyLogic.clickIncreaseMoney();
@@ -93,7 +212,7 @@ class ClickerBrain extends ChangeNotifier {
         isClickRow: true,
         shouldAnimate: 1.0,
         boxShouldAnimate: 'null',
-        increment: getClickIncrement(),
+        increment: getIncrement(kClickName),
         costOne: clickRowLogic.clickCostOne(),
         numberToChange: clickRowLogic.clickAmount(),
         boxCostOneName: clickRowLogic.clickCostOneString,
@@ -106,7 +225,7 @@ class ClickerBrain extends ChangeNotifier {
 
   void changeClickIncrement() {
     clickerFunctions.updateIncrement(
-        increment: getClickIncrement(),
+        increment: getIncrement(kClickName),
         cost: clickRowLogic.clickCost(),
         costOne: clickRowLogic.clickCostOne(),
         boxIncrementName: clickRowLogic.clickIncrementString,
@@ -117,32 +236,13 @@ class ClickerBrain extends ChangeNotifier {
 
   // autoclicker
 
-  String getAutoClickNumber() =>
-      NumberFormat.compact().format(autoClickLogic.autoClickNumber());
-
-  String getAutoClickCost() =>
-      NumberFormat.compact().format(autoClickLogic.autoClickCost());
-
-  double getAutoClickIncrement() => autoClickLogic.autoClickIncrement();
-
-  Duration getAutoClickDuration() => Duration(
-      milliseconds: autoClickLogic.autoClickDurationMilliseconds().toInt());
-
-  String getAutoClickDurationString() =>
-      (autoClickLogic.autoClickDurationMilliseconds() / 1000).toString();
-
-  String getAutoClickDecreaseDurationCost() => NumberFormat.compact()
-      .format(autoClickLogic.autoClickDecreaseDurationCost());
-
-  double shouldAnimateAutoClick() => autoClickLogic.shouldAnimateAutoClick();
-
   double wasAutoClickInitiated = 0;
 
   Timer autoClickTimer = Timer(Duration(milliseconds: 0), () {});
 
   void autoClickTimerStart(controller) {
     autoClickTimer = Timer.periodic(
-      getAutoClickDuration(),
+      getDuration(kAutoClickName),
       (timer) {
         moneyLogic.autoClickIncreaseMoney();
         controller.reset();
@@ -157,9 +257,9 @@ class ClickerBrain extends ChangeNotifier {
       moneyLogic.decreaseMoney(autoClickLogic.autoClickCost());
       clickerFunctions.upgradeRow(
           isClickRow: false,
-          increment: getAutoClickIncrement(),
+          increment: getIncrement(kAutoClickName),
           costOne: autoClickLogic.autoClickCostOne(),
-          shouldAnimate: shouldAnimateAutoClick(),
+          shouldAnimate: shouldAnimate(kAutoClickName),
           numberToChange: autoClickLogic.autoClickNumber(),
           boxCostOneName: autoClickLogic.autoClickCostOneString,
           boxCostName: autoClickLogic.autoClickCostString,
@@ -171,23 +271,16 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void initialAutoClickTimer(controller) {
-    if (shouldAnimateAutoClick() == 1.0 && wasAutoClickInitiated == 0) {
+    if (shouldAnimate(kAutoClickName) == 1.0 && wasAutoClickInitiated == 0) {
       wasAutoClickInitiated++;
       controller.forward();
       autoClickTimerStart(controller);
     }
   }
 
-  bool isAutoClickVisible() => autoClickLogic.isAutoClickVisible(getMoney());
-
-  double showedAutoClick() =>
-      box.get('showedAutoClick', defaultValue: 0.0) as double;
-
-  void updateShowedAutoClick() => box.put('showedAutoClick', 1.0);
-
   void updateAutoClickIncrement() {
     clickerFunctions.updateIncrement(
-        increment: getAutoClickIncrement(),
+        increment: getIncrement(kAutoClickName),
         cost: autoClickLogic.autoClickCost(),
         costOne: autoClickLogic.autoClickCostOne(),
         boxIncrementName: autoClickLogic.autoClickIncrementString,
@@ -220,32 +313,13 @@ class ClickerBrain extends ChangeNotifier {
 
   // worker
 
-  String getWorkerNumber() =>
-      NumberFormat.compact().format(workerLogic.workerNumber());
-
-  String getWorkerCost() =>
-      NumberFormat.compact().format(workerLogic.workerCost());
-
-  double getWorkerIncrement() => workerLogic.workerIncrement();
-
-  Duration getWorkerDuration() =>
-      Duration(milliseconds: workerLogic.workerDurationMilliseconds().toInt());
-
-  String getWorkerDurationString() =>
-      (workerLogic.workerDurationMilliseconds() / 1000).toString();
-
-  String getWorkerDecreaseDurationCost() =>
-      NumberFormat.compact().format(workerLogic.workerDecreaseDurationCost());
-
-  double shouldAnimateWorker() => workerLogic.shouldAnimateWorker();
-
   double wasWorkerInitiated = 0;
 
   Timer workerTimer = Timer(Duration(milliseconds: 0), () {});
 
   void workerTimerStart(controller) {
     workerTimer = Timer.periodic(
-      getWorkerDuration(),
+      getDuration(kWorkerName),
       (timer) {
         autoClickLogic.workerBuysAutoClicks(workerLogic.workerNumber());
         controller.reset();
@@ -260,9 +334,9 @@ class ClickerBrain extends ChangeNotifier {
       moneyLogic.decreaseMoney(workerLogic.workerCost());
       clickerFunctions.upgradeRow(
           isClickRow: false,
-          increment: getWorkerIncrement(),
+          increment: getIncrement(kWorkerName),
           costOne: workerLogic.workerCostOne(),
-          shouldAnimate: shouldAnimateWorker(),
+          shouldAnimate: shouldAnimate(kWorkerName),
           numberToChange: workerLogic.workerNumber(),
           boxCostOneName: workerLogic.workerCostOneString,
           boxCostName: workerLogic.workerCostString,
@@ -274,25 +348,16 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void initialWorkerTimer(controller) {
-    if (shouldAnimateWorker() == 1.0 && wasWorkerInitiated == 0) {
+    if (shouldAnimate(kWorkerName) == 1.0 && wasWorkerInitiated == 0) {
       wasWorkerInitiated++;
       controller.forward();
       workerTimerStart(controller);
     }
   }
 
-  bool isWorkerVisible() =>
-      workerLogic.isWorkerVisible(autoClickLogic.autoClickNumber());
-
-  double showedWorker() => box.get('showedWorker', defaultValue: 0.0) as double;
-
-  void updateShowedWorker() {
-    box.put('showedWorker', 1.0);
-  }
-
   void updateWorkerIncrement() {
     clickerFunctions.updateIncrement(
-        increment: getWorkerIncrement(),
+        increment: getIncrement(kWorkerName),
         cost: workerLogic.workerCost(),
         costOne: workerLogic.workerCostOne(),
         boxIncrementName: workerLogic.workerIncrementString,
@@ -324,32 +389,13 @@ class ClickerBrain extends ChangeNotifier {
 
   // manager
 
-  String getManagerNumber() =>
-      NumberFormat.compact().format(managerLogic.managerNumber());
-
-  String getManagerCost() =>
-      NumberFormat.compact().format(managerLogic.managerCost());
-
-  double getManagerIncrement() => managerLogic.managerIncrement();
-
-  Duration getManagerDuration() => Duration(
-      milliseconds: managerLogic.managerDurationMilliseconds().toInt());
-
-  String getManagerDurationString() =>
-      (managerLogic.managerDurationMilliseconds() / 1000).toString();
-
-  String getManagerDecreaseDurationCost() =>
-      NumberFormat.compact().format(managerLogic.managerDecreaseDurationCost());
-
-  double shouldAnimateManager() => managerLogic.shouldAnimateManager();
-
   double wasManagerInitiated = 0;
 
   Timer managerTimer = Timer(Duration(milliseconds: 0), () {});
 
   void managerTimerStart(controller) {
     managerTimer = Timer.periodic(
-      getManagerDuration(),
+      getDuration(kManagerName),
       (timer) {
         workerLogic.managerBuysWorkers(managerLogic.managerNumber());
         controller.reset();
@@ -364,9 +410,9 @@ class ClickerBrain extends ChangeNotifier {
       moneyLogic.decreaseMoney(managerLogic.managerCost());
       clickerFunctions.upgradeRow(
           isClickRow: false,
-          increment: getManagerIncrement(),
+          increment: getIncrement(kManagerName),
           costOne: managerLogic.managerCostOne(),
-          shouldAnimate: shouldAnimateManager(),
+          shouldAnimate: shouldAnimate(kManagerName),
           numberToChange: managerLogic.managerNumber(),
           boxCostOneName: managerLogic.managerCostOneString,
           boxCostName: managerLogic.managerCostString,
@@ -378,26 +424,16 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void initialManagerTimer(controller) {
-    if (shouldAnimateManager() == 1.0 && wasManagerInitiated == 0) {
+    if (shouldAnimate(kManagerName) == 1.0 && wasManagerInitiated == 0) {
       wasManagerInitiated++;
       controller.forward();
       managerTimerStart(controller);
     }
   }
 
-  bool isManagerVisible() =>
-      managerLogic.isManagerVisible(workerLogic.workerNumber());
-
-  double showedManager() =>
-      box.get('showedManager', defaultValue: 0.0) as double;
-
-  void updateShowedManager() {
-    box.put('showedManager', 1.0);
-  }
-
   void updateManagerIncrement() {
     clickerFunctions.updateIncrement(
-        increment: getManagerIncrement(),
+        increment: getIncrement(kManagerName),
         cost: managerLogic.managerCost(),
         costOne: managerLogic.managerCostOne(),
         boxIncrementName: managerLogic.managerIncrementString,
@@ -429,30 +465,13 @@ class ClickerBrain extends ChangeNotifier {
 
   // ceo
 
-  String getCeoNumber() => NumberFormat.compact().format(ceoLogic.ceoNumber());
-
-  String getCeoCost() => NumberFormat.compact().format(ceoLogic.ceoCost());
-
-  double getCeoIncrement() => ceoLogic.ceoIncrement();
-
-  Duration getCeoDuration() =>
-      Duration(milliseconds: ceoLogic.ceoDurationMilliseconds().toInt());
-
-  String getCeoDurationString() =>
-      (ceoLogic.ceoDurationMilliseconds() / 1000).toString();
-
-  String getCeoDecreaseDurationCost() =>
-      NumberFormat.compact().format(ceoLogic.ceoDecreaseDurationCost());
-
-  double shouldAnimateCeo() => ceoLogic.shouldAnimateCeo();
-
   double wasCeoInitiated = 0;
 
   Timer ceoTimer = Timer(Duration(milliseconds: 0), () {});
 
   void ceoTimerStart(controller) {
     ceoTimer = Timer.periodic(
-      getCeoDuration(),
+      getDuration(kCeoName),
       (timer) {
         managerLogic.ceoBuysManagers(ceoLogic.ceoNumber());
         controller.reset();
@@ -467,7 +486,7 @@ class ClickerBrain extends ChangeNotifier {
       moneyLogic.decreaseMoney(ceoLogic.ceoCost());
       clickerFunctions.upgradeRow(
           isClickRow: false,
-          increment: getCeoIncrement(),
+          increment: getIncrement(kCeoName),
           costOne: ceoLogic.ceoCostOne(),
           shouldAnimate: ceoLogic.shouldAnimateCeo(),
           numberToChange: ceoLogic.ceoNumber(),
@@ -481,24 +500,16 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void initialCeoTimer(controller) {
-    if (shouldAnimateCeo() == 1.0 && wasCeoInitiated == 0) {
+    if (shouldAnimate(kCeoName) == 1.0 && wasCeoInitiated == 0) {
       wasCeoInitiated++;
       controller.forward();
       ceoTimerStart(controller);
     }
   }
 
-  bool isCeoVisible() => ceoLogic.isCeoVisible(managerLogic.managerNumber());
-
-  double showedCeo() => box.get('showedCeo', defaultValue: 0.0) as double;
-
-  void updateShowedCeo() {
-    box.put('showedCeo', 1.0);
-  }
-
   void updateCeoIncrement() {
     clickerFunctions.updateIncrement(
-        increment: getCeoIncrement(),
+        increment: getIncrement(kCeoName),
         cost: ceoLogic.ceoCost(),
         costOne: ceoLogic.ceoCostOne(),
         boxIncrementName: ceoLogic.ceoIncrementString,

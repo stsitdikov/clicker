@@ -22,7 +22,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   late var clickerBrain = Provider.of<ClickerBrain>(context);
 
   late final AnimationController autoClickController = AnimationController(
-    duration: clickerBrain.getAutoClickDuration(),
+    duration: clickerBrain.getDuration(kAutoClickName),
     vsync: this,
   );
   late final Animation<double> autoClickAnimation = CurvedAnimation(
@@ -31,7 +31,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController workerController = AnimationController(
-    duration: clickerBrain.getWorkerDuration(),
+    duration: clickerBrain.getDuration(kWorkerName),
     vsync: this,
   );
   late final Animation<double> workerAnimation = CurvedAnimation(
@@ -40,7 +40,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController managerController = AnimationController(
-    duration: clickerBrain.getManagerDuration(),
+    duration: clickerBrain.getDuration(kManagerName),
     vsync: this,
   );
   late final Animation<double> managerAnimation = CurvedAnimation(
@@ -49,7 +49,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController ceoController = AnimationController(
-    duration: clickerBrain.getCeoDuration(),
+    duration: clickerBrain.getDuration(kCeoName),
     vsync: this,
   );
   late final Animation<double> ceoAnimation = CurvedAnimation(

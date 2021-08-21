@@ -40,7 +40,7 @@ class ClickRow extends StatelessWidget {
             child: GestureDetector(
               onTap: () => clickerBrainListenFalse.changeClickIncrement(),
               child: IncrementContainer(
-                clickerBrain.getClickIncrement().toStringAsFixed(0),
+                clickerBrain.getIncrement(kClickName).toStringAsFixed(0),
                 Border(
                   top: BorderSide(color: kBorderColor),
                   right: BorderSide(color: kBorderColor),
@@ -55,7 +55,7 @@ class ClickRow extends StatelessWidget {
                 clickerBrainListenFalse.clickUpgrade();
               },
               child: UpgradeContainer(
-                clickerBrain.getClickCost(),
+                clickerBrain.getCost(kClickName),
                 Border(
                   top: BorderSide(color: kBorderColor),
                   right: BorderSide(color: kBorderColor),

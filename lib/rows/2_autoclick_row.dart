@@ -2,6 +2,7 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../components/reusable_progress_row.dart';
+import 'package:clicker/logic/constants.dart';
 
 class AutoClickRow extends StatelessWidget {
   final Animation<double> animation;
@@ -17,12 +18,13 @@ class AutoClickRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getAutoClickNumber() + ' x  AutoClicker',
+      title: clickerBrain.getNumber(kAutoClickName) + ' x  AutoClicker',
       onUpgradeTap: () {
         clickerBrainListenFalse.buyAutoClicker(controller);
       },
-      upgradeCost: clickerBrain.getAutoClickCost(),
-      incrementNumber: clickerBrain.getAutoClickIncrement().toStringAsFixed(0),
+      upgradeCost: clickerBrain.getCost(kAutoClickName),
+      incrementNumber:
+          clickerBrain.getIncrement(kAutoClickName).toStringAsFixed(0),
       onIncrementTap: () {
         clickerBrainListenFalse.updateAutoClickIncrement();
       },

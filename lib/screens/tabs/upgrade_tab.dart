@@ -4,6 +4,7 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 
 import 'package:clicker/logic/clicker_brain.dart';
+import 'package:clicker/logic/constants.dart';
 
 import 'package:clicker/components/global_upgrade_tile.dart';
 
@@ -48,9 +49,9 @@ class UpgradeTab extends StatelessWidget {
                   Phoenix.rebirth(context);
                 }
               },
-              duration: clickerBrain.getCeoDurationString(),
+              duration: clickerBrain.getDurationString(kCeoName),
               title: 'Ceo',
-              cost: clickerBrain.getCeoDecreaseDurationCost()),
+              cost: clickerBrain.getDecreaseDurationCost(kCeoName)),
         ),
       ),
       Visibility(
@@ -73,9 +74,9 @@ class UpgradeTab extends StatelessWidget {
                   Phoenix.rebirth(context);
                 }
               },
-              duration: clickerBrain.getManagerDurationString(),
+              duration: clickerBrain.getDurationString(kManagerName),
               title: 'Manager',
-              cost: clickerBrain.getManagerDecreaseDurationCost()),
+              cost: clickerBrain.getDecreaseDurationCost(kManagerName)),
         ),
       ),
       Visibility(
@@ -96,9 +97,9 @@ class UpgradeTab extends StatelessWidget {
                 Phoenix.rebirth(context);
               }
             },
-            duration: clickerBrain.getWorkerDurationString(),
+            duration: clickerBrain.getDurationString(kWorkerName),
             title: 'Worker',
-            cost: clickerBrain.getWorkerDecreaseDurationCost(),
+            cost: clickerBrain.getDecreaseDurationCost(kWorkerName),
           ),
         ),
       ),
@@ -121,9 +122,9 @@ class UpgradeTab extends StatelessWidget {
                 Phoenix.rebirth(context);
               }
             },
-            duration: clickerBrain.getAutoClickDurationString(),
+            duration: clickerBrain.getDurationString(kAutoClickName),
             title: 'AutoClicker',
-            cost: clickerBrain.getAutoClickDecreaseDurationCost(),
+            cost: clickerBrain.getDecreaseDurationCost(kAutoClickName),
           ),
         ),
       ),

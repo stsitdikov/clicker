@@ -2,6 +2,7 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../components/reusable_progress_row.dart';
+import 'package:clicker/logic/constants.dart';
 
 class ManagerRow extends StatelessWidget {
   final Animation<double> animation;
@@ -17,12 +18,13 @@ class ManagerRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getManagerNumber() + ' x  Manager',
+      title: clickerBrain.getNumber(kManagerName) + ' x  Manager',
       onUpgradeTap: () {
         clickerBrainListenFalse.buyManager(controller);
       },
-      upgradeCost: clickerBrain.getManagerCost(),
-      incrementNumber: clickerBrain.getManagerIncrement().toStringAsFixed(0),
+      upgradeCost: clickerBrain.getCost(kManagerName),
+      incrementNumber:
+          clickerBrain.getIncrement(kManagerName).toStringAsFixed(0),
       onIncrementTap: () {
         clickerBrainListenFalse.updateManagerIncrement();
       },
