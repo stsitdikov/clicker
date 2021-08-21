@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:clicker/logic/autoclick_logic.dart';
-import 'package:clicker/logic/ceo_logic.dart';
-import 'package:clicker/logic/click_row_logic.dart';
+import 'package:clicker/logic/2_autoclick_logic.dart';
+import 'package:clicker/logic/5_ceo_logic.dart';
+import 'package:clicker/logic/1_click_row_logic.dart';
 import 'package:clicker/logic/clicker_functions.dart';
-import 'package:clicker/logic/manager_logic.dart';
+import 'package:clicker/logic/4_manager_logic.dart';
 import 'package:clicker/logic/money_logic.dart';
-import 'package:clicker/logic/worker_logic.dart';
+import 'package:clicker/logic/3_worker_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';

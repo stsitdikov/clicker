@@ -7,11 +7,11 @@ import 'package:clicker/logic/constants.dart';
 
 import 'package:clicker/components/money_display.dart';
 import 'package:clicker/rows/blocked_row.dart';
-import 'package:clicker/rows/autoclick_row.dart';
-import 'package:clicker/rows/ceo_row.dart';
-import 'package:clicker/rows/click_row.dart';
-import 'package:clicker/rows/manager_row.dart';
-import 'package:clicker/rows/worker_row.dart';
+import 'package:clicker/rows/2_autoclick_row.dart';
+import 'package:clicker/rows/5_ceo_row.dart';
+import 'package:clicker/rows/1_click_row.dart';
+import 'package:clicker/rows/4_manager_row.dart';
+import 'package:clicker/rows/3_worker_row.dart';
 
 class MainTab extends StatefulWidget {
   final List<AnimationController> animationControllerList;
