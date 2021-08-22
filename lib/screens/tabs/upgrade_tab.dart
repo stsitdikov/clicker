@@ -46,7 +46,8 @@ class UpgradeTab extends StatelessWidget {
                   kCeoName, kDecreaseCeoDurationBy),
               onTap: () {
                 if (clickerBrain.canDecreaseDuration(
-                    kCeoName, kDecreaseCeoDurationBy)) {
+                        kCeoName, kDecreaseCeoDurationBy) &&
+                    clickerBrain.canShowGlobalUpgrade(kCeoName)) {
                   clickerBrain.decreaseCeoDuration(animationControllerList[3]);
                   Phoenix.rebirth(context);
                 }
@@ -72,7 +73,8 @@ class UpgradeTab extends StatelessWidget {
                   kManagerName, kDecreaseManagerDurationBy),
               onTap: () {
                 if (clickerBrain.canDecreaseDuration(
-                    kManagerName, kDecreaseManagerDurationBy)) {
+                        kManagerName, kDecreaseManagerDurationBy) &&
+                    clickerBrain.canShowGlobalUpgrade(kManagerName)) {
                   clickerBrain
                       .decreaseManagerDuration(animationControllerList[2]);
                   Phoenix.rebirth(context);
@@ -98,7 +100,8 @@ class UpgradeTab extends StatelessWidget {
                 kWorkerName, kDecreaseWorkerDurationBy),
             onTap: () {
               if (clickerBrain.canDecreaseDuration(
-                  kWorkerName, kDecreaseWorkerDurationBy)) {
+                      kWorkerName, kDecreaseWorkerDurationBy) &&
+                  clickerBrain.canShowGlobalUpgrade(kWorkerName)) {
                 clickerBrain.decreaseWorkerDuration(animationControllerList[1]);
                 Phoenix.rebirth(context);
               }
