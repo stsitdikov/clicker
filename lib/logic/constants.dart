@@ -78,7 +78,7 @@ const double kDecreaseCeoDurationBy = 10000;
 
 // millionaire constants
 
-const double kManagerNumberToShowMillionaire = 5;
+const double kCeoNumberToShowMillionaire = 5;
 const double kDefaultMillionaireCost = 10;
 const double kDefaultMillionaireCostOne = 10;
 const double kDefaultMillionaireIncrement = 1;

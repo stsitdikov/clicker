@@ -24,11 +24,11 @@ class ClickerBrain extends ChangeNotifier {
   ClickerBrain(this.moneyLogic, this.clickerFunctions, this.clickRowLogic,
       this.autoClickLogic, this.workerLogic, this.managerLogic, this.ceoLogic);
 
-  String getMoneyString() => NumberFormat.compact().format(getMoney());
+  Box box = Hive.box<double>(kClickerBrainBox);
 
   double getMoney() => moneyLogic.money();
 
-  Box box = Hive.box<double>(kClickerBrainBox);
+  String getMoneyString() => NumberFormat.compact().format(getMoney());
 
   void clearBox() => box.clear();
 
@@ -45,9 +45,9 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  double firstLaunch() => box.get('firstLaunch', defaultValue: 1.0);
-
-  void notFirstLaunch() => box.put('firstLaunch', (firstLaunch() + 1.0));
+  // double firstLaunch() => box.get('firstLaunch', defaultValue: 1.0);
+  //
+  // void notFirstLaunch() => box.put('firstLaunch', (firstLaunch() + 1.0));
 
   double isLaunchFromGlobalUpgrade() =>
       box.get('isLaunchFromGlobalUpgrade', defaultValue: 0.0);
@@ -130,6 +130,9 @@ class ClickerBrain extends ChangeNotifier {
 
   String getDurationString(which) => (whichDuration(which) / 1000).toString();
 
+  bool canDecreaseDuration(which, decreaseConstant) =>
+      whichDuration(which) > decreaseConstant;
+
   double whichDuration(which) {
     if (which == kAutoClickName) {
       return autoClickLogic.autoClickDurationMilliseconds();
@@ -147,6 +150,9 @@ class ClickerBrain extends ChangeNotifier {
   String getDecreaseDurationCost(which) {
     return NumberFormat.compact().format(whichDecreaseDurationCost(which));
   }
+
+  bool canShowGlobalUpgrade(which) =>
+      moneyLogic.canUpgrade(whichDecreaseDurationCost(which));
 
   double whichDecreaseDurationCost(which) {
     if (which == kAutoClickName) {
@@ -194,6 +200,12 @@ class ClickerBrain extends ChangeNotifier {
       box.get('showed$which', defaultValue: 0.0) as double;
 
   void updateShowedRow(which) => box.put('showed$which', 1.0);
+
+  double showedGlobalUpgrade(which) =>
+      box.get('showed${which}GlobalUpgrade', defaultValue: 0.0) as double;
+
+  void updateShowedGlobalUpgrade(which) =>
+      box.put('showed${which}GlobalUpgrade', 1.0);
 
   // click row
 
@@ -289,19 +301,6 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool canShowAutoClickGlobalUpgrade() =>
-      moneyLogic.canUpgrade(autoClickLogic.autoClickDecreaseDurationCost());
-
-  double showedAutoClickGlobalUpgrade() =>
-      box.get('showedAutoClickGlobalUpgrade', defaultValue: 0.0);
-
-  void updateShowedAutoClickGlobalUpgrade() =>
-      box.put('showedAutoClickGlobalUpgrade', 1.0);
-
-  bool canDecreaseAutoClickDuration() =>
-      autoClickLogic.autoClickDurationMilliseconds() >
-      kDecreaseAutoClickDurationBy;
-
   void decreaseAutoClickDuration(controller) {
     moneyLogic.decreaseMoney(autoClickLogic.autoClickDecreaseDurationCost());
     autoClickLogic.decreaseAutoClickDuration();
@@ -365,18 +364,6 @@ class ClickerBrain extends ChangeNotifier {
         boxCostOneName: workerLogic.workerCostOneString);
     notifyListeners();
   }
-
-  bool canShowWorkerGlobalUpgrade() =>
-      moneyLogic.canUpgrade(workerLogic.workerDecreaseDurationCost());
-
-  double showedWorkerGlobalUpgrade() =>
-      box.get('showedWorkerGlobalUpgrade', defaultValue: 0.0);
-
-  void updateShowedWorkerGlobalUpgrade() =>
-      box.put('showedWorkerGlobalUpgrade', 1.0);
-
-  bool canDecreaseWorkerDuration() =>
-      workerLogic.workerDurationMilliseconds() > kDecreaseWorkerDurationBy;
 
   void decreaseWorkerDuration(controller) {
     moneyLogic.decreaseMoney(workerLogic.workerDecreaseDurationCost());
@@ -442,18 +429,6 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool canShowManagerGlobalUpgrade() =>
-      moneyLogic.canUpgrade(managerLogic.managerDecreaseDurationCost());
-
-  double showedManagerGlobalUpgrade() =>
-      box.get('showedManagerGlobalUpgrade', defaultValue: 0.0);
-
-  void updateShowedManagerGlobalUpgrade() =>
-      box.put('showedManagerGlobalUpgrade', 1.0);
-
-  bool canDecreaseManagerDuration() =>
-      managerLogic.managerDurationMilliseconds() > kDecreaseManagerDurationBy;
-
   void decreaseManagerDuration(controller) {
     moneyLogic.decreaseMoney(managerLogic.managerDecreaseDurationCost());
     managerLogic.decreaseManagerDuration();
@@ -517,17 +492,6 @@ class ClickerBrain extends ChangeNotifier {
         boxCostOneName: ceoLogic.ceoCostOneString);
     notifyListeners();
   }
-
-  bool canShowCeoGlobalUpgrade() =>
-      moneyLogic.canUpgrade(ceoLogic.ceoDecreaseDurationCost());
-
-  double showedCeoGlobalUpgrade() =>
-      box.get('showedCeoGlobalUpgrade', defaultValue: 0.0);
-
-  void updateShowedCeoGlobalUpgrade() => box.put('showedCeoGlobalUpgrade', 1.0);
-
-  bool canDecreaseCeoDuration() =>
-      ceoLogic.ceoDurationMilliseconds() > kDecreaseCeoDurationBy;
 
   void decreaseCeoDuration(controller) {
     moneyLogic.decreaseMoney(ceoLogic.ceoDecreaseDurationCost());

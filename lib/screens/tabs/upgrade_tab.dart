@@ -16,35 +16,37 @@ class UpgradeTab extends StatelessWidget {
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
 
-    if (clickerBrain.canShowAutoClickGlobalUpgrade() &&
-        clickerBrain.showedAutoClickGlobalUpgrade() == 0.0) {
-      clickerBrain.updateShowedAutoClickGlobalUpgrade();
+    if (clickerBrain.canShowGlobalUpgrade(kAutoClickName) &&
+        clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0) {
+      clickerBrain.updateShowedGlobalUpgrade(kAutoClickName);
     }
 
-    if (clickerBrain.canShowWorkerGlobalUpgrade() &&
-        clickerBrain.showedWorkerGlobalUpgrade() == 0.0) {
-      clickerBrain.updateShowedWorkerGlobalUpgrade();
+    if (clickerBrain.canShowGlobalUpgrade(kWorkerName) &&
+        clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0) {
+      clickerBrain.updateShowedGlobalUpgrade(kWorkerName);
     }
 
-    if (clickerBrain.canShowManagerGlobalUpgrade() &&
-        clickerBrain.showedManagerGlobalUpgrade() == 0.0) {
-      clickerBrain.updateShowedManagerGlobalUpgrade();
+    if (clickerBrain.canShowGlobalUpgrade(kManagerName) &&
+        clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0) {
+      clickerBrain.updateShowedGlobalUpgrade(kManagerName);
     }
 
-    if (clickerBrain.canShowCeoGlobalUpgrade() &&
-        clickerBrain.showedCeoGlobalUpgrade() == 0.0) {
-      clickerBrain.updateShowedCeoGlobalUpgrade();
+    if (clickerBrain.canShowGlobalUpgrade(kCeoName) &&
+        clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0) {
+      clickerBrain.updateShowedGlobalUpgrade(kCeoName);
     }
 
     List<Widget> listOfUpgrades = [
       Visibility(
-        visible: clickerBrain.showedCeoGlobalUpgrade() == 1.0,
+        visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0,
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
-              canUpgradeMore: clickerBrain.canDecreaseCeoDuration(),
+              canUpgradeMore: clickerBrain.canDecreaseDuration(
+                  kCeoName, kDecreaseCeoDurationBy),
               onTap: () {
-                if (clickerBrain.canDecreaseCeoDuration()) {
+                if (clickerBrain.canDecreaseDuration(
+                    kCeoName, kDecreaseCeoDurationBy)) {
                   clickerBrain.decreaseCeoDuration(animationControllerList[3]);
                   Phoenix.rebirth(context);
                 }
@@ -55,20 +57,22 @@ class UpgradeTab extends StatelessWidget {
         ),
       ),
       Visibility(
-        visible: clickerBrain.showedCeoGlobalUpgrade() == 0.0 &&
-            clickerBrain.showedManagerGlobalUpgrade() == 1.0 &&
-            clickerBrain.showedWorkerGlobalUpgrade() == 1.0 &&
-            clickerBrain.showedAutoClickGlobalUpgrade() == 1.0,
+        visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0 &&
+            clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0 &&
+            clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0 &&
+            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
         child: GlobalUpgradeTileBlocked(),
       ),
       Visibility(
-        visible: clickerBrain.showedManagerGlobalUpgrade() == 1.0,
+        visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0,
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
-              canUpgradeMore: clickerBrain.canDecreaseManagerDuration(),
+              canUpgradeMore: clickerBrain.canDecreaseDuration(
+                  kManagerName, kDecreaseManagerDurationBy),
               onTap: () {
-                if (clickerBrain.canDecreaseManagerDuration()) {
+                if (clickerBrain.canDecreaseDuration(
+                    kManagerName, kDecreaseManagerDurationBy)) {
                   clickerBrain
                       .decreaseManagerDuration(animationControllerList[2]);
                   Phoenix.rebirth(context);
@@ -80,19 +84,21 @@ class UpgradeTab extends StatelessWidget {
         ),
       ),
       Visibility(
-        visible: clickerBrain.showedManagerGlobalUpgrade() == 0.0 &&
-            clickerBrain.showedWorkerGlobalUpgrade() == 1.0 &&
-            clickerBrain.showedAutoClickGlobalUpgrade() == 1.0,
+        visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0 &&
+            clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0 &&
+            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
         child: GlobalUpgradeTileBlocked(),
       ),
       Visibility(
-        visible: clickerBrain.showedWorkerGlobalUpgrade() == 1.0,
+        visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0,
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
-            canUpgradeMore: clickerBrain.canDecreaseWorkerDuration(),
+            canUpgradeMore: clickerBrain.canDecreaseDuration(
+                kWorkerName, kDecreaseWorkerDurationBy),
             onTap: () {
-              if (clickerBrain.canDecreaseWorkerDuration()) {
+              if (clickerBrain.canDecreaseDuration(
+                  kWorkerName, kDecreaseWorkerDurationBy)) {
                 clickerBrain.decreaseWorkerDuration(animationControllerList[1]);
                 Phoenix.rebirth(context);
               }
@@ -104,19 +110,21 @@ class UpgradeTab extends StatelessWidget {
         ),
       ),
       Visibility(
-        visible: clickerBrain.showedWorkerGlobalUpgrade() == 0.0 &&
-            clickerBrain.showedAutoClickGlobalUpgrade() == 1.0,
+        visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0 &&
+            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
         child: GlobalUpgradeTileBlocked(),
       ),
       Visibility(
-        visible: clickerBrain.showedAutoClickGlobalUpgrade() == 1.0,
+        visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
         child: Padding(
           padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
           child: GlobalUpgradeTile(
-            canUpgradeMore: clickerBrain.canDecreaseAutoClickDuration(),
+            canUpgradeMore: clickerBrain.canDecreaseDuration(
+                kAutoClickName, kDecreaseAutoClickDurationBy),
             onTap: () {
-              if (clickerBrain.canDecreaseAutoClickDuration() &&
-                  clickerBrain.canShowAutoClickGlobalUpgrade()) {
+              if (clickerBrain.canDecreaseDuration(
+                      kAutoClickName, kDecreaseAutoClickDurationBy) &&
+                  clickerBrain.canShowGlobalUpgrade(kAutoClickName)) {
                 clickerBrain
                     .decreaseAutoClickDuration(animationControllerList[0]);
                 Phoenix.rebirth(context);
@@ -129,7 +137,7 @@ class UpgradeTab extends StatelessWidget {
         ),
       ),
       Visibility(
-        visible: clickerBrain.showedAutoClickGlobalUpgrade() == 0.0,
+        visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0,
         child: GlobalUpgradeTileBlocked(),
       ),
     ];
