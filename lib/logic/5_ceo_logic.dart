@@ -39,9 +39,9 @@ class CeoLogic {
 
   // functions
 
-  // void billionaireBuysCeos(ceoNumber) {
-  //
-  // }
+  void millionaireBuysCeos(millionaireNumber) {
+    box.put('ceoNumber', ceoNumber() + millionaireNumber);
+  }
 
   bool isCeoVisible(managerNumber) {
     if (ceoVisible() == 0.0 && managerNumber >= kManagerNumberToShowCeo) {

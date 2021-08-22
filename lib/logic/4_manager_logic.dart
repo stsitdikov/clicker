@@ -44,7 +44,7 @@ class ManagerLogic {
   // functions
 
   void ceoBuysManagers(ceoNumber) =>
-      box.put('managerNumber', (managerNumber() + ceoNumber));
+      box.put('managerNumber', managerNumber() + ceoNumber);
 
   bool isManagerVisible(workerNumber) {
     if (managerVisible() == 0.0 && workerNumber >= kWorkerNumberToShowManager) {

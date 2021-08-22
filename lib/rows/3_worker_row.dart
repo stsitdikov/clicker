@@ -18,7 +18,7 @@ class WorkerRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getNumber(kWorkerName) + ' x  Worker',
+      title: clickerBrain.getNumber(kWorkerName) + ' x  $kWorkerName',
       onUpgradeTap: () {
         clickerBrainListenFalse.buyWorker(controller);
       },

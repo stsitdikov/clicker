@@ -29,7 +29,7 @@ class ClickRow extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Click (${clickerBrain.getClickAmount()} \$)',
+                    '$kClickName (${clickerBrain.getClickAmount()} \$)',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ),

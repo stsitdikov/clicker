@@ -18,7 +18,7 @@ class CeoRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getNumber(kCeoName) + ' x  CEO',
+      title: clickerBrain.getNumber(kCeoName) + ' x  ${kCeoName.toUpperCase()}',
       onUpgradeTap: () {
         clickerBrainListenFalse.buyCeo(controller);
       },

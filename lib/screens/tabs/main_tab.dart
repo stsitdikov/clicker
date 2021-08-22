@@ -7,11 +7,12 @@ import 'package:clicker/logic/constants.dart';
 
 import 'package:clicker/components/money_display.dart';
 import 'package:clicker/rows/blocked_row.dart';
-import 'package:clicker/rows/2_autoclick_row.dart';
-import 'package:clicker/rows/5_ceo_row.dart';
 import 'package:clicker/rows/1_click_row.dart';
-import 'package:clicker/rows/4_manager_row.dart';
+import 'package:clicker/rows/2_autoclick_row.dart';
 import 'package:clicker/rows/3_worker_row.dart';
+import 'package:clicker/rows/4_manager_row.dart';
+import 'package:clicker/rows/5_ceo_row.dart';
+import 'package:clicker/rows/6_millionaire_row.dart';
 
 class MainTab extends StatefulWidget {
   final List<AnimationController> animationControllerList;
@@ -38,6 +39,8 @@ class _MainTabState extends State<MainTab> {
     BlockedRow(),
     CeoRow(widget.animationList[3], widget.animationControllerList[3]),
     BlockedRow(),
+    MillionaireRow(widget.animationList[4], widget.animationControllerList[4]),
+    BlockedRow(),
   ];
 
   late int removedBlockedRows = 0;
@@ -62,6 +65,7 @@ class _MainTabState extends State<MainTab> {
     clickerBrain.initialWorkerTimer(widget.animationControllerList[1]);
     clickerBrain.initialManagerTimer(widget.animationControllerList[2]);
     clickerBrain.initialCeoTimer(widget.animationControllerList[3]);
+    clickerBrain.initialMillionaireTimer(widget.animationControllerList[4]);
 
     if (removedBlockedRows == 0) {
       if (clickerBrain.showedRow(kAutoClickName) == 1.0) {
@@ -75,7 +79,10 @@ class _MainTabState extends State<MainTab> {
       }
       if (clickerBrain.showedRow(kCeoName) == 1.0) {
         listOfRows.removeAt(4);
+      }
+      if (clickerBrain.showedRow(kMillionaireName) == 1.0) {
         listOfRows.removeAt(5);
+        listOfRows.removeAt(6);
       }
       removedBlockedRows++;
     }
@@ -116,11 +123,23 @@ class _MainTabState extends State<MainTab> {
         clickerBrain.showedRow(kCeoName) == 0.0) {
       listOfRows.removeAt(4);
       rowsKey.currentState?.insertItem(4, duration: kShowRowDuration);
-      rowsKey.currentState?.removeItem(
-        5,
-        (context, animation) => transition(context, 5, animation),
-      );
       clickerBrain.updateShowedRow(kCeoName);
+      clickerBrain.increaseListFlex();
+      Timer(kShowRowDuration, () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: kShowRowDuration, curve: Curves.linear);
+      });
+    }
+
+    if (clickerBrain.isVisible(kMillionaireName) &&
+        clickerBrain.showedRow(kMillionaireName) == 0.0) {
+      listOfRows.removeAt(5);
+      rowsKey.currentState?.insertItem(5, duration: kShowRowDuration);
+      rowsKey.currentState?.removeItem(
+        6,
+        (context, animation) => transition(context, 6, animation),
+      );
+      clickerBrain.updateShowedRow(kMillionaireName);
       clickerBrain.increaseListFlex();
       Timer(kShowRowDuration, () {
         scrollController.animateTo(scrollController.position.maxScrollExtent,

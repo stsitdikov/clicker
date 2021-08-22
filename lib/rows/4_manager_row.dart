@@ -18,7 +18,7 @@ class ManagerRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getNumber(kManagerName) + ' x  Manager',
+      title: clickerBrain.getNumber(kManagerName) + ' x  $kManagerName',
       onUpgradeTap: () {
         clickerBrainListenFalse.buyManager(controller);
       },

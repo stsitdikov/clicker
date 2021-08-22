@@ -36,7 +36,41 @@ class UpgradeTab extends StatelessWidget {
       clickerBrain.updateShowedGlobalUpgrade(kCeoName);
     }
 
+    if (clickerBrain.canShowGlobalUpgrade(kMillionaireName) &&
+        clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0) {
+      clickerBrain.updateShowedGlobalUpgrade(kMillionaireName);
+    }
+
     List<Widget> listOfUpgrades = [
+      Visibility(
+        visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 1.0,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
+          child: GlobalUpgradeTile(
+              canUpgradeMore: clickerBrain.canDecreaseDuration(
+                  kMillionaireName, kDecreaseMillionaireDurationBy),
+              onTap: () {
+                if (clickerBrain.canDecreaseDuration(
+                        kMillionaireName, kDecreaseMillionaireDurationBy) &&
+                    clickerBrain.canShowGlobalUpgrade(kMillionaireName)) {
+                  clickerBrain
+                      .decreaseMillionaireDuration(animationControllerList[4]);
+                  Phoenix.rebirth(context);
+                }
+              },
+              duration: clickerBrain.getDurationString(kMillionaireName),
+              title: kMillionaireName,
+              cost: clickerBrain.getDecreaseDurationCost(kMillionaireName)),
+        ),
+      ),
+      Visibility(
+        visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0 &&
+            clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0 &&
+            clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0 &&
+            clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0 &&
+            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
+        child: GlobalUpgradeTileBlocked(),
+      ),
       Visibility(
         visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0,
         child: Padding(
@@ -53,7 +87,7 @@ class UpgradeTab extends StatelessWidget {
                 }
               },
               duration: clickerBrain.getDurationString(kCeoName),
-              title: 'Ceo',
+              title: kCeoName.toUpperCase(),
               cost: clickerBrain.getDecreaseDurationCost(kCeoName)),
         ),
       ),
@@ -81,7 +115,7 @@ class UpgradeTab extends StatelessWidget {
                 }
               },
               duration: clickerBrain.getDurationString(kManagerName),
-              title: 'Manager',
+              title: kManagerName,
               cost: clickerBrain.getDecreaseDurationCost(kManagerName)),
         ),
       ),
@@ -107,7 +141,7 @@ class UpgradeTab extends StatelessWidget {
               }
             },
             duration: clickerBrain.getDurationString(kWorkerName),
-            title: 'Worker',
+            title: kWorkerName,
             cost: clickerBrain.getDecreaseDurationCost(kWorkerName),
           ),
         ),
@@ -134,7 +168,7 @@ class UpgradeTab extends StatelessWidget {
               }
             },
             duration: clickerBrain.getDurationString(kAutoClickName),
-            title: 'AutoClicker',
+            title: kAutoClickName,
             cost: clickerBrain.getDecreaseDurationCost(kAutoClickName),
           ),
         ),

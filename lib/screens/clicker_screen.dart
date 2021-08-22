@@ -57,12 +57,22 @@ class _ClickerScreenState extends State<ClickerScreen>
     curve: Curves.linear,
   );
 
+  late final AnimationController millionaireController = AnimationController(
+    duration: clickerBrain.getDuration(kMillionaireName),
+    vsync: this,
+  );
+  late final Animation<double> millionaireAnimation = CurvedAnimation(
+    parent: millionaireController,
+    curve: Curves.linear,
+  );
+
   @override
   void dispose() {
     autoClickController.dispose();
     workerController.dispose();
     managerController.dispose();
     ceoController.dispose();
+    millionaireController.dispose();
     super.dispose();
   }
 
@@ -75,12 +85,14 @@ class _ClickerScreenState extends State<ClickerScreen>
       workerController,
       managerController,
       ceoController,
+      millionaireController,
     ];
     List<Animation<double>> animationList = [
       autoClickAnimation,
       workerAnimation,
       managerAnimation,
       ceoAnimation,
+      millionaireAnimation,
     ];
 
     List<Widget> tabs = <Widget>[

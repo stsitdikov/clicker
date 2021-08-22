@@ -78,11 +78,12 @@ const double kDecreaseCeoDurationBy = 10000;
 
 // millionaire constants
 
+const String kMillionaireName = 'Millionaire';
 const double kCeoNumberToShowMillionaire = 5;
 const double kDefaultMillionaireCost = 10;
 const double kDefaultMillionaireCostOne = 10;
 const double kDefaultMillionaireIncrement = 1;
 
-const double kDefaultMillionaireDurationMilliseconds = 60000;
-const double kDefaultMillionaireDecreaseDurationCost = 100000;
+const double kDefaultMillionaireDurationMilliseconds = 120000;
+const double kDefaultMillionaireDecreaseDurationCost = 1000000;
 const double kDecreaseMillionaireDurationBy = 10000;

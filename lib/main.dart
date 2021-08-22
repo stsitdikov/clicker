@@ -17,6 +17,7 @@ import 'package:clicker/logic/2_autoclick_logic.dart';
 import 'package:clicker/logic/3_worker_logic.dart';
 import 'package:clicker/logic/4_manager_logic.dart';
 import 'package:clicker/logic/5_ceo_logic.dart';
+import 'logic/6_millionaire_row_logic.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
           AutoClickLogic(),
           WorkerLogic(),
           ManagerLogic(),
-          CeoLogic()),
+          CeoLogic(),
+          MillionaireLogic()),
       child: MaterialApp(
         theme: ThemeData.dark(),
         title: kAppName,

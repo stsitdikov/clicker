@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 import '../components/reusable_progress_row.dart';
 import 'package:clicker/logic/constants.dart';
 
-class AutoClickRow extends StatelessWidget {
+class MillionaireRow extends StatelessWidget {
   final Animation<double> animation;
   final AnimationController controller;
 
-  AutoClickRow(this.animation, this.controller);
+  MillionaireRow(this.animation, this.controller);
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +18,15 @@ class AutoClickRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getNumber(kAutoClickName) + ' x  $kAutoClickName',
+      title: clickerBrain.getNumber(kMillionaireName) + ' x  $kMillionaireName',
       onUpgradeTap: () {
-        clickerBrainListenFalse.buyAutoClicker(controller);
+        clickerBrainListenFalse.buyMillionaire(controller);
       },
-      upgradeCost: clickerBrain.getCost(kAutoClickName),
+      upgradeCost: clickerBrain.getCost(kMillionaireName),
       incrementNumber:
-          clickerBrain.getIncrement(kAutoClickName).toStringAsFixed(0),
+          clickerBrain.getIncrement(kMillionaireName).toStringAsFixed(0),
       onIncrementTap: () {
-        clickerBrainListenFalse.updateAutoClickIncrement();
+        clickerBrainListenFalse.updateMillionaireIncrement();
       },
     );
   }

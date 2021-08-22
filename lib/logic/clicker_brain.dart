@@ -1,28 +1,38 @@
 import 'dart:async';
-import 'package:clicker/logic/2_autoclick_logic.dart';
-import 'package:clicker/logic/5_ceo_logic.dart';
-import 'package:clicker/logic/1_click_row_logic.dart';
-import 'package:clicker/logic/clicker_functions.dart';
-import 'package:clicker/logic/4_manager_logic.dart';
-import 'package:clicker/logic/money_logic.dart';
-import 'package:clicker/logic/3_worker_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:clicker/logic/money_logic.dart';
+import 'package:clicker/logic/clicker_functions.dart';
 import 'package:clicker/logic/constants.dart';
+import 'package:clicker/logic/1_click_row_logic.dart';
+import 'package:clicker/logic/2_autoclick_logic.dart';
+import 'package:clicker/logic/3_worker_logic.dart';
+import 'package:clicker/logic/4_manager_logic.dart';
+import 'package:clicker/logic/5_ceo_logic.dart';
+import 'package:clicker/logic/6_millionaire_row_logic.dart';
 
 class ClickerBrain extends ChangeNotifier {
   MoneyLogic moneyLogic;
+  ClickerFunctions clickerFunctions;
   ClickRowLogic clickRowLogic;
   AutoClickLogic autoClickLogic;
   WorkerLogic workerLogic;
   ManagerLogic managerLogic;
   CeoLogic ceoLogic;
-  ClickerFunctions clickerFunctions;
+  MillionaireLogic millionaireLogic;
 
-  ClickerBrain(this.moneyLogic, this.clickerFunctions, this.clickRowLogic,
-      this.autoClickLogic, this.workerLogic, this.managerLogic, this.ceoLogic);
+  ClickerBrain(
+      this.moneyLogic,
+      this.clickerFunctions,
+      this.clickRowLogic,
+      this.autoClickLogic,
+      this.workerLogic,
+      this.managerLogic,
+      this.ceoLogic,
+      this.millionaireLogic);
 
   Box box = Hive.box<double>(kClickerBrainBox);
 
@@ -69,6 +79,7 @@ class ClickerBrain extends ChangeNotifier {
     workerTimer.cancel();
     managerTimer.cancel();
     ceoTimer.cancel();
+    millionaireTimer.cancel();
   }
 
   String getCost(which) {
@@ -86,6 +97,8 @@ class ClickerBrain extends ChangeNotifier {
       return managerLogic.managerCost();
     } else if (which == kCeoName) {
       return ceoLogic.ceoCost();
+    } else if (which == kMillionaireName) {
+      return millionaireLogic.millionaireCost();
     } else {
       return 0.0;
     }
@@ -102,6 +115,8 @@ class ClickerBrain extends ChangeNotifier {
       return managerLogic.managerIncrement();
     } else if (which == kCeoName) {
       return ceoLogic.ceoIncrement();
+    } else if (which == kMillionaireName) {
+      return millionaireLogic.millionaireIncrement();
     } else {
       return 0.0;
     }
@@ -120,6 +135,8 @@ class ClickerBrain extends ChangeNotifier {
       return managerLogic.managerNumber();
     } else if (which == kCeoName) {
       return ceoLogic.ceoNumber();
+    } else if (which == kMillionaireName) {
+      return millionaireLogic.millionaireNumber();
     } else {
       return 0.0;
     }
@@ -142,6 +159,8 @@ class ClickerBrain extends ChangeNotifier {
       return managerLogic.managerDurationMilliseconds();
     } else if (which == kCeoName) {
       return ceoLogic.ceoDurationMilliseconds();
+    } else if (which == kMillionaireName) {
+      return millionaireLogic.millionaireDurationMilliseconds();
     } else {
       return 0.0;
     }
@@ -163,6 +182,8 @@ class ClickerBrain extends ChangeNotifier {
       return managerLogic.managerDecreaseDurationCost();
     } else if (which == kCeoName) {
       return ceoLogic.ceoDecreaseDurationCost();
+    } else if (which == kMillionaireName) {
+      return millionaireLogic.millionaireDecreaseDurationCost();
     } else {
       return 0.0;
     }
@@ -177,6 +198,8 @@ class ClickerBrain extends ChangeNotifier {
       return managerLogic.shouldAnimateManager();
     } else if (which == kCeoName) {
       return ceoLogic.shouldAnimateCeo();
+    } else if (which == kMillionaireName) {
+      return millionaireLogic.shouldAnimateMillionaire();
     } else {
       return 0.0;
     }
@@ -191,6 +214,8 @@ class ClickerBrain extends ChangeNotifier {
       return managerLogic.isManagerVisible(workerLogic.workerNumber());
     } else if (which == kCeoName) {
       return ceoLogic.isCeoVisible(managerLogic.managerNumber());
+    } else if (which == kMillionaireName) {
+      return millionaireLogic.isMillionaireVisible(ceoLogic.ceoNumber());
     } else {
       return false;
     }
@@ -497,6 +522,72 @@ class ClickerBrain extends ChangeNotifier {
     moneyLogic.decreaseMoney(ceoLogic.ceoDecreaseDurationCost());
     ceoLogic.decreaseCeoDuration();
     ceoLogic.increaseCeoDecreaseDurationCost();
+    launchIsFromGlobalUpgrade();
+    cancelTimers();
+    notifyListeners();
+  }
+
+  // millionaire
+
+  double wasMillionaireInitiated = 0;
+
+  Timer millionaireTimer = Timer(Duration(milliseconds: 0), () {});
+
+  void millionaireTimerStart(controller) {
+    millionaireTimer = Timer.periodic(
+      getDuration(kMillionaireName),
+      (timer) {
+        ceoLogic.millionaireBuysCeos(millionaireLogic.millionaireNumber());
+        controller.reset();
+        controller.forward();
+        notifyListeners();
+      },
+    );
+  }
+
+  void buyMillionaire(controller) {
+    if (moneyLogic.canUpgrade(millionaireLogic.millionaireCost())) {
+      moneyLogic.decreaseMoney(millionaireLogic.millionaireCost());
+      clickerFunctions.upgradeRow(
+          isClickRow: false,
+          increment: getIncrement(kMillionaireName),
+          costOne: millionaireLogic.millionaireCostOne(),
+          shouldAnimate: millionaireLogic.shouldAnimateMillionaire(),
+          numberToChange: millionaireLogic.millionaireNumber(),
+          boxCostOneName: millionaireLogic.millionaireCostOneString,
+          boxCostName: millionaireLogic.millionaireCostString,
+          boxNumberName: millionaireLogic.millionaireNumberString,
+          boxShouldAnimate: millionaireLogic.shouldAnimateMillionaireString);
+      notifyListeners();
+      initialMillionaireTimer(controller);
+    }
+  }
+
+  void initialMillionaireTimer(controller) {
+    if (shouldAnimate(kMillionaireName) == 1.0 &&
+        wasMillionaireInitiated == 0) {
+      wasMillionaireInitiated++;
+      controller.forward();
+      millionaireTimerStart(controller);
+    }
+  }
+
+  void updateMillionaireIncrement() {
+    clickerFunctions.updateIncrement(
+        increment: getIncrement(kMillionaireName),
+        cost: millionaireLogic.millionaireCost(),
+        costOne: millionaireLogic.millionaireCostOne(),
+        boxIncrementName: millionaireLogic.millionaireIncrementString,
+        boxCostName: millionaireLogic.millionaireCostString,
+        boxCostOneName: millionaireLogic.millionaireCostOneString);
+    notifyListeners();
+  }
+
+  void decreaseMillionaireDuration(controller) {
+    moneyLogic
+        .decreaseMoney(millionaireLogic.millionaireDecreaseDurationCost());
+    millionaireLogic.decreaseMillionaireDuration();
+    millionaireLogic.increaseMillionaireDecreaseDurationCost();
     launchIsFromGlobalUpgrade();
     cancelTimers();
     notifyListeners();
