@@ -167,6 +167,7 @@ class UpgradeTab extends StatelessWidget {
                 Phoenix.rebirth(context);
               }
             },
+            remove: () => listOfUpgrades.removeAt(9),
             duration: clickerBrain.getDurationString(kAutoClickName),
             title: kAutoClickName,
             cost: clickerBrain.getDecreaseDurationCost(kAutoClickName),

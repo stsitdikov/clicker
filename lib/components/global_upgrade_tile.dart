@@ -4,6 +4,7 @@ import 'package:clicker/logic/constants.dart';
 
 class GlobalUpgradeTile extends StatelessWidget {
   final onTap;
+  final remove;
   final String duration;
   final String title;
   final String cost;
@@ -11,6 +12,7 @@ class GlobalUpgradeTile extends StatelessWidget {
 
   GlobalUpgradeTile(
       {required this.onTap,
+      required this.remove,
       required this.duration,
       required this.title,
       required this.cost,
@@ -26,8 +28,31 @@ class GlobalUpgradeTile extends StatelessWidget {
       textOfUpgrade = 'Fully upgraded';
     }
 
+    void removeGlobalUpgradeTile() {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: Text('Remove this button?'),
+                content: Text(title +
+                    ' is fully upgraded, do you want to remove this button?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'No'),
+                    child: Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context, 'Yes');
+                      remove();
+                    },
+                    child: Text('Yes'),
+                  ),
+                ],
+              ));
+    }
+
     return GestureDetector(
-      onTap: canUpgradeMore ? onTap : () {},
+      onTap: canUpgradeMore ? onTap : removeGlobalUpgradeTile,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.teal,
