@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:clicker/custom_widgets/upgrade_container.dart';
+import 'package:clicker/components/upgrade_container.dart';
+import 'package:clicker/components/increment_container.dart';
 import 'package:clicker/logic/constants.dart';
 
 class ReusableProgressRow extends StatelessWidget {
@@ -21,7 +22,7 @@ class ReusableProgressRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70.0,
+      height: kRowHeight,
       child: Row(
         children: [
           Expanded(
@@ -57,19 +58,11 @@ class ReusableProgressRow extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: onIncrementTap,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey,
-                  border: Border(
-                    top: BorderSide(color: kBorderColor),
-                    right: BorderSide(color: kBorderColor),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'x $incrementNumber',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
+              child: IncrementContainer(
+                incrementNumber,
+                Border(
+                  top: BorderSide(color: kBorderColor),
+                  right: BorderSide(color: kBorderColor),
                 ),
               ),
             ),

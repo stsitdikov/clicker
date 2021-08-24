@@ -13,16 +13,16 @@ class MoneyDisplay extends StatelessWidget {
         Provider.of<ClickerBrain>(context, listen: false).clearBox();
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 60.0, vertical: 25.0),
+        margin: EdgeInsets.symmetric(horizontal: 70.0, vertical: 15.0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.blueGrey,
         ),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 30.0),
+          margin: EdgeInsets.symmetric(horizontal: 20.0),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.green[500],
+            color: Colors.green[600],
           ),
           child: Center(
             child: Text(

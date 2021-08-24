@@ -1,24 +1,28 @@
-import 'package:clicker/components/autoclick_row.dart';
-import 'package:clicker/components/click_row.dart';
-import 'package:clicker/components/manager_row.dart';
-import 'package:clicker/components/worker_row.dart';
-import 'package:clicker/logic/clicker_brain.dart';
 import 'package:flutter/material.dart';
-import 'package:clicker/components/money_display.dart';
 import 'package:provider/provider.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:clicker/logic/constants.dart';
+import 'package:clicker/logic/clicker_brain.dart';
+
+import 'tabs/main_tab.dart';
+import 'tabs/upgrade_tab.dart';
+import 'tabs/info_tab.dart';
 
 class ClickerScreen extends StatefulWidget {
+  final int initialIndex;
+  ClickerScreen(this.initialIndex);
   @override
   _ClickerScreenState createState() => _ClickerScreenState();
 }
 
 class _ClickerScreenState extends State<ClickerScreen>
     with TickerProviderStateMixin {
+  late int selectedIndex = widget.initialIndex;
+
+  late var clickerBrain = Provider.of<ClickerBrain>(context);
+
   late final AnimationController autoClickController = AnimationController(
-    duration: Provider.of<ClickerBrain>(context).getAutoClickDuration(),
+    duration: clickerBrain.getDuration(kAutoClickName),
     vsync: this,
   );
   late final Animation<double> autoClickAnimation = CurvedAnimation(
@@ -27,7 +31,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController workerController = AnimationController(
-    duration: Provider.of<ClickerBrain>(context).getWorkerDuration(),
+    duration: clickerBrain.getDuration(kWorkerName),
     vsync: this,
   );
   late final Animation<double> workerAnimation = CurvedAnimation(
@@ -36,7 +40,7 @@ class _ClickerScreenState extends State<ClickerScreen>
   );
 
   late final AnimationController managerController = AnimationController(
-    duration: Provider.of<ClickerBrain>(context).getManagerDuration(),
+    duration: clickerBrain.getDuration(kManagerName),
     vsync: this,
   );
   late final Animation<double> managerAnimation = CurvedAnimation(
@@ -44,64 +48,87 @@ class _ClickerScreenState extends State<ClickerScreen>
     curve: Curves.linear,
   );
 
+  late final AnimationController ceoController = AnimationController(
+    duration: clickerBrain.getDuration(kCeoName),
+    vsync: this,
+  );
+  late final Animation<double> ceoAnimation = CurvedAnimation(
+    parent: ceoController,
+    curve: Curves.linear,
+  );
+
+  late final AnimationController millionaireController = AnimationController(
+    duration: clickerBrain.getDuration(kMillionaireName),
+    vsync: this,
+  );
+  late final Animation<double> millionaireAnimation = CurvedAnimation(
+    parent: millionaireController,
+    curve: Curves.linear,
+  );
+
   @override
   void dispose() {
-    super.dispose();
     autoClickController.dispose();
     workerController.dispose();
     managerController.dispose();
-  }
-
-  late Box<double> box;
-
-  @override
-  void initState() {
-    super.initState();
-    box = Hive.box(kClickerBrainBox);
+    ceoController.dispose();
+    millionaireController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // if (Provider.of<ClickerBrain>(context).shouldAnimateAutoClick()) {
-    //   autoClickController.repeat();
-    // }
+    clickerBrain.launchIsNormal();
 
-    if (Provider.of<ClickerBrain>(context).shouldStartWorkerAnimation()) {
-      workerController.repeat();
+    List<AnimationController> animationControllerList = [
+      autoClickController,
+      workerController,
+      managerController,
+      ceoController,
+      millionaireController,
+    ];
+    List<Animation<double>> animationList = [
+      autoClickAnimation,
+      workerAnimation,
+      managerAnimation,
+      ceoAnimation,
+      millionaireAnimation,
+    ];
+
+    List<Widget> tabs = <Widget>[
+      MainTab(animationControllerList, animationList),
+      UpgradeTab(animationControllerList),
+      InfoTab(),
+    ];
+
+    void onTabTapped(int index) {
+      setState(() {
+        selectedIndex = index;
+      });
     }
-
-    if (Provider.of<ClickerBrain>(context).shouldStartManagerAnimation()) {
-      managerController.repeat();
-    }
-
-    Provider.of<ClickerBrain>(context)
-        .initialAutoClickTimer(autoClickController);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Clicker'),
+        title: Text(kAppName),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: MoneyDisplay(),
-          ),
-          Consumer<ClickerBrain>(
-            builder: (context, clickerBrain, child) {
-              return ListView(
-                shrinkWrap: true,
-                children: [
-                  // ManagerRow(managerAnimation),
-                  // WorkerRow(workerAnimation),
-                  AutoClickRow(autoClickAnimation, autoClickController),
-                  ClickRow(),
-                ],
-              );
-            },
-          ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(.60),
+        selectedFontSize: 14.0,
+        unselectedFontSize: 10.0,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: 'Main'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.upgrade_outlined), label: 'Upgrades'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.info_outline), label: 'Info'),
         ],
+        currentIndex: selectedIndex,
+        onTap: onTabTapped,
       ),
+      body: tabs.elementAt(selectedIndex),
     );
   }
 }
