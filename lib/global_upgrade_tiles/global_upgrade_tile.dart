@@ -38,14 +38,20 @@ class GlobalUpgradeTile extends StatelessWidget {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.pop(context, 'No'),
-                    child: Text('No'),
+                    child: Text(
+                      'No',
+                      style: kDialogButtonTextStyle,
+                    ),
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.pop(context, 'Yes');
                       remove();
+                      Navigator.pop(context, 'Yes');
                     },
-                    child: Text('Yes'),
+                    child: Text(
+                      'Yes',
+                      style: kDialogButtonTextStyle,
+                    ),
                   ),
                 ],
               ));
@@ -56,9 +62,8 @@ class GlobalUpgradeTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.teal,
-          borderRadius: BorderRadius.horizontal(
-            left: Radius.circular(15),
-            right: Radius.circular(15),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
           ),
         ),
         height: kGlobalUpgradeTileHeight,

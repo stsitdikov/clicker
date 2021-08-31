@@ -1,12 +1,19 @@
-import 'package:clicker/components/global_upgrade_tile_blocked.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/logic/constants.dart';
 
-import 'package:clicker/components/global_upgrade_tile.dart';
+import 'package:clicker/global_upgrade_tiles/global_upgrade_tile_blocked.dart';
+import 'package:clicker/global_upgrade_tiles/2_autoclick_global_upgrade.dart';
+import 'package:clicker/global_upgrade_tiles/3_worker_global_upgrade.dart';
+import 'package:clicker/global_upgrade_tiles/4_manager_global_upgrade.dart';
+import 'package:clicker/global_upgrade_tiles/5_ceo_global_upgrade.dart';
+import 'package:clicker/global_upgrade_tiles/6_millionaire_global_upgrade.dart';
+
+List<Widget> listOfUpgrades = [
+  GlobalUpgradeTileBlocked(),
+];
 
 class UpgradeTab extends StatelessWidget {
   final List<AnimationController> animationControllerList;
@@ -19,173 +26,61 @@ class UpgradeTab extends StatelessWidget {
     if (clickerBrain.canShowGlobalUpgrade(kAutoClickName) &&
         clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0) {
       clickerBrain.updateShowedGlobalUpgrade(kAutoClickName);
+      listOfUpgrades.insert(
+        listOfUpgrades.length - 1,
+        AutoClickGlobalUpgrade(
+            animationControllerList[0], () => listOfUpgrades.removeAt(0)),
+      );
     }
 
     if (clickerBrain.canShowGlobalUpgrade(kWorkerName) &&
         clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0) {
       clickerBrain.updateShowedGlobalUpgrade(kWorkerName);
+      listOfUpgrades.insert(
+        listOfUpgrades.length - 1,
+        WorkerGlobalUpgrade(
+            animationControllerList[1], () => listOfUpgrades.removeAt(1)),
+      );
     }
 
     if (clickerBrain.canShowGlobalUpgrade(kManagerName) &&
         clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0) {
       clickerBrain.updateShowedGlobalUpgrade(kManagerName);
+      listOfUpgrades.insert(
+        listOfUpgrades.length - 1,
+        ManagerGlobalUpgrade(
+            animationControllerList[2], () => listOfUpgrades.removeAt(2)),
+      );
     }
 
     if (clickerBrain.canShowGlobalUpgrade(kCeoName) &&
         clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0) {
       clickerBrain.updateShowedGlobalUpgrade(kCeoName);
+      listOfUpgrades.insert(
+        listOfUpgrades.length - 1,
+        CeoGlobalUpgrade(
+            animationControllerList[3], () => listOfUpgrades.removeAt(3)),
+      );
     }
 
     if (clickerBrain.canShowGlobalUpgrade(kMillionaireName) &&
         clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0) {
       clickerBrain.updateShowedGlobalUpgrade(kMillionaireName);
+      listOfUpgrades.insert(
+        listOfUpgrades.length - 1,
+        MillionaireGlobalUpgrade(
+            animationControllerList[4], () => listOfUpgrades.removeAt(4)),
+      );
+      listOfUpgrades.removeAt(5);
     }
-
-    List<Widget> listOfUpgrades = [
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 1.0,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
-          child: GlobalUpgradeTile(
-              canUpgradeMore: clickerBrain.canDecreaseDuration(
-                  kMillionaireName, kDecreaseMillionaireDurationBy),
-              onTap: () {
-                if (clickerBrain.canDecreaseDuration(
-                        kMillionaireName, kDecreaseMillionaireDurationBy) &&
-                    clickerBrain.canShowGlobalUpgrade(kMillionaireName)) {
-                  clickerBrain
-                      .decreaseMillionaireDuration(animationControllerList[4]);
-                  Phoenix.rebirth(context);
-                }
-              },
-              duration: clickerBrain.getDurationString(kMillionaireName),
-              title: kMillionaireName,
-              cost: clickerBrain.getDecreaseDurationCost(kMillionaireName)),
-        ),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0 &&
-            clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0 &&
-            clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0 &&
-            clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0 &&
-            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
-        child: GlobalUpgradeTileBlocked(),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
-          child: GlobalUpgradeTile(
-              canUpgradeMore: clickerBrain.canDecreaseDuration(
-                  kCeoName, kDecreaseCeoDurationBy),
-              onTap: () {
-                if (clickerBrain.canDecreaseDuration(
-                        kCeoName, kDecreaseCeoDurationBy) &&
-                    clickerBrain.canShowGlobalUpgrade(kCeoName)) {
-                  clickerBrain.decreaseCeoDuration(animationControllerList[3]);
-                  Phoenix.rebirth(context);
-                }
-              },
-              duration: clickerBrain.getDurationString(kCeoName),
-              title: kCeoName.toUpperCase(),
-              cost: clickerBrain.getDecreaseDurationCost(kCeoName)),
-        ),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0 &&
-            clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0 &&
-            clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0 &&
-            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
-        child: GlobalUpgradeTileBlocked(),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
-          child: GlobalUpgradeTile(
-              canUpgradeMore: clickerBrain.canDecreaseDuration(
-                  kManagerName, kDecreaseManagerDurationBy),
-              onTap: () {
-                if (clickerBrain.canDecreaseDuration(
-                        kManagerName, kDecreaseManagerDurationBy) &&
-                    clickerBrain.canShowGlobalUpgrade(kManagerName)) {
-                  clickerBrain
-                      .decreaseManagerDuration(animationControllerList[2]);
-                  Phoenix.rebirth(context);
-                }
-              },
-              duration: clickerBrain.getDurationString(kManagerName),
-              title: kManagerName,
-              cost: clickerBrain.getDecreaseDurationCost(kManagerName)),
-        ),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0 &&
-            clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0 &&
-            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
-        child: GlobalUpgradeTileBlocked(),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
-          child: GlobalUpgradeTile(
-            canUpgradeMore: clickerBrain.canDecreaseDuration(
-                kWorkerName, kDecreaseWorkerDurationBy),
-            onTap: () {
-              if (clickerBrain.canDecreaseDuration(
-                      kWorkerName, kDecreaseWorkerDurationBy) &&
-                  clickerBrain.canShowGlobalUpgrade(kWorkerName)) {
-                clickerBrain.decreaseWorkerDuration(animationControllerList[1]);
-                Phoenix.rebirth(context);
-              }
-            },
-            duration: clickerBrain.getDurationString(kWorkerName),
-            title: kWorkerName,
-            cost: clickerBrain.getDecreaseDurationCost(kWorkerName),
-          ),
-        ),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0 &&
-            clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
-        child: GlobalUpgradeTileBlocked(),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
-          child: GlobalUpgradeTile(
-            canUpgradeMore: clickerBrain.canDecreaseDuration(
-                kAutoClickName, kDecreaseAutoClickDurationBy),
-            onTap: () {
-              if (clickerBrain.canDecreaseDuration(
-                      kAutoClickName, kDecreaseAutoClickDurationBy) &&
-                  clickerBrain.canShowGlobalUpgrade(kAutoClickName)) {
-                clickerBrain
-                    .decreaseAutoClickDuration(animationControllerList[0]);
-                Phoenix.rebirth(context);
-              }
-            },
-            remove: () => listOfUpgrades.removeAt(9),
-            duration: clickerBrain.getDurationString(kAutoClickName),
-            title: kAutoClickName,
-            cost: clickerBrain.getDecreaseDurationCost(kAutoClickName),
-          ),
-        ),
-      ),
-      Visibility(
-        visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0,
-        child: GlobalUpgradeTileBlocked(),
-      ),
-    ];
 
     return Align(
       alignment: Alignment.bottomLeft,
       child: SingleChildScrollView(
         padding: EdgeInsets.only(top: 15.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          verticalDirection: VerticalDirection.up,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: listOfUpgrades,
         ),
       ),
