@@ -16,7 +16,6 @@ class GlobalUpgradeTileBlocked extends StatelessWidget {
             GlobalUpgradeTile(
                 canUpgradeMore: true,
                 onTap: () {},
-                remove: () {},
                 duration: '30',
                 title: 'AutoClicker',
                 cost: 'cost'),

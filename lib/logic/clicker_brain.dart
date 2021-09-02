@@ -229,8 +229,8 @@ class ClickerBrain extends ChangeNotifier {
   double showedGlobalUpgrade(which) =>
       box.get('showed${which}GlobalUpgrade', defaultValue: 0.0) as double;
 
-  void updateShowedGlobalUpgrade(which) =>
-      box.put('showed${which}GlobalUpgrade', 1.0);
+  void updateShowedGlobalUpgrade(which, how) =>
+      box.put('showed${which}GlobalUpgrade', how);
 
   // click row
 

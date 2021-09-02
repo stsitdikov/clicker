@@ -8,9 +8,8 @@ import 'package:clicker/logic/constants.dart';
 import 'package:clicker/global_upgrade_tiles/global_upgrade_tile.dart';
 
 class WorkerGlobalUpgrade extends StatelessWidget {
-  WorkerGlobalUpgrade(this.controller, this.remove);
+  WorkerGlobalUpgrade(this.controller);
   final AnimationController controller;
-  final remove;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,6 @@ class WorkerGlobalUpgrade extends StatelessWidget {
             Phoenix.rebirth(context);
           }
         },
-        remove: remove,
         duration: clickerBrain.getDurationString(kWorkerName),
         title: kWorkerName,
         cost: clickerBrain.getDecreaseDurationCost(kWorkerName),

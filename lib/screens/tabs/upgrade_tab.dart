@@ -11,10 +11,6 @@ import 'package:clicker/global_upgrade_tiles/4_manager_global_upgrade.dart';
 import 'package:clicker/global_upgrade_tiles/5_ceo_global_upgrade.dart';
 import 'package:clicker/global_upgrade_tiles/6_millionaire_global_upgrade.dart';
 
-List<Widget> listOfUpgrades = [
-  GlobalUpgradeTileBlocked(),
-];
-
 class UpgradeTab extends StatelessWidget {
   final List<AnimationController> animationControllerList;
   UpgradeTab(this.animationControllerList);
@@ -23,56 +19,55 @@ class UpgradeTab extends StatelessWidget {
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
 
-    if (clickerBrain.canShowGlobalUpgrade(kAutoClickName) &&
-        clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0) {
-      clickerBrain.updateShowedGlobalUpgrade(kAutoClickName);
-      listOfUpgrades.insert(
-        listOfUpgrades.length - 1,
-        AutoClickGlobalUpgrade(
-            animationControllerList[0], () => listOfUpgrades.removeAt(0)),
-      );
+    for (String name in kListOfNamesExceptClick) {
+      if (clickerBrain.canShowGlobalUpgrade(name) &&
+          clickerBrain.showedGlobalUpgrade(name) == 0.0) {
+        clickerBrain.updateShowedGlobalUpgrade(name, 1.0);
+      }
     }
 
-    if (clickerBrain.canShowGlobalUpgrade(kWorkerName) &&
-        clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0) {
-      clickerBrain.updateShowedGlobalUpgrade(kWorkerName);
-      listOfUpgrades.insert(
-        listOfUpgrades.length - 1,
-        WorkerGlobalUpgrade(
-            animationControllerList[1], () => listOfUpgrades.removeAt(1)),
-      );
-    }
-
-    if (clickerBrain.canShowGlobalUpgrade(kManagerName) &&
-        clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0) {
-      clickerBrain.updateShowedGlobalUpgrade(kManagerName);
-      listOfUpgrades.insert(
-        listOfUpgrades.length - 1,
-        ManagerGlobalUpgrade(
-            animationControllerList[2], () => listOfUpgrades.removeAt(2)),
-      );
-    }
-
-    if (clickerBrain.canShowGlobalUpgrade(kCeoName) &&
-        clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0) {
-      clickerBrain.updateShowedGlobalUpgrade(kCeoName);
-      listOfUpgrades.insert(
-        listOfUpgrades.length - 1,
-        CeoGlobalUpgrade(
-            animationControllerList[3], () => listOfUpgrades.removeAt(3)),
-      );
-    }
-
-    if (clickerBrain.canShowGlobalUpgrade(kMillionaireName) &&
-        clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0) {
-      clickerBrain.updateShowedGlobalUpgrade(kMillionaireName);
-      listOfUpgrades.insert(
-        listOfUpgrades.length - 1,
-        MillionaireGlobalUpgrade(
-            animationControllerList[4], () => listOfUpgrades.removeAt(4)),
-      );
-      listOfUpgrades.removeAt(5);
-    }
+    List<Widget> listOfUpgrades = [
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0,
+          child: GlobalUpgradeTileBlocked()),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
+          child: AutoClickGlobalUpgrade(animationControllerList[0])),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
+          child: GlobalUpgradeTileBlocked()),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0,
+          child: WorkerGlobalUpgrade(animationControllerList[1])),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
+          child: GlobalUpgradeTileBlocked()),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0,
+          child: ManagerGlobalUpgrade(animationControllerList[2])),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kManagerName) != 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
+          child: GlobalUpgradeTileBlocked()),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0,
+          child: CeoGlobalUpgrade(animationControllerList[3])),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kCeoName) != 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kManagerName) != 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
+              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
+          child: GlobalUpgradeTileBlocked()),
+      Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 1.0,
+          child: MillionaireGlobalUpgrade(animationControllerList[4])),
+    ];
 
     return Align(
       alignment: Alignment.bottomLeft,

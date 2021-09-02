@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/logic/constants.dart';
 
 class GlobalUpgradeTile extends StatelessWidget {
   final onTap;
-  final remove;
   final String duration;
   final String title;
   final String cost;
@@ -12,7 +13,6 @@ class GlobalUpgradeTile extends StatelessWidget {
 
   GlobalUpgradeTile(
       {required this.onTap,
-      required this.remove,
       required this.duration,
       required this.title,
       required this.cost,
@@ -20,6 +20,8 @@ class GlobalUpgradeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var clickerBrain = Provider.of<ClickerBrain>(context);
+
     String textOfUpgrade = '';
 
     if (canUpgradeMore == true) {
@@ -45,8 +47,8 @@ class GlobalUpgradeTile extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      remove();
                       Navigator.pop(context, 'Yes');
+                      clickerBrain.updateShowedGlobalUpgrade(title, 2.0);
                     },
                     child: Text(
                       'Yes',

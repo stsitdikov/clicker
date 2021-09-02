@@ -8,9 +8,8 @@ import 'package:clicker/logic/constants.dart';
 import 'package:clicker/global_upgrade_tiles/global_upgrade_tile.dart';
 
 class AutoClickGlobalUpgrade extends StatelessWidget {
-  AutoClickGlobalUpgrade(this.controller, this.remove);
+  AutoClickGlobalUpgrade(this.controller);
   final AnimationController controller;
-  final remove;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,6 @@ class AutoClickGlobalUpgrade extends StatelessWidget {
             Phoenix.rebirth(context);
           }
         },
-        remove: remove,
         duration: clickerBrain.getDurationString(kAutoClickName),
         title: kAutoClickName,
         cost: clickerBrain.getDecreaseDurationCost(kAutoClickName),

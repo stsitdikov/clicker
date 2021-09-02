@@ -20,6 +20,13 @@ const double kMainIncrement = 1.2;
 const double kRowHeight = 70.0;
 const double kGlobalUpgradeTileHeight = 100.0;
 const Duration kShowRowDuration = Duration(milliseconds: 500);
+const List<String> kListOfNamesExceptClick = [
+  kAutoClickName,
+  kWorkerName,
+  kManagerName,
+  kCeoName,
+  kMillionaireName
+];
 
 // click row constants
 
