@@ -74,6 +74,14 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
+  void initialTimers(animationControllerList) {
+    initialAutoClickTimer(animationControllerList[0]);
+    initialWorkerTimer(animationControllerList[1]);
+    initialManagerTimer(animationControllerList[2]);
+    initialCeoTimer(animationControllerList[3]);
+    initialMillionaireTimer(animationControllerList[4]);
+  }
+
   void cancelTimers() {
     autoClickTimer.cancel();
     workerTimer.cancel();
@@ -229,8 +237,12 @@ class ClickerBrain extends ChangeNotifier {
   double showedGlobalUpgrade(which) =>
       box.get('showed${which}GlobalUpgrade', defaultValue: 0.0) as double;
 
-  void updateShowedGlobalUpgrade(which, how) =>
-      box.put('showed${which}GlobalUpgrade', how);
+  void updateShowedGlobalUpgrade(which, how, shouldNotify) {
+    box.put('showed${which}GlobalUpgrade', how);
+    if (shouldNotify == true) {
+      notifyListeners();
+    }
+  }
 
   // click row
 

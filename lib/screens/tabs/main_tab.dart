@@ -49,8 +49,6 @@ class _MainTabState extends State<MainTab> {
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
 
-    // clickerBrain.clearBox();
-
     Widget transition(_, index, animation) {
       if (index < listOfRows.length) {
         return SizeTransition(
@@ -63,102 +61,41 @@ class _MainTabState extends State<MainTab> {
       }
     }
 
-    clickerBrain.initialAutoClickTimer(widget.animationControllerList[0]);
-    clickerBrain.initialWorkerTimer(widget.animationControllerList[1]);
-    clickerBrain.initialManagerTimer(widget.animationControllerList[2]);
-    clickerBrain.initialCeoTimer(widget.animationControllerList[3]);
-    clickerBrain.initialMillionaireTimer(widget.animationControllerList[4]);
-
     if (removedBlockedRows == 0) {
+      clickerBrain.initialTimers(widget.animationControllerList);
       int i = 0;
       for (String name in kListOfNamesExceptClick) {
         i++;
         if (clickerBrain.showedRow(name) == 1.0) {
           listOfRows.removeAt(i);
+          if (name == kListOfNamesExceptClick.last) {
+            listOfRows.removeAt(i + 1);
+          }
         }
       }
-      listOfRows.removeAt(i + 1);
       removedBlockedRows++;
     }
 
-    // for (String name in kListOfNamesExceptClick) {
-    //   if (clickerBrain.isVisible(name) && clickerBrain.showedRow(name) == 0.0) {
-    //     print(name + ' accepted');
-    //     listOfRows.removeAt(kListOfNamesExceptClick.indexOf(name) + 1);
-    //     rowsKey.currentState?.insertItem(
-    //         kListOfNamesExceptClick.indexOf(name) + 1,
-    //         duration: kShowRowDuration);
-    //     clickerBrain.updateShowedRow(name);
-    //     clickerBrain.increaseListFlex();
-    //     Timer(kShowRowDuration, () {
-    //       scrollController.animateTo(scrollController.position.maxScrollExtent,
-    //           duration: kShowRowDuration, curve: Curves.linear);
-    //     });
-    //   }
-    // }
-
-    if (clickerBrain.isVisible(kAutoClickName) &&
-        clickerBrain.showedRow(kAutoClickName) == 0.0) {
-      listOfRows.removeAt(1);
-      rowsKey.currentState?.insertItem(1, duration: kShowRowDuration);
-      clickerBrain.updateShowedRow(kAutoClickName);
-      clickerBrain.increaseListFlex();
-      Timer(kShowRowDuration, () {
-        scrollController.animateTo(scrollController.position.maxScrollExtent,
-            duration: kShowRowDuration, curve: Curves.linear);
-      });
-    }
-
-    if (clickerBrain.isVisible(kWorkerName) &&
-        clickerBrain.showedRow(kWorkerName) == 0.0) {
-      listOfRows.removeAt(2);
-      rowsKey.currentState?.insertItem(2, duration: kShowRowDuration);
-      clickerBrain.updateShowedRow(kWorkerName);
-      clickerBrain.increaseListFlex();
-      Timer(kShowRowDuration, () {
-        scrollController.animateTo(scrollController.position.maxScrollExtent,
-            duration: kShowRowDuration, curve: Curves.linear);
-      });
-    }
-
-    if (clickerBrain.isVisible(kManagerName) &&
-        clickerBrain.showedRow(kManagerName) == 0.0) {
-      listOfRows.removeAt(3);
-      rowsKey.currentState?.insertItem(3, duration: kShowRowDuration);
-      clickerBrain.updateShowedRow(kManagerName);
-      clickerBrain.increaseListFlex();
-      Timer(kShowRowDuration, () {
-        scrollController.animateTo(scrollController.position.maxScrollExtent,
-            duration: kShowRowDuration, curve: Curves.linear);
-      });
-    }
-
-    if (clickerBrain.isVisible(kCeoName) &&
-        clickerBrain.showedRow(kCeoName) == 0.0) {
-      listOfRows.removeAt(4);
-      rowsKey.currentState?.insertItem(4, duration: kShowRowDuration);
-      clickerBrain.updateShowedRow(kCeoName);
-      clickerBrain.increaseListFlex();
-      Timer(kShowRowDuration, () {
-        scrollController.animateTo(scrollController.position.maxScrollExtent,
-            duration: kShowRowDuration, curve: Curves.linear);
-      });
-    }
-
-    if (clickerBrain.isVisible(kMillionaireName) &&
-        clickerBrain.showedRow(kMillionaireName) == 0.0) {
-      listOfRows.removeAt(5);
-      rowsKey.currentState?.insertItem(5, duration: kShowRowDuration);
-      rowsKey.currentState?.removeItem(
-        6,
-        (context, animation) => transition(context, 6, animation),
-      );
-      clickerBrain.updateShowedRow(kMillionaireName);
-      clickerBrain.increaseListFlex();
-      Timer(kShowRowDuration, () {
-        scrollController.animateTo(scrollController.position.maxScrollExtent,
-            duration: kShowRowDuration, curve: Curves.linear);
-      });
+    for (String name in kListOfNamesExceptClick) {
+      if (clickerBrain.isVisible(name) && clickerBrain.showedRow(name) == 0.0) {
+        listOfRows.removeAt(kListOfNamesExceptClick.indexOf(name) + 1);
+        rowsKey.currentState?.insertItem(
+            kListOfNamesExceptClick.indexOf(name) + 1,
+            duration: kShowRowDuration);
+        if (name == kListOfNamesExceptClick.last) {
+          rowsKey.currentState?.removeItem(
+            kListOfNamesExceptClick.indexOf(name) + 2,
+            (context, animation) => transition(
+                context, kListOfNamesExceptClick.indexOf(name) + 2, animation),
+          );
+        }
+        clickerBrain.updateShowedRow(name);
+        clickerBrain.increaseListFlex();
+        Timer(kShowRowDuration, () {
+          scrollController.animateTo(scrollController.position.maxScrollExtent,
+              duration: kShowRowDuration, curve: Curves.linear);
+        });
+      }
     }
 
     return Column(
