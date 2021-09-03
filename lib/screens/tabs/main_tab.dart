@@ -68,22 +68,14 @@ class _MainTabState extends State<MainTab> {
     clickerBrain.initialMillionaireTimer(widget.animationControllerList[4]);
 
     if (removedBlockedRows == 0) {
-      if (clickerBrain.showedRow(kAutoClickName) == 1.0) {
-        listOfRows.removeAt(1);
+      int i = 1;
+      for (String name in kListOfNamesExceptClick) {
+        if (clickerBrain.showedRow(name) == 1.0) {
+          listOfRows.removeAt(i);
+        }
+        i++;
       }
-      if (clickerBrain.showedRow(kWorkerName) == 1.0) {
-        listOfRows.removeAt(2);
-      }
-      if (clickerBrain.showedRow(kManagerName) == 1.0) {
-        listOfRows.removeAt(3);
-      }
-      if (clickerBrain.showedRow(kCeoName) == 1.0) {
-        listOfRows.removeAt(4);
-      }
-      if (clickerBrain.showedRow(kMillionaireName) == 1.0) {
-        listOfRows.removeAt(5);
-        listOfRows.removeAt(6);
-      }
+      listOfRows.removeAt(i + 1);
       removedBlockedRows++;
     }
 
