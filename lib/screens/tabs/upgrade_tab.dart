@@ -22,7 +22,7 @@ class UpgradeTab extends StatelessWidget {
     for (String name in kListOfNamesExceptClick) {
       if (clickerBrain.canShowGlobalUpgrade(name) &&
           clickerBrain.showedGlobalUpgrade(name) == 0.0) {
-        clickerBrain.updateShowedGlobalUpgrade(name, 1.0);
+        clickerBrain.updateShowedGlobalUpgrade(name, 1.0, false);
       }
     }
 

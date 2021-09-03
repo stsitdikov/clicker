@@ -48,7 +48,7 @@ class GlobalUpgradeTile extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context, 'Yes');
-                      clickerBrain.updateShowedGlobalUpgrade(title, 2.0);
+                      clickerBrain.updateShowedGlobalUpgrade(title, 2.0, true);
                     },
                     child: Text(
                       'Yes',

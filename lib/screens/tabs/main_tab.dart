@@ -49,6 +49,8 @@ class _MainTabState extends State<MainTab> {
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
 
+    // clickerBrain.clearBox();
+
     Widget transition(_, index, animation) {
       if (index < listOfRows.length) {
         return SizeTransition(
@@ -68,16 +70,32 @@ class _MainTabState extends State<MainTab> {
     clickerBrain.initialMillionaireTimer(widget.animationControllerList[4]);
 
     if (removedBlockedRows == 0) {
-      int i = 1;
+      int i = 0;
       for (String name in kListOfNamesExceptClick) {
+        i++;
         if (clickerBrain.showedRow(name) == 1.0) {
           listOfRows.removeAt(i);
         }
-        i++;
       }
       listOfRows.removeAt(i + 1);
       removedBlockedRows++;
     }
+
+    // for (String name in kListOfNamesExceptClick) {
+    //   if (clickerBrain.isVisible(name) && clickerBrain.showedRow(name) == 0.0) {
+    //     print(name + ' accepted');
+    //     listOfRows.removeAt(kListOfNamesExceptClick.indexOf(name) + 1);
+    //     rowsKey.currentState?.insertItem(
+    //         kListOfNamesExceptClick.indexOf(name) + 1,
+    //         duration: kShowRowDuration);
+    //     clickerBrain.updateShowedRow(name);
+    //     clickerBrain.increaseListFlex();
+    //     Timer(kShowRowDuration, () {
+    //       scrollController.animateTo(scrollController.position.maxScrollExtent,
+    //           duration: kShowRowDuration, curve: Curves.linear);
+    //     });
+    //   }
+    // }
 
     if (clickerBrain.isVisible(kAutoClickName) &&
         clickerBrain.showedRow(kAutoClickName) == 0.0) {
@@ -85,6 +103,10 @@ class _MainTabState extends State<MainTab> {
       rowsKey.currentState?.insertItem(1, duration: kShowRowDuration);
       clickerBrain.updateShowedRow(kAutoClickName);
       clickerBrain.increaseListFlex();
+      Timer(kShowRowDuration, () {
+        scrollController.animateTo(scrollController.position.maxScrollExtent,
+            duration: kShowRowDuration, curve: Curves.linear);
+      });
     }
 
     if (clickerBrain.isVisible(kWorkerName) &&
