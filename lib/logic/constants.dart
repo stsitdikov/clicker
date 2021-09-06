@@ -13,85 +13,66 @@ const String kClickerScreenName = 'ClickerScreen';
 const String kTestScreenName = 'TestScreen';
 const String kLaunchScreenName = 'LaunchScreen';
 
+// row names
+
+const String kClickName = 'Click';
+const String kAutoClickName = 'AutoClick';
+const String kWorkerName = 'Worker';
+const String kManagerName = 'Manager';
+const String kCeoName = 'Ceo';
+const String kMillionaireName = 'Millionaire';
+
 // main constants
 
-const String kAppName = 'Clicker';
+const String kAppName = 'Click & Tick';
+const double kDefaultClickAmount = 10.0;
 const double kMainIncrement = 1.2;
 const double kRowHeight = 70.0;
 const double kGlobalUpgradeTileHeight = 100.0;
 const Duration kShowRowDuration = Duration(milliseconds: 500);
+
+// lists and maps
+
 const List<String> kListOfNamesExceptClick = [
   kAutoClickName,
   kWorkerName,
   kManagerName,
   kCeoName,
-  kMillionaireName
+  kMillionaireName,
 ];
-
-// click row constants
-
-const String kClickName = 'Click';
-const double kDefaultClickAmount = 10;
-const double kDefaultClickCost = 10;
-const double kDefaultClickCostOne = 10;
-const double kDefaultClickIncrement = 1;
-
-// autoclick constants
-
-const String kAutoClickName = 'AutoClick';
-const double kMoneyToShowAutoClick = 10;
-const double kDefaultAutoClickCost = 10;
-const double kDefaultAutoClickCostOne = 10;
-const double kDefaultAutoClickIncrement = 1;
-
-const double kDefaultAutoClickDurationMilliseconds = 3000;
-const double kDefaultAutoClickDecreaseDurationCost = 100;
-const double kDecreaseAutoClickDurationBy = 1000;
-
-// worker constants
-
-const String kWorkerName = 'Worker';
-const double kAutoClickNumberToShowWorker = 5;
-const double kDefaultWorkerCost = 10;
-const double kDefaultWorkerCostOne = 10;
-const double kDefaultWorkerIncrement = 1;
-
-const double kDefaultWorkerDurationMilliseconds = 10000;
-const double kDefaultWorkerDecreaseDurationCost = 1000;
-const double kDecreaseWorkerDurationBy = 5000;
-
-// manager constants
-
-const String kManagerName = 'Manager';
-const double kWorkerNumberToShowManager = 5;
-const double kDefaultManagerCost = 10;
-const double kDefaultManagerCostOne = 10;
-const double kDefaultManagerIncrement = 1;
-
-const double kDefaultManagerDurationMilliseconds = 30000;
-const double kDefaultManagerDecreaseDurationCost = 10000;
-const double kDecreaseManagerDurationBy = 10000;
-
-// ceo constants
-
-const String kCeoName = 'Ceo';
-const double kManagerNumberToShowCeo = 5;
-const double kDefaultCeoCost = 10;
-const double kDefaultCeoCostOne = 10;
-const double kDefaultCeoIncrement = 1;
-
-const double kDefaultCeoDurationMilliseconds = 60000;
-const double kDefaultCeoDecreaseDurationCost = 100000;
-const double kDecreaseCeoDurationBy = 10000;
-
-// millionaire constants
-
-const String kMillionaireName = 'Millionaire';
-const double kCeoNumberToShowMillionaire = 5;
-const double kDefaultMillionaireCost = 10;
-const double kDefaultMillionaireCostOne = 10;
-const double kDefaultMillionaireIncrement = 1;
-
-const double kDefaultMillionaireDurationMilliseconds = 120000;
-const double kDefaultMillionaireDecreaseDurationCost = 1000000;
-const double kDecreaseMillionaireDurationBy = 10000;
+const Map kMapOfDefaultCosts = {
+  kClickName: 10.0,
+  kAutoClickName: 10.0,
+  kWorkerName: 10.0,
+  kManagerName: 10.0,
+  kCeoName: 10.0,
+  kMillionaireName: 10.0,
+};
+const Map kMapOfDefaultDurations = {
+  kAutoClickName: 3000.0,
+  kWorkerName: 10000.0,
+  kManagerName: 30000.0,
+  kCeoName: 60000.0,
+  kMillionaireName: 120000.0,
+};
+const Map kMapOfDefaultDecreaseDurationCosts = {
+  kAutoClickName: 100.0,
+  kWorkerName: 1000.0,
+  kManagerName: 10000.0,
+  kCeoName: 100000.0,
+  kMillionaireName: 1000000.0,
+};
+const Map kMapOfVisibilityRequirements = {
+  kAutoClickName: 10.0,
+  kWorkerName: 5.0,
+  kManagerName: 5.0,
+  kCeoName: 5.0,
+  kMillionaireName: 5.0,
+};
+const Map kMapOfDecreaseDurationIncrements = {
+  kAutoClickName: 1000.0,
+  kWorkerName: 5000.0,
+  kManagerName: 10000.0,
+  kCeoName: 10000.0,
+  kMillionaireName: 10000.0,
+};

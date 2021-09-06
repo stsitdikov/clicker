@@ -17,11 +17,11 @@ class MillionaireGlobalUpgrade extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GlobalUpgradeTile(
-          canUpgradeMore: clickerBrain.canDecreaseDuration(
-              kMillionaireName, kDecreaseMillionaireDurationBy),
+          canUpgradeMore: clickerBrain.canDecreaseDuration(kMillionaireName,
+              kMapOfDecreaseDurationIncrements[kMillionaireName]),
           onTap: () {
-            if (clickerBrain.canDecreaseDuration(
-                    kMillionaireName, kDecreaseMillionaireDurationBy) &&
+            if (clickerBrain.canDecreaseDuration(kMillionaireName,
+                    kMapOfDecreaseDurationIncrements[kMillionaireName]) &&
                 clickerBrain.canShowGlobalUpgrade(kMillionaireName)) {
               clickerBrain.decreaseMillionaireDuration(controller);
               Phoenix.rebirth(context);
@@ -29,7 +29,7 @@ class MillionaireGlobalUpgrade extends StatelessWidget {
           },
           duration: clickerBrain.getDurationString(kMillionaireName),
           title: kMillionaireName,
-          cost: clickerBrain.getDecreaseDurationCost(kMillionaireName)),
+          cost: clickerBrain.getDecreaseDurationCostString(kMillionaireName)),
     );
   }
 }

@@ -18,11 +18,12 @@ class AutoClickRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getNumber(kAutoClickName) + ' x  $kAutoClickName',
+      title:
+          clickerBrain.getNumberString(kAutoClickName) + ' x  $kAutoClickName',
       onUpgradeTap: () {
         clickerBrainListenFalse.buyAutoClicker(controller);
       },
-      upgradeCost: clickerBrain.getCost(kAutoClickName),
+      upgradeCost: clickerBrain.getCostString(kAutoClickName),
       incrementNumber:
           clickerBrain.getIncrement(kAutoClickName).toStringAsFixed(0),
       onIncrementTap: () {

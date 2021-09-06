@@ -18,10 +18,10 @@ class CeoGlobalUpgrade extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GlobalUpgradeTile(
           canUpgradeMore: clickerBrain.canDecreaseDuration(
-              kCeoName, kDecreaseCeoDurationBy),
+              kCeoName, kMapOfDecreaseDurationIncrements[kCeoName]),
           onTap: () {
             if (clickerBrain.canDecreaseDuration(
-                    kCeoName, kDecreaseCeoDurationBy) &&
+                    kCeoName, kMapOfDecreaseDurationIncrements[kCeoName]) &&
                 clickerBrain.canShowGlobalUpgrade(kCeoName)) {
               clickerBrain.decreaseCeoDuration(controller);
               Phoenix.rebirth(context);
@@ -29,7 +29,7 @@ class CeoGlobalUpgrade extends StatelessWidget {
           },
           duration: clickerBrain.getDurationString(kCeoName),
           title: kCeoName.toUpperCase(),
-          cost: clickerBrain.getDecreaseDurationCost(kCeoName)),
+          cost: clickerBrain.getDecreaseDurationCostString(kCeoName)),
     );
   }
 }

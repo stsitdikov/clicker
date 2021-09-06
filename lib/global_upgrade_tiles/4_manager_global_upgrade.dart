@@ -18,10 +18,10 @@ class ManagerGlobalUpgrade extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GlobalUpgradeTile(
           canUpgradeMore: clickerBrain.canDecreaseDuration(
-              kManagerName, kDecreaseManagerDurationBy),
+              kManagerName, kMapOfDecreaseDurationIncrements[kManagerName]),
           onTap: () {
-            if (clickerBrain.canDecreaseDuration(
-                    kManagerName, kDecreaseManagerDurationBy) &&
+            if (clickerBrain.canDecreaseDuration(kManagerName,
+                    kMapOfDecreaseDurationIncrements[kManagerName]) &&
                 clickerBrain.canShowGlobalUpgrade(kManagerName)) {
               clickerBrain.decreaseManagerDuration(controller);
               Phoenix.rebirth(context);
@@ -29,7 +29,7 @@ class ManagerGlobalUpgrade extends StatelessWidget {
           },
           duration: clickerBrain.getDurationString(kManagerName),
           title: kManagerName,
-          cost: clickerBrain.getDecreaseDurationCost(kManagerName)),
+          cost: clickerBrain.getDecreaseDurationCostString(kManagerName)),
     );
   }
 }

@@ -8,78 +8,68 @@ class ClickerFunctions {
   Box box = Hive.box<double>(kClickerBrainBox);
 
   void upgradeRow({
-    required bool isClickRow,
+    required String name,
     required double increment,
     required double costOne,
     required double shouldAnimate,
     required double numberToChange,
-    required String boxCostOneName,
-    required String boxCostName,
-    required String boxNumberName,
-    required String boxShouldAnimate,
   }) {
     if (increment == 1.0) {
-      box.put(boxCostOneName, costOne * pow(kMainIncrement, increment));
-      box.put(boxCostName, costOne * pow(kMainIncrement, increment));
-      incrementalCost(0.0, increment, costOne, boxCostName);
-      if (isClickRow == true) {
-        updateNumberClickRow(boxNumberName, numberToChange, increment);
+      box.put('${name}CostOne', costOne * pow(kMainIncrement, increment));
+      box.put('${name}Cost', costOne * pow(kMainIncrement, increment));
+      incrementalCost(name, 0.0, increment, costOne);
+      if (name == kClickName) {
+        updateNumberClickRow(numberToChange, increment);
       } else {
-        updateNumber(boxNumberName, numberToChange, increment, shouldAnimate,
-            boxShouldAnimate);
+        updateNumber(name, numberToChange, increment, shouldAnimate);
       }
     } else {
-      box.put(boxCostOneName, costOne * pow(kMainIncrement, increment));
-      box.put(boxCostName, costOne * pow(kMainIncrement, increment));
-      incrementalCost(costOne * pow(kMainIncrement, increment), increment,
-          costOne * pow(kMainIncrement, increment), boxCostName);
-      if (isClickRow == true) {
-        updateNumberClickRow(boxNumberName, numberToChange, increment);
+      box.put('${name}CostOne', costOne * pow(kMainIncrement, increment));
+      box.put('${name}Cost', costOne * pow(kMainIncrement, increment));
+      incrementalCost(name, costOne * pow(kMainIncrement, increment), increment,
+          costOne * pow(kMainIncrement, increment));
+      if (name == kClickName) {
+        updateNumberClickRow(numberToChange, increment);
       } else {
-        updateNumber(boxNumberName, numberToChange, increment, shouldAnimate,
-            boxShouldAnimate);
+        updateNumber(name, numberToChange, increment, shouldAnimate);
       }
     }
   }
 
-  void updateNumberClickRow(boxNumberName, numberToChange, increment) =>
-      box.put(boxNumberName, numberToChange * pow(kMainIncrement, increment));
+  void updateNumberClickRow(numberToChange, increment) =>
+      box.put('ClickAmount', numberToChange * pow(kMainIncrement, increment));
 
-  void updateNumber(boxNumberName, numberToChange, increment, shouldAnimate,
-      boxShouldAnimate) {
-    box.put(boxNumberName, numberToChange + increment);
+  void updateNumber(name, numberToChange, increment, shouldAnimate) {
+    box.put('${name}Number', numberToChange + increment);
     if (shouldAnimate == 0.0) {
-      box.put(boxShouldAnimate, 1.0);
+      box.put('shouldAnimate$name', 1.0);
     }
   }
 
   void updateIncrement({
+    required String name,
     required double increment,
-    required double cost,
     required double costOne,
-    required String boxIncrementName,
-    required String boxCostName,
-    required String boxCostOneName,
   }) {
     if (increment == 1.0) {
-      box.put(boxIncrementName, 10.0);
-      box.put(boxCostName, costOne);
-      incrementalCost(costOne, 10.0, costOne, boxCostName);
+      box.put('${name}Increment', 10.0);
+      box.put('${name}Cost', costOne);
+      incrementalCost(name, costOne, 10.0, costOne);
     } else if (increment == 10.0) {
-      box.put(boxIncrementName, 100.0);
-      box.put(boxCostName, costOne);
-      incrementalCost(costOne, 100.0, costOne, boxCostName);
+      box.put('${name}Increment', 100.0);
+      box.put('${name}Cost', costOne);
+      incrementalCost(name, costOne, 100.0, costOne);
     } else if (increment == 100.0) {
-      box.put(boxIncrementName, 1.0);
-      box.put(boxCostName, costOne);
+      box.put('${name}Increment', 1.0);
+      box.put('${name}Cost', costOne);
     }
   }
 
-  void incrementalCost(newValue, increment, costOne, boxCostName) {
+  void incrementalCost(name, newValue, increment, costOne) {
     double newCost = newValue;
     for (var i = 1; i <= increment; i++) {
       newCost = newCost + costOne * pow(kMainIncrement, i);
     }
-    box.put(boxCostName, newCost);
+    box.put('${name}Cost', newCost);
   }
 }

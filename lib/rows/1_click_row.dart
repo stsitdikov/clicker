@@ -29,7 +29,7 @@ class ClickRow extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    '$kClickName (${clickerBrain.getClickAmount()} \$)',
+                    '$kClickName (${clickerBrain.getClickAmountString()} \$)',
                     style: TextStyle(fontSize: 20.0),
                   ),
                 ),
@@ -55,7 +55,7 @@ class ClickRow extends StatelessWidget {
                 clickerBrainListenFalse.clickUpgrade();
               },
               child: UpgradeContainer(
-                clickerBrain.getCost(kClickName),
+                clickerBrain.getCostString(kClickName),
                 Border(
                   top: BorderSide(color: kBorderColor),
                   right: BorderSide(color: kBorderColor),

@@ -19,10 +19,10 @@ class AutoClickGlobalUpgrade extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GlobalUpgradeTile(
         canUpgradeMore: clickerBrain.canDecreaseDuration(
-            kAutoClickName, kDecreaseAutoClickDurationBy),
+            kAutoClickName, kMapOfDecreaseDurationIncrements[kAutoClickName]),
         onTap: () {
-          if (clickerBrain.canDecreaseDuration(
-                  kAutoClickName, kDecreaseAutoClickDurationBy) &&
+          if (clickerBrain.canDecreaseDuration(kAutoClickName,
+                  kMapOfDecreaseDurationIncrements[kAutoClickName]) &&
               clickerBrain.canShowGlobalUpgrade(kAutoClickName)) {
             clickerBrain.decreaseAutoClickDuration(controller);
             Phoenix.rebirth(context);
@@ -30,7 +30,7 @@ class AutoClickGlobalUpgrade extends StatelessWidget {
         },
         duration: clickerBrain.getDurationString(kAutoClickName),
         title: kAutoClickName,
-        cost: clickerBrain.getDecreaseDurationCost(kAutoClickName),
+        cost: clickerBrain.getDecreaseDurationCostString(kAutoClickName),
       ),
     );
   }

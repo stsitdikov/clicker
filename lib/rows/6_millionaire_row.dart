@@ -18,11 +18,12 @@ class MillionaireRow extends StatelessWidget {
 
     return ReusableProgressRow(
       animation: animation,
-      title: clickerBrain.getNumber(kMillionaireName) + ' x  $kMillionaireName',
+      title: clickerBrain.getNumberString(kMillionaireName) +
+          ' x  $kMillionaireName',
       onUpgradeTap: () {
         clickerBrainListenFalse.buyMillionaire(controller);
       },
-      upgradeCost: clickerBrain.getCost(kMillionaireName),
+      upgradeCost: clickerBrain.getCostString(kMillionaireName),
       incrementNumber:
           clickerBrain.getIncrement(kMillionaireName).toStringAsFixed(0),
       onIncrementTap: () {

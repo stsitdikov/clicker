@@ -18,10 +18,10 @@ class WorkerGlobalUpgrade extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(15.0, 0.0, 15.0, 15.0),
       child: GlobalUpgradeTile(
         canUpgradeMore: clickerBrain.canDecreaseDuration(
-            kWorkerName, kDecreaseWorkerDurationBy),
+            kWorkerName, kMapOfDecreaseDurationIncrements[kWorkerName]),
         onTap: () {
           if (clickerBrain.canDecreaseDuration(
-                  kWorkerName, kDecreaseWorkerDurationBy) &&
+                  kWorkerName, kMapOfDecreaseDurationIncrements[kWorkerName]) &&
               clickerBrain.canShowGlobalUpgrade(kWorkerName)) {
             clickerBrain.decreaseWorkerDuration(controller);
             Phoenix.rebirth(context);
@@ -29,7 +29,7 @@ class WorkerGlobalUpgrade extends StatelessWidget {
         },
         duration: clickerBrain.getDurationString(kWorkerName),
         title: kWorkerName,
-        cost: clickerBrain.getDecreaseDurationCost(kWorkerName),
+        cost: clickerBrain.getDecreaseDurationCostString(kWorkerName),
       ),
     );
   }
