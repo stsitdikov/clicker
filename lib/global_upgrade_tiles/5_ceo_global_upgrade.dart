@@ -28,7 +28,7 @@ class CeoGlobalUpgrade extends StatelessWidget {
             }
           },
           duration: clickerBrain.getDurationString(kCeoName),
-          title: kCeoName.toUpperCase(),
+          title: kCeoName,
           cost: clickerBrain.getDecreaseDurationCostString(kCeoName)),
     );
   }

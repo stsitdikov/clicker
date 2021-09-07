@@ -420,9 +420,9 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   void decreaseCeoDuration(controller) {
-    decreaseMoney(getDecreaseDurationCost(kManagerName));
-    decreaseDuration(kManagerName);
-    increaseDecreaseDurationCost(kManagerName);
+    decreaseMoney(getDecreaseDurationCost(kCeoName));
+    decreaseDuration(kCeoName);
+    increaseDecreaseDurationCost(kCeoName);
     launchIsFromGlobalUpgrade();
     cancelTimers();
     notifyListeners();
