@@ -54,22 +54,6 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  void initialTimers(animationControllerList) {
-    initialAutoClickTimer(animationControllerList[0]);
-    initialWorkerTimer(animationControllerList[1]);
-    initialManagerTimer(animationControllerList[2]);
-    initialCeoTimer(animationControllerList[3]);
-    initialMillionaireTimer(animationControllerList[4]);
-  }
-
-  void cancelTimers() {
-    autoClickTimer.cancel();
-    workerTimer.cancel();
-    managerTimer.cancel();
-    ceoTimer.cancel();
-    millionaireTimer.cancel();
-  }
-
   double getCost(which) =>
       box.get('${which}Cost', defaultValue: kMapOfDefaultCosts[which]);
 
@@ -168,6 +152,52 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
+  Timer autoClickTimer = Timer(Duration(milliseconds: 0), () {});
+  Timer workerTimer = Timer(Duration(milliseconds: 0), () {});
+  Timer managerTimer = Timer(Duration(milliseconds: 0), () {});
+  Timer ceoTimer = Timer(Duration(milliseconds: 0), () {});
+  Timer millionaireTimer = Timer(Duration(milliseconds: 0), () {});
+
+  void initialTimers(animationControllerList) {
+    initialAutoClickTimer(animationControllerList[0]);
+    initialWorkerTimer(animationControllerList[1]);
+    initialManagerTimer(animationControllerList[2]);
+    initialCeoTimer(animationControllerList[3]);
+    initialMillionaireTimer(animationControllerList[4]);
+  }
+
+  void cancelTimers() {
+    autoClickTimer.cancel();
+    workerTimer.cancel();
+    managerTimer.cancel();
+    ceoTimer.cancel();
+    millionaireTimer.cancel();
+  }
+
+  void timerStart(name, controller) {
+    if (name == kAutoClickName) {
+      autoClickTimer = timerNew(name, controller);
+    } else if (name == kWorkerName) {
+      workerTimer = timerNew(name, controller);
+    } else if (name == kManagerName) {
+      managerTimer = timerNew(name, controller);
+    } else if (name == kCeoName) {
+      ceoTimer = timerNew(name, controller);
+    } else if (name == kMillionaireName) {
+      millionaireTimer = timerNew(name, controller);
+    }
+  }
+
+  Timer timerNew(name, controller) => Timer.periodic(
+        getDuration(name),
+        (timer) {
+          timerFunction(name);
+          controller.reset();
+          controller.forward();
+          notifyListeners();
+        },
+      );
+
   // click row
 
   double getClickAmount() =>
@@ -206,20 +236,6 @@ class ClickerBrain extends ChangeNotifier {
 
   double wasAutoClickInitiated = 0;
 
-  Timer autoClickTimer = Timer(Duration(milliseconds: 0), () {});
-
-  void autoClickTimerStart(controller) {
-    autoClickTimer = Timer.periodic(
-      getDuration(kAutoClickName),
-      (timer) {
-        timerFunction(kAutoClickName);
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
-  }
-
   void buyAutoClicker(controller) {
     if (getMoney() >= getCost(kAutoClickName)) {
       decreaseMoney(getCost(kAutoClickName));
@@ -238,7 +254,7 @@ class ClickerBrain extends ChangeNotifier {
     if (shouldAnimate(kAutoClickName) == 1.0 && wasAutoClickInitiated == 0) {
       wasAutoClickInitiated++;
       controller.forward();
-      autoClickTimerStart(controller);
+      timerStart(kAutoClickName, controller);
     }
   }
 
@@ -263,20 +279,6 @@ class ClickerBrain extends ChangeNotifier {
 
   double wasWorkerInitiated = 0;
 
-  Timer workerTimer = Timer(Duration(milliseconds: 0), () {});
-
-  void workerTimerStart(controller) {
-    workerTimer = Timer.periodic(
-      getDuration(kWorkerName),
-      (timer) {
-        timerFunction(kWorkerName);
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
-  }
-
   void buyWorker(controller) {
     if (getMoney() >= getCost(kWorkerName)) {
       decreaseMoney(getCost(kWorkerName));
@@ -295,7 +297,7 @@ class ClickerBrain extends ChangeNotifier {
     if (shouldAnimate(kWorkerName) == 1.0 && wasWorkerInitiated == 0) {
       wasWorkerInitiated++;
       controller.forward();
-      workerTimerStart(controller);
+      timerStart(kWorkerName, controller);
     }
   }
 
@@ -320,20 +322,6 @@ class ClickerBrain extends ChangeNotifier {
 
   double wasManagerInitiated = 0;
 
-  Timer managerTimer = Timer(Duration(milliseconds: 0), () {});
-
-  void managerTimerStart(controller) {
-    managerTimer = Timer.periodic(
-      getDuration(kManagerName),
-      (timer) {
-        timerFunction(kManagerName);
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
-  }
-
   void buyManager(controller) {
     if (getMoney() >= getCost(kManagerName)) {
       decreaseMoney(getCost(kManagerName));
@@ -352,7 +340,7 @@ class ClickerBrain extends ChangeNotifier {
     if (shouldAnimate(kManagerName) == 1.0 && wasManagerInitiated == 0) {
       wasManagerInitiated++;
       controller.forward();
-      managerTimerStart(controller);
+      timerStart(kManagerName, controller);
     }
   }
 
@@ -377,20 +365,6 @@ class ClickerBrain extends ChangeNotifier {
 
   double wasCeoInitiated = 0;
 
-  Timer ceoTimer = Timer(Duration(milliseconds: 0), () {});
-
-  void ceoTimerStart(controller) {
-    ceoTimer = Timer.periodic(
-      getDuration(kCeoName),
-      (timer) {
-        timerFunction(kCeoName);
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
-  }
-
   void buyCeo(controller) {
     if (getMoney() >= getCost(kCeoName)) {
       decreaseMoney(getCost(kCeoName));
@@ -409,7 +383,7 @@ class ClickerBrain extends ChangeNotifier {
     if (shouldAnimate(kCeoName) == 1.0 && wasCeoInitiated == 0) {
       wasCeoInitiated++;
       controller.forward();
-      ceoTimerStart(controller);
+      timerStart(kCeoName, controller);
     }
   }
 
@@ -434,20 +408,6 @@ class ClickerBrain extends ChangeNotifier {
 
   double wasMillionaireInitiated = 0;
 
-  Timer millionaireTimer = Timer(Duration(milliseconds: 0), () {});
-
-  void millionaireTimerStart(controller) {
-    millionaireTimer = Timer.periodic(
-      getDuration(kMillionaireName),
-      (timer) {
-        timerFunction(kMillionaireName);
-        controller.reset();
-        controller.forward();
-        notifyListeners();
-      },
-    );
-  }
-
   void buyMillionaire(controller) {
     if (getMoney() >= getCost(kMillionaireName)) {
       decreaseMoney(getCost(kMillionaireName));
@@ -467,7 +427,7 @@ class ClickerBrain extends ChangeNotifier {
         wasMillionaireInitiated == 0) {
       wasMillionaireInitiated++;
       controller.forward();
-      millionaireTimerStart(controller);
+      timerStart(kMillionaireName, controller);
     }
   }
 
