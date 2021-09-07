@@ -157,13 +157,16 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  void rowBuysPreviousRow(previousRowName) => box.put(
-      '${previousRowName}Number',
-      (getNumber(previousRowName) +
-          getNumber(
-            kListOfNamesExceptClick[
-                (kListOfNamesExceptClick.indexOf(previousRowName) + 1)],
-          )));
+  void timerFunction(name) {
+    if (name == kAutoClickName) {
+      box.put('money', (getMoney() + getNumber(name) * getClickAmount()));
+    } else {
+      String previousRowName =
+          kListOfNamesExceptClick[(kListOfNamesExceptClick.indexOf(name) - 1)];
+      box.put('${previousRowName}Number',
+          (getNumber(previousRowName) + getNumber(name)));
+    }
+  }
 
   // click row
 
@@ -209,8 +212,7 @@ class ClickerBrain extends ChangeNotifier {
     autoClickTimer = Timer.periodic(
       getDuration(kAutoClickName),
       (timer) {
-        box.put('money',
-            (getMoney() + getNumber(kAutoClickName) * getClickAmount()));
+        timerFunction(kAutoClickName);
         controller.reset();
         controller.forward();
         notifyListeners();
@@ -267,7 +269,7 @@ class ClickerBrain extends ChangeNotifier {
     workerTimer = Timer.periodic(
       getDuration(kWorkerName),
       (timer) {
-        rowBuysPreviousRow(kAutoClickName);
+        timerFunction(kWorkerName);
         controller.reset();
         controller.forward();
         notifyListeners();
@@ -324,7 +326,7 @@ class ClickerBrain extends ChangeNotifier {
     managerTimer = Timer.periodic(
       getDuration(kManagerName),
       (timer) {
-        rowBuysPreviousRow(kWorkerName);
+        timerFunction(kManagerName);
         controller.reset();
         controller.forward();
         notifyListeners();
@@ -381,7 +383,7 @@ class ClickerBrain extends ChangeNotifier {
     ceoTimer = Timer.periodic(
       getDuration(kCeoName),
       (timer) {
-        rowBuysPreviousRow(kManagerName);
+        timerFunction(kCeoName);
         controller.reset();
         controller.forward();
         notifyListeners();
@@ -438,7 +440,7 @@ class ClickerBrain extends ChangeNotifier {
     millionaireTimer = Timer.periodic(
       getDuration(kMillionaireName),
       (timer) {
-        rowBuysPreviousRow(kCeoName);
+        timerFunction(kMillionaireName);
         controller.reset();
         controller.forward();
         notifyListeners();
