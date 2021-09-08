@@ -10,7 +10,6 @@ import 'screens/launch_screen.dart';
 
 import 'package:clicker/logic/constants.dart';
 import 'logic/clicker_brain.dart';
-import 'logic/clicker_functions.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -22,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ClickerBrain>(
-      create: (_) => ClickerBrain(ClickerFunctions()),
+      create: (_) => ClickerBrain(),
       child: MaterialApp(
         theme: ThemeData.dark(),
         title: kAppName,

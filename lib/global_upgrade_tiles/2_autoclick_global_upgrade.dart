@@ -8,9 +8,6 @@ import 'package:clicker/logic/constants.dart';
 import 'package:clicker/global_upgrade_tiles/global_upgrade_tile.dart';
 
 class AutoClickGlobalUpgrade extends StatelessWidget {
-  AutoClickGlobalUpgrade(this.controller);
-  final AnimationController controller;
-
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
@@ -24,7 +21,7 @@ class AutoClickGlobalUpgrade extends StatelessWidget {
           if (clickerBrain.canDecreaseDuration(kAutoClickName,
                   kMapOfDecreaseDurationIncrements[kAutoClickName]) &&
               clickerBrain.canShowGlobalUpgrade(kAutoClickName)) {
-            clickerBrain.decreaseAutoClickDuration(controller);
+            clickerBrain.decreaseDuration(kAutoClickName);
             Phoenix.rebirth(context);
           }
         },

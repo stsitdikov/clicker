@@ -1,17 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:math';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:clicker/logic/clicker_functions.dart';
 import 'package:clicker/logic/constants.dart';
 
 class ClickerBrain extends ChangeNotifier {
-  ClickerFunctions clickerFunctions;
-
-  ClickerBrain(this.clickerFunctions);
-
   Box box = Hive.box<double>(kClickerBrainBox);
   void clearBox() => box.clear();
 
@@ -64,7 +60,7 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  // rows
+  // rows getters
 
   double getClickAmount() =>
       box.get('ClickAmount', defaultValue: kDefaultClickAmount);
@@ -99,16 +95,37 @@ class ClickerBrain extends ChangeNotifier {
   double shouldAnimate(which) =>
       box.get('shouldAnimate$which', defaultValue: 0.0);
 
+  // rows functions
+
   void upgradeRow(name, controller) {
+    double increment = getIncrement(name);
+    double costOne = getCostOne(name);
+    double shouldAnimateRow = name == kClickName ? 1.0 : shouldAnimate(name);
+    double numberToChange =
+        name == kClickName ? getClickAmount() : getNumber(name);
+
     if (getMoney() >= getCost(name)) {
       decreaseMoney(getCost(name));
-      clickerFunctions.upgradeRow(
-          name: name,
-          increment: getIncrement(name),
-          costOne: getCostOne(name),
-          shouldAnimate: name == kClickName ? 1.0 : shouldAnimate(name),
-          numberToChange:
-              name == kClickName ? getClickAmount() : getNumber(name));
+      if (increment == 1.0) {
+        box.put('${name}CostOne', costOne * pow(kMainIncrement, increment));
+        box.put('${name}Cost', costOne * pow(kMainIncrement, increment));
+        incrementalCost(name, 0.0, increment, costOne);
+        if (name == kClickName) {
+          updateNumberClickRow(numberToChange, increment);
+        } else {
+          updateNumber(name, numberToChange, increment, shouldAnimateRow);
+        }
+      } else {
+        box.put('${name}CostOne', costOne * pow(kMainIncrement, increment));
+        box.put('${name}Cost', costOne * pow(kMainIncrement, increment));
+        incrementalCost(name, costOne * pow(kMainIncrement, increment),
+            increment, costOne * pow(kMainIncrement, increment));
+        if (name == kClickName) {
+          updateNumberClickRow(numberToChange, increment);
+        } else {
+          updateNumber(name, numberToChange, increment, shouldAnimateRow);
+        }
+      }
       notifyListeners();
       if (name != kClickName) {
         initiateTimer(name, controller);
@@ -116,10 +133,41 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
+  void updateNumberClickRow(numberToChange, increment) =>
+      box.put('ClickAmount', numberToChange * pow(kMainIncrement, increment));
+
+  void updateNumber(name, numberToChange, increment, shouldAnimate) {
+    box.put('${name}Number', numberToChange + increment);
+    if (shouldAnimate == 0.0) {
+      box.put('shouldAnimate$name', 1.0);
+    }
+  }
+
   void updateIncrement(name) {
-    clickerFunctions.updateIncrement(
-        name: name, increment: getIncrement(name), costOne: getCostOne(name));
+    double increment = getIncrement(name);
+    double costOne = getCostOne(name);
+
+    if (increment == 1.0) {
+      box.put('${name}Increment', 10.0);
+      box.put('${name}Cost', costOne);
+      incrementalCost(name, costOne, 10.0, costOne);
+    } else if (increment == 10.0) {
+      box.put('${name}Increment', 100.0);
+      box.put('${name}Cost', costOne);
+      incrementalCost(name, costOne, 100.0, costOne);
+    } else if (increment == 100.0) {
+      box.put('${name}Increment', 1.0);
+      box.put('${name}Cost', costOne);
+    }
     notifyListeners();
+  }
+
+  void incrementalCost(name, newValue, increment, costOne) {
+    double newCost = newValue;
+    for (var i = 1; i <= increment; i++) {
+      newCost = newCost + costOne * pow(kMainIncrement, i);
+    }
+    box.put('${name}Cost', newCost);
   }
 
   // visibility
@@ -245,8 +293,16 @@ class ClickerBrain extends ChangeNotifier {
   bool canDecreaseDuration(which, decreaseConstant) =>
       getDurationDouble(which) > decreaseConstant;
 
-  void decreaseDuration(which) => box.put('${which}DurationMilliseconds',
-      (getDurationDouble(which) - kMapOfDecreaseDurationIncrements[which]));
+  void decreaseDuration(name) {
+    decreaseMoney(getDecreaseDurationCost(name));
+    box.put('${name}DurationMilliseconds',
+        (getDurationDouble(name) - kMapOfDecreaseDurationIncrements[name]));
+    box.put('${name}DecreaseDurationCost',
+        (getDecreaseDurationCost(name) * kMainIncrement));
+    launchIsFromGlobalUpgrade();
+    cancelTimers();
+    notifyListeners();
+  }
 
   double getDecreaseDurationCost(which) =>
       box.get('${which}DecreaseDurationCost',
@@ -254,64 +310,5 @@ class ClickerBrain extends ChangeNotifier {
 
   String getDecreaseDurationCostString(which) {
     return NumberFormat.compact().format(getDecreaseDurationCost(which));
-  }
-
-  void increaseDecreaseDurationCost(which) => box.put(
-      '${which}DecreaseDurationCost',
-      (getDecreaseDurationCost(which) * kMainIncrement));
-
-  // autoclicker
-
-  void decreaseAutoClickDuration(controller) {
-    decreaseMoney(getDecreaseDurationCost(kAutoClickName));
-    decreaseDuration(kAutoClickName);
-    increaseDecreaseDurationCost(kAutoClickName);
-    launchIsFromGlobalUpgrade();
-    cancelTimers();
-    notifyListeners();
-  }
-
-  // worker
-
-  void decreaseWorkerDuration(controller) {
-    decreaseMoney(getDecreaseDurationCost(kWorkerName));
-    decreaseDuration(kWorkerName);
-    increaseDecreaseDurationCost(kWorkerName);
-    launchIsFromGlobalUpgrade();
-    cancelTimers();
-    notifyListeners();
-  }
-
-  // manager
-
-  void decreaseManagerDuration(controller) {
-    decreaseMoney(getDecreaseDurationCost(kManagerName));
-    decreaseDuration(kManagerName);
-    increaseDecreaseDurationCost(kManagerName);
-    launchIsFromGlobalUpgrade();
-    cancelTimers();
-    notifyListeners();
-  }
-
-  // ceo
-
-  void decreaseCeoDuration(controller) {
-    decreaseMoney(getDecreaseDurationCost(kCeoName));
-    decreaseDuration(kCeoName);
-    increaseDecreaseDurationCost(kCeoName);
-    launchIsFromGlobalUpgrade();
-    cancelTimers();
-    notifyListeners();
-  }
-
-  // millionaire
-
-  void decreaseMillionaireDuration(controller) {
-    decreaseMoney(getDecreaseDurationCost(kMillionaireName));
-    decreaseDuration(kMillionaireName);
-    increaseDecreaseDurationCost(kMillionaireName);
-    launchIsFromGlobalUpgrade();
-    cancelTimers();
-    notifyListeners();
   }
 }

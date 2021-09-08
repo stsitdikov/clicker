@@ -8,9 +8,6 @@ import 'package:clicker/logic/constants.dart';
 import 'package:clicker/global_upgrade_tiles/global_upgrade_tile.dart';
 
 class ManagerGlobalUpgrade extends StatelessWidget {
-  ManagerGlobalUpgrade(this.controller);
-  final AnimationController controller;
-
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
@@ -23,7 +20,7 @@ class ManagerGlobalUpgrade extends StatelessWidget {
             if (clickerBrain.canDecreaseDuration(kManagerName,
                     kMapOfDecreaseDurationIncrements[kManagerName]) &&
                 clickerBrain.canShowGlobalUpgrade(kManagerName)) {
-              clickerBrain.decreaseManagerDuration(controller);
+              clickerBrain.decreaseDuration(kManagerName);
               Phoenix.rebirth(context);
             }
           },

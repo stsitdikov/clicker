@@ -8,9 +8,6 @@ import 'package:clicker/logic/constants.dart';
 import 'package:clicker/global_upgrade_tiles/global_upgrade_tile.dart';
 
 class MillionaireGlobalUpgrade extends StatelessWidget {
-  MillionaireGlobalUpgrade(this.controller);
-  final AnimationController controller;
-
   @override
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
@@ -23,7 +20,7 @@ class MillionaireGlobalUpgrade extends StatelessWidget {
             if (clickerBrain.canDecreaseDuration(kMillionaireName,
                     kMapOfDecreaseDurationIncrements[kMillionaireName]) &&
                 clickerBrain.canShowGlobalUpgrade(kMillionaireName)) {
-              clickerBrain.decreaseMillionaireDuration(controller);
+              clickerBrain.decreaseDuration(kMillionaireName);
               Phoenix.rebirth(context);
             }
           },
