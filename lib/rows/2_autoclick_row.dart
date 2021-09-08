@@ -21,7 +21,7 @@ class AutoClickRow extends StatelessWidget {
       title:
           clickerBrain.getNumberString(kAutoClickName) + ' x  $kAutoClickName',
       onUpgradeTap: () {
-        clickerBrainListenFalse.buyAutoClicker(controller);
+        clickerBrainListenFalse.upgradeRow(kAutoClickName, controller);
       },
       upgradeCost: clickerBrain.getCostString(kAutoClickName),
       incrementNumber:

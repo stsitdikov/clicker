@@ -126,6 +126,23 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
+  void upgradeRow(name, controller) {
+    if (getMoney() >= getCost(name)) {
+      decreaseMoney(getCost(name));
+      clickerFunctions.upgradeRow(
+          name: name,
+          increment: getIncrement(name),
+          costOne: getCostOne(name),
+          shouldAnimate: name == kClickName ? 1.0 : shouldAnimate(name),
+          numberToChange:
+              name == kClickName ? getClickAmount() : getNumber(name));
+      notifyListeners();
+      if (name != kClickName) {
+        initiateTimer(name, controller);
+      }
+    }
+  }
+
   double showedRow(which) =>
       box.get('showed$which', defaultValue: 0.0) as double;
 
@@ -159,11 +176,27 @@ class ClickerBrain extends ChangeNotifier {
   Timer millionaireTimer = Timer(Duration(milliseconds: 0), () {});
 
   void initialTimers(animationControllerList) {
-    initialAutoClickTimer(animationControllerList[0]);
-    initialWorkerTimer(animationControllerList[1]);
-    initialManagerTimer(animationControllerList[2]);
-    initialCeoTimer(animationControllerList[3]);
-    initialMillionaireTimer(animationControllerList[4]);
+    initiateTimer(kAutoClickName, animationControllerList[0]);
+    initiateTimer(kWorkerName, animationControllerList[1]);
+    initiateTimer(kManagerName, animationControllerList[2]);
+    initiateTimer(kCeoName, animationControllerList[3]);
+    initiateTimer(kMillionaireName, animationControllerList[4]);
+  }
+
+  Map wasInitiated = {
+    kAutoClickName: 0,
+    kWorkerName: 0,
+    kManagerName: 0,
+    kCeoName: 0,
+    kMillionaireName: 0,
+  };
+
+  void initiateTimer(name, controller) {
+    if (shouldAnimate(name) == 1.0 && wasInitiated[name] == 0) {
+      wasInitiated[name]++;
+      controller.forward();
+      timerStart(name, controller);
+    }
   }
 
   void cancelTimers() {
@@ -211,19 +244,6 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clickUpgrade() {
-    if (getMoney() >= getCost(kClickName)) {
-      decreaseMoney(getCost(kClickName));
-      clickerFunctions.upgradeRow(
-          name: kClickName,
-          increment: getIncrement(kClickName),
-          costOne: getCostOne(kClickName),
-          shouldAnimate: 1.0,
-          numberToChange: getClickAmount());
-      notifyListeners();
-    }
-  }
-
   void changeClickIncrement() {
     clickerFunctions.updateIncrement(
         name: kClickName,
@@ -233,30 +253,6 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   // autoclicker
-
-  double wasAutoClickInitiated = 0;
-
-  void buyAutoClicker(controller) {
-    if (getMoney() >= getCost(kAutoClickName)) {
-      decreaseMoney(getCost(kAutoClickName));
-      clickerFunctions.upgradeRow(
-          name: kAutoClickName,
-          increment: getIncrement(kAutoClickName),
-          costOne: getCostOne(kAutoClickName),
-          shouldAnimate: shouldAnimate(kAutoClickName),
-          numberToChange: getNumber(kAutoClickName));
-      notifyListeners();
-      initialAutoClickTimer(controller);
-    }
-  }
-
-  void initialAutoClickTimer(controller) {
-    if (shouldAnimate(kAutoClickName) == 1.0 && wasAutoClickInitiated == 0) {
-      wasAutoClickInitiated++;
-      controller.forward();
-      timerStart(kAutoClickName, controller);
-    }
-  }
 
   void updateAutoClickIncrement() {
     clickerFunctions.updateIncrement(
@@ -277,30 +273,6 @@ class ClickerBrain extends ChangeNotifier {
 
   // worker
 
-  double wasWorkerInitiated = 0;
-
-  void buyWorker(controller) {
-    if (getMoney() >= getCost(kWorkerName)) {
-      decreaseMoney(getCost(kWorkerName));
-      clickerFunctions.upgradeRow(
-          name: kWorkerName,
-          increment: getIncrement(kWorkerName),
-          costOne: getCostOne(kWorkerName),
-          shouldAnimate: shouldAnimate(kWorkerName),
-          numberToChange: getNumber(kWorkerName));
-      notifyListeners();
-      initialWorkerTimer(controller);
-    }
-  }
-
-  void initialWorkerTimer(controller) {
-    if (shouldAnimate(kWorkerName) == 1.0 && wasWorkerInitiated == 0) {
-      wasWorkerInitiated++;
-      controller.forward();
-      timerStart(kWorkerName, controller);
-    }
-  }
-
   void updateWorkerIncrement() {
     clickerFunctions.updateIncrement(
         name: kWorkerName,
@@ -319,30 +291,6 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   // manager
-
-  double wasManagerInitiated = 0;
-
-  void buyManager(controller) {
-    if (getMoney() >= getCost(kManagerName)) {
-      decreaseMoney(getCost(kManagerName));
-      clickerFunctions.upgradeRow(
-          name: kManagerName,
-          increment: getIncrement(kManagerName),
-          costOne: getCostOne(kManagerName),
-          shouldAnimate: shouldAnimate(kManagerName),
-          numberToChange: getNumber(kManagerName));
-      notifyListeners();
-      initialManagerTimer(controller);
-    }
-  }
-
-  void initialManagerTimer(controller) {
-    if (shouldAnimate(kManagerName) == 1.0 && wasManagerInitiated == 0) {
-      wasManagerInitiated++;
-      controller.forward();
-      timerStart(kManagerName, controller);
-    }
-  }
 
   void updateManagerIncrement() {
     clickerFunctions.updateIncrement(
@@ -363,30 +311,6 @@ class ClickerBrain extends ChangeNotifier {
 
   // ceo
 
-  double wasCeoInitiated = 0;
-
-  void buyCeo(controller) {
-    if (getMoney() >= getCost(kCeoName)) {
-      decreaseMoney(getCost(kCeoName));
-      clickerFunctions.upgradeRow(
-          name: kCeoName,
-          increment: getIncrement(kCeoName),
-          costOne: getCostOne(kCeoName),
-          shouldAnimate: shouldAnimate(kCeoName),
-          numberToChange: getNumber(kCeoName));
-      notifyListeners();
-      initialCeoTimer(controller);
-    }
-  }
-
-  void initialCeoTimer(controller) {
-    if (shouldAnimate(kCeoName) == 1.0 && wasCeoInitiated == 0) {
-      wasCeoInitiated++;
-      controller.forward();
-      timerStart(kCeoName, controller);
-    }
-  }
-
   void updateCeoIncrement() {
     clickerFunctions.updateIncrement(
         name: kCeoName,
@@ -405,31 +329,6 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   // millionaire
-
-  double wasMillionaireInitiated = 0;
-
-  void buyMillionaire(controller) {
-    if (getMoney() >= getCost(kMillionaireName)) {
-      decreaseMoney(getCost(kMillionaireName));
-      clickerFunctions.upgradeRow(
-          name: kMillionaireName,
-          increment: getIncrement(kMillionaireName),
-          costOne: getCostOne(kMillionaireName),
-          shouldAnimate: shouldAnimate(kMillionaireName),
-          numberToChange: getNumber(kMillionaireName));
-      notifyListeners();
-      initialMillionaireTimer(controller);
-    }
-  }
-
-  void initialMillionaireTimer(controller) {
-    if (shouldAnimate(kMillionaireName) == 1.0 &&
-        wasMillionaireInitiated == 0) {
-      wasMillionaireInitiated++;
-      controller.forward();
-      timerStart(kMillionaireName, controller);
-    }
-  }
 
   void updateMillionaireIncrement() {
     clickerFunctions.updateIncrement(

@@ -20,7 +20,7 @@ class WorkerRow extends StatelessWidget {
       animation: animation,
       title: clickerBrain.getNumberString(kWorkerName) + ' x  $kWorkerName',
       onUpgradeTap: () {
-        clickerBrainListenFalse.buyWorker(controller);
+        clickerBrainListenFalse.upgradeRow(kWorkerName, controller);
       },
       upgradeCost: clickerBrain.getCostString(kWorkerName),
       incrementNumber:

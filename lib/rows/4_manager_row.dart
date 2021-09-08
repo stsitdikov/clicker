@@ -20,7 +20,7 @@ class ManagerRow extends StatelessWidget {
       animation: animation,
       title: clickerBrain.getNumberString(kManagerName) + ' x  $kManagerName',
       onUpgradeTap: () {
-        clickerBrainListenFalse.buyManager(controller);
+        clickerBrainListenFalse.upgradeRow(kManagerName, controller);
       },
       upgradeCost: clickerBrain.getCostString(kManagerName),
       incrementNumber:

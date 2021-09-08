@@ -21,7 +21,7 @@ class MillionaireRow extends StatelessWidget {
       title: clickerBrain.getNumberString(kMillionaireName) +
           ' x  $kMillionaireName',
       onUpgradeTap: () {
-        clickerBrainListenFalse.buyMillionaire(controller);
+        clickerBrainListenFalse.upgradeRow(kMillionaireName, controller);
       },
       upgradeCost: clickerBrain.getCostString(kMillionaireName),
       incrementNumber:

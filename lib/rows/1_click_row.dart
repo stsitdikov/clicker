@@ -52,7 +52,7 @@ class ClickRow extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                clickerBrainListenFalse.clickUpgrade();
+                clickerBrainListenFalse.upgradeRow(kClickName, null);
               },
               child: UpgradeContainer(
                 clickerBrain.getCostString(kClickName),

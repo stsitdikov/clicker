@@ -21,7 +21,7 @@ class CeoRow extends StatelessWidget {
       title: clickerBrain.getNumberString(kCeoName) +
           ' x  ${kCeoName.toUpperCase()}',
       onUpgradeTap: () {
-        clickerBrainListenFalse.buyCeo(controller);
+        clickerBrainListenFalse.upgradeRow(kCeoName, controller);
       },
       upgradeCost: clickerBrain.getCostString(kCeoName),
       incrementNumber: clickerBrain.getIncrement(kCeoName).toStringAsFixed(0),
