@@ -176,11 +176,11 @@ class ClickerBrain extends ChangeNotifier {
   Timer millionaireTimer = Timer(Duration(milliseconds: 0), () {});
 
   void initialTimers(animationControllerList) {
-    initiateTimer(kAutoClickName, animationControllerList[0]);
-    initiateTimer(kWorkerName, animationControllerList[1]);
-    initiateTimer(kManagerName, animationControllerList[2]);
-    initiateTimer(kCeoName, animationControllerList[3]);
-    initiateTimer(kMillionaireName, animationControllerList[4]);
+    int i = 0;
+    for (String name in kListOfNamesExceptClick) {
+      initiateTimer(name, animationControllerList[i]);
+      i++;
+    }
   }
 
   Map wasInitiated = {
