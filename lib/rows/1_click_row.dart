@@ -38,7 +38,7 @@ class ClickRow extends StatelessWidget {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: () => clickerBrainListenFalse.changeClickIncrement(),
+              onTap: () => clickerBrainListenFalse.updateIncrement(kClickName),
               child: IncrementContainer(
                 clickerBrain.getIncrement(kClickName).toStringAsFixed(0),
                 Border(

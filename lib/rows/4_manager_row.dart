@@ -26,7 +26,7 @@ class ManagerRow extends StatelessWidget {
       incrementNumber:
           clickerBrain.getIncrement(kManagerName).toStringAsFixed(0),
       onIncrementTap: () {
-        clickerBrainListenFalse.updateManagerIncrement();
+        clickerBrainListenFalse.updateIncrement(kManagerName);
       },
     );
   }

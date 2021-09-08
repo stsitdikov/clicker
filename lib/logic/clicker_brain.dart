@@ -13,6 +13,9 @@ class ClickerBrain extends ChangeNotifier {
   ClickerBrain(this.clickerFunctions);
 
   Box box = Hive.box<double>(kClickerBrainBox);
+  void clearBox() => box.clear();
+
+  // money
 
   double getMoney() => box.get('money', defaultValue: 0.0) as double;
 
@@ -20,7 +23,12 @@ class ClickerBrain extends ChangeNotifier {
 
   String getMoneyString() => NumberFormat.compact().format(getMoney());
 
-  void clearBox() => box.clear();
+  void clickIncreaseMoney() {
+    box.put('money', (getMoney() + getClickAmount()));
+    notifyListeners();
+  }
+
+  // main tab flexes
 
   double listFlex() => box.get('listFlex', defaultValue: 2.0);
 
@@ -34,6 +42,8 @@ class ClickerBrain extends ChangeNotifier {
       box.put('itemCount', (itemCount() + 1.0));
     }
   }
+
+  // launch parameters
 
   // double firstLaunch() => box.get('firstLaunch', defaultValue: 1.0);
   //
@@ -54,6 +64,14 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
+  // rows
+
+  double getClickAmount() =>
+      box.get('ClickAmount', defaultValue: kDefaultClickAmount);
+
+  String getClickAmountString() =>
+      NumberFormat.compact().format(getClickAmount());
+
   double getCost(which) =>
       box.get('${which}Cost', defaultValue: kMapOfDefaultCosts[which]);
 
@@ -66,9 +84,8 @@ class ClickerBrain extends ChangeNotifier {
 
   double getNumber(which) => box.get('${which}Number', defaultValue: 0.0);
 
-  String getNumberString(which) {
-    return NumberFormat.compact().format(getNumber(which));
-  }
+  String getNumberString(which) =>
+      NumberFormat.compact().format(getNumber(which));
 
   Duration getDuration(which) =>
       Duration(milliseconds: getDurationDouble(which).toInt());
@@ -79,29 +96,33 @@ class ClickerBrain extends ChangeNotifier {
   double getDurationDouble(which) => box.get('${which}DurationMilliseconds',
       defaultValue: kMapOfDefaultDurations[which]);
 
-  bool canDecreaseDuration(which, decreaseConstant) =>
-      getDurationDouble(which) > decreaseConstant;
-
-  void decreaseDuration(which) => box.put('${which}DurationMilliseconds',
-      (getDurationDouble(which) - kMapOfDecreaseDurationIncrements[which]));
-
-  double getDecreaseDurationCost(which) =>
-      box.get('${which}DecreaseDurationCost',
-          defaultValue: kMapOfDefaultDecreaseDurationCosts[which]);
-
-  String getDecreaseDurationCostString(which) {
-    return NumberFormat.compact().format(getDecreaseDurationCost(which));
-  }
-
-  bool canShowGlobalUpgrade(which) =>
-      getMoney() >= getDecreaseDurationCost(which);
-
-  void increaseDecreaseDurationCost(which) => box.put(
-      '${which}DecreaseDurationCost',
-      (getDecreaseDurationCost(which) * kMainIncrement));
-
   double shouldAnimate(which) =>
       box.get('shouldAnimate$which', defaultValue: 0.0);
+
+  void upgradeRow(name, controller) {
+    if (getMoney() >= getCost(name)) {
+      decreaseMoney(getCost(name));
+      clickerFunctions.upgradeRow(
+          name: name,
+          increment: getIncrement(name),
+          costOne: getCostOne(name),
+          shouldAnimate: name == kClickName ? 1.0 : shouldAnimate(name),
+          numberToChange:
+              name == kClickName ? getClickAmount() : getNumber(name));
+      notifyListeners();
+      if (name != kClickName) {
+        initiateTimer(name, controller);
+      }
+    }
+  }
+
+  void updateIncrement(name) {
+    clickerFunctions.updateIncrement(
+        name: name, increment: getIncrement(name), costOne: getCostOne(name));
+    notifyListeners();
+  }
+
+  // visibility
 
   double isVisibleDouble(which) =>
       box.get('is${which}Visible', defaultValue: 0.0);
@@ -126,27 +147,13 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  void upgradeRow(name, controller) {
-    if (getMoney() >= getCost(name)) {
-      decreaseMoney(getCost(name));
-      clickerFunctions.upgradeRow(
-          name: name,
-          increment: getIncrement(name),
-          costOne: getCostOne(name),
-          shouldAnimate: name == kClickName ? 1.0 : shouldAnimate(name),
-          numberToChange:
-              name == kClickName ? getClickAmount() : getNumber(name));
-      notifyListeners();
-      if (name != kClickName) {
-        initiateTimer(name, controller);
-      }
-    }
-  }
-
   double showedRow(which) =>
       box.get('showed$which', defaultValue: 0.0) as double;
 
   void updateShowedRow(which) => box.put('showed$which', 1.0);
+
+  bool canShowGlobalUpgrade(which) =>
+      getMoney() >= getDecreaseDurationCost(which);
 
   double showedGlobalUpgrade(which) =>
       box.get('showed${which}GlobalUpgrade', defaultValue: 0.0) as double;
@@ -157,6 +164,8 @@ class ClickerBrain extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  // timers
 
   void timerFunction(name) {
     if (name == kAutoClickName) {
@@ -231,36 +240,27 @@ class ClickerBrain extends ChangeNotifier {
         },
       );
 
-  // click row
+  // global upgrades
 
-  double getClickAmount() =>
-      box.get('ClickAmount', defaultValue: kDefaultClickAmount);
+  bool canDecreaseDuration(which, decreaseConstant) =>
+      getDurationDouble(which) > decreaseConstant;
 
-  String getClickAmountString() =>
-      NumberFormat.compact().format(getClickAmount());
+  void decreaseDuration(which) => box.put('${which}DurationMilliseconds',
+      (getDurationDouble(which) - kMapOfDecreaseDurationIncrements[which]));
 
-  void clickIncreaseMoney() {
-    box.put('money', (getMoney() + getClickAmount()));
-    notifyListeners();
+  double getDecreaseDurationCost(which) =>
+      box.get('${which}DecreaseDurationCost',
+          defaultValue: kMapOfDefaultDecreaseDurationCosts[which]);
+
+  String getDecreaseDurationCostString(which) {
+    return NumberFormat.compact().format(getDecreaseDurationCost(which));
   }
 
-  void changeClickIncrement() {
-    clickerFunctions.updateIncrement(
-        name: kClickName,
-        increment: getIncrement(kClickName),
-        costOne: getCostOne(kClickName));
-    notifyListeners();
-  }
+  void increaseDecreaseDurationCost(which) => box.put(
+      '${which}DecreaseDurationCost',
+      (getDecreaseDurationCost(which) * kMainIncrement));
 
   // autoclicker
-
-  void updateAutoClickIncrement() {
-    clickerFunctions.updateIncrement(
-        name: kAutoClickName,
-        increment: getIncrement(kAutoClickName),
-        costOne: getCostOne(kAutoClickName));
-    notifyListeners();
-  }
 
   void decreaseAutoClickDuration(controller) {
     decreaseMoney(getDecreaseDurationCost(kAutoClickName));
@@ -273,14 +273,6 @@ class ClickerBrain extends ChangeNotifier {
 
   // worker
 
-  void updateWorkerIncrement() {
-    clickerFunctions.updateIncrement(
-        name: kWorkerName,
-        increment: getIncrement(kWorkerName),
-        costOne: getCostOne(kWorkerName));
-    notifyListeners();
-  }
-
   void decreaseWorkerDuration(controller) {
     decreaseMoney(getDecreaseDurationCost(kWorkerName));
     decreaseDuration(kWorkerName);
@@ -291,14 +283,6 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   // manager
-
-  void updateManagerIncrement() {
-    clickerFunctions.updateIncrement(
-        name: kManagerName,
-        increment: getIncrement(kManagerName),
-        costOne: getCostOne(kManagerName));
-    notifyListeners();
-  }
 
   void decreaseManagerDuration(controller) {
     decreaseMoney(getDecreaseDurationCost(kManagerName));
@@ -311,14 +295,6 @@ class ClickerBrain extends ChangeNotifier {
 
   // ceo
 
-  void updateCeoIncrement() {
-    clickerFunctions.updateIncrement(
-        name: kCeoName,
-        increment: getIncrement(kCeoName),
-        costOne: getCostOne(kCeoName));
-    notifyListeners();
-  }
-
   void decreaseCeoDuration(controller) {
     decreaseMoney(getDecreaseDurationCost(kCeoName));
     decreaseDuration(kCeoName);
@@ -329,14 +305,6 @@ class ClickerBrain extends ChangeNotifier {
   }
 
   // millionaire
-
-  void updateMillionaireIncrement() {
-    clickerFunctions.updateIncrement(
-        name: kMillionaireName,
-        increment: getIncrement(kMillionaireName),
-        costOne: getCostOne(kMillionaireName));
-    notifyListeners();
-  }
 
   void decreaseMillionaireDuration(controller) {
     decreaseMoney(getDecreaseDurationCost(kMillionaireName));

@@ -26,7 +26,7 @@ class CeoRow extends StatelessWidget {
       upgradeCost: clickerBrain.getCostString(kCeoName),
       incrementNumber: clickerBrain.getIncrement(kCeoName).toStringAsFixed(0),
       onIncrementTap: () {
-        clickerBrainListenFalse.updateCeoIncrement();
+        clickerBrainListenFalse.updateIncrement(kCeoName);
       },
     );
   }

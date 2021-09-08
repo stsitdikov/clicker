@@ -27,7 +27,7 @@ class AutoClickRow extends StatelessWidget {
       incrementNumber:
           clickerBrain.getIncrement(kAutoClickName).toStringAsFixed(0),
       onIncrementTap: () {
-        clickerBrainListenFalse.updateAutoClickIncrement();
+        clickerBrainListenFalse.updateIncrement(kAutoClickName);
       },
     );
   }

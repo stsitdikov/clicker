@@ -27,7 +27,7 @@ class MillionaireRow extends StatelessWidget {
       incrementNumber:
           clickerBrain.getIncrement(kMillionaireName).toStringAsFixed(0),
       onIncrementTap: () {
-        clickerBrainListenFalse.updateMillionaireIncrement();
+        clickerBrainListenFalse.updateIncrement(kMillionaireName);
       },
     );
   }
