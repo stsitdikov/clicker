@@ -24,35 +24,7 @@ class _MainTabState extends State<MainTab> {
 
   GlobalKey<AnimatedListState> rowsKey = GlobalKey();
 
-  late List<Widget> listOfRows = [
-    ClickRow(),
-    BlockedRow(kAutoClickName),
-    ReusableProgressRow(
-        animation: widget.animationMap[kAutoClickName],
-        controller: widget.animationControllerMap[kAutoClickName],
-        name: kAutoClickName),
-    BlockedRow(kWorkerName),
-    ReusableProgressRow(
-        animation: widget.animationMap[kWorkerName],
-        controller: widget.animationControllerMap[kWorkerName],
-        name: kWorkerName),
-    BlockedRow(kManagerName),
-    ReusableProgressRow(
-        animation: widget.animationMap[kManagerName],
-        controller: widget.animationControllerMap[kManagerName],
-        name: kManagerName),
-    BlockedRow(kCeoName),
-    ReusableProgressRow(
-        animation: widget.animationMap[kCeoName],
-        controller: widget.animationControllerMap[kCeoName],
-        name: kCeoName),
-    BlockedRow(kMillionaireName),
-    ReusableProgressRow(
-        animation: widget.animationMap[kMillionaireName],
-        controller: widget.animationControllerMap[kMillionaireName],
-        name: kMillionaireName),
-    BlockedRow(kMillionaireName),
-  ];
+  late List<Widget> listOfRows = [ClickRow()];
 
   late int removedBlockedRows = 0;
 
@@ -73,17 +45,20 @@ class _MainTabState extends State<MainTab> {
     }
 
     if (removedBlockedRows == 0) {
-      clickerBrain.initialTimers(widget.animationControllerMap);
-      int i = 0;
       for (String name in kListOfNamesExceptClick) {
-        i++;
-        if (clickerBrain.showedRow(name) == 1.0) {
-          listOfRows.removeAt(i);
-          if (name == kListOfNamesExceptClick.last) {
-            listOfRows.removeAt(i + 1);
-          }
+        if (clickerBrain.showedRow(name) != 1.0) {
+          listOfRows.add(BlockedRow(name));
+        }
+        listOfRows.add(ReusableProgressRow(
+            animation: widget.animationMap[name],
+            controller: widget.animationControllerMap[name],
+            name: name));
+        if (clickerBrain.showedRow(name) != 1.0 &&
+            name == kListOfNamesExceptClick.last) {
+          listOfRows.add(BlockedRow(name));
         }
       }
+      clickerBrain.initialTimers(widget.animationControllerMap);
       removedBlockedRows++;
     }
 
