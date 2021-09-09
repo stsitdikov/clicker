@@ -4,8 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/logic/constants.dart';
 
-import 'package:clicker/global_upgrade_tiles/global_upgrade_tile.dart';
-import 'package:clicker/global_upgrade_tiles/global_upgrade_tile_blocked.dart';
+import 'package:clicker/components/global_upgrade_tile.dart';
 
 class UpgradeTab extends StatelessWidget {
   @override
@@ -22,44 +21,44 @@ class UpgradeTab extends StatelessWidget {
     List<Widget> listOfUpgrades = [
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0,
-          child: GlobalUpgradeTileBlocked(kAutoClickName)),
+          child: GlobalUpgradeTile(kAutoClickName, true)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
-          child: GlobalUpgradeTile(kAutoClickName)),
+          child: GlobalUpgradeTile(kAutoClickName, false)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0 &&
               clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTileBlocked(kWorkerName)),
+          child: GlobalUpgradeTile(kWorkerName, true)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0,
-          child: GlobalUpgradeTile(kWorkerName)),
+          child: GlobalUpgradeTile(kWorkerName, false)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0 &&
               clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
               clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTileBlocked(kManagerName)),
+          child: GlobalUpgradeTile(kManagerName, true)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0,
-          child: GlobalUpgradeTile(kManagerName)),
+          child: GlobalUpgradeTile(kManagerName, false)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0 &&
               clickerBrain.showedGlobalUpgrade(kManagerName) != 0.0 &&
               clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
               clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTileBlocked(kCeoName)),
+          child: GlobalUpgradeTile(kCeoName, true)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0,
-          child: GlobalUpgradeTile(kCeoName)),
+          child: GlobalUpgradeTile(kCeoName, false)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0 &&
               clickerBrain.showedGlobalUpgrade(kCeoName) != 0.0 &&
               clickerBrain.showedGlobalUpgrade(kManagerName) != 0.0 &&
               clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
               clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTileBlocked(kMillionaireName)),
+          child: GlobalUpgradeTile(kMillionaireName, true)),
       Visibility(
           visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 1.0,
-          child: GlobalUpgradeTile(kMillionaireName)),
+          child: GlobalUpgradeTile(kMillionaireName, false)),
     ];
 
     return Align(
