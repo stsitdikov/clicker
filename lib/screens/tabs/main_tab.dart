@@ -24,9 +24,7 @@ class _MainTabState extends State<MainTab> {
 
   GlobalKey<AnimatedListState> rowsKey = GlobalKey();
 
-  late List<Widget> listOfRows = [ClickRow()];
-
-  late int removedBlockedRows = 0;
+  List<Widget> listOfRows = [ClickRow()];
 
   @override
   Widget build(BuildContext context) {
@@ -44,23 +42,21 @@ class _MainTabState extends State<MainTab> {
       }
     }
 
-    if (removedBlockedRows == 0) {
-      for (String name in kListOfNamesExceptClick) {
-        if (clickerBrain.showedRow(name) != 1.0) {
-          listOfRows.add(BlockedRow(name));
-        }
-        listOfRows.add(ReusableProgressRow(
-            animation: widget.animationMap[name],
-            controller: widget.animationControllerMap[name],
-            name: name));
-        if (clickerBrain.showedRow(name) != 1.0 &&
-            name == kListOfNamesExceptClick.last) {
-          listOfRows.add(BlockedRow(name));
-        }
+    for (String name in kListOfNamesExceptClick) {
+      if (clickerBrain.showedRow(name) != 1.0) {
+        listOfRows.add(BlockedRow(name));
       }
-      clickerBrain.initialTimers(widget.animationControllerMap);
-      removedBlockedRows++;
+      listOfRows.add(ReusableProgressRow(
+          animation: widget.animationMap[name],
+          controller: widget.animationControllerMap[name],
+          name: name));
+      if (clickerBrain.showedRow(name) != 1.0 &&
+          name == kListOfNamesExceptClick.last) {
+        listOfRows.add(BlockedRow(name));
+      }
     }
+
+    clickerBrain.initialTimers(widget.animationControllerMap);
 
     for (String name in kListOfNamesExceptClick) {
       if (clickerBrain.isVisible(name) && clickerBrain.showedRow(name) == 0.0) {

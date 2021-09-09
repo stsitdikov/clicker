@@ -34,7 +34,8 @@ class ClickerBrain extends ChangeNotifier {
     if (listFlex() < 3.0) {
       box.put('listFlex', (listFlex() + 1.0));
       box.put('itemCount', (itemCount() + 1.0));
-    } else if (listFlex() == 3.0) {
+    } else if (listFlex() == 3.0 &&
+        itemCount() <= kListOfNamesExceptClick.length) {
       box.put('itemCount', (itemCount() + 1.0));
     }
   }

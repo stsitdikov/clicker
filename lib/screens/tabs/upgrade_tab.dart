@@ -18,48 +18,26 @@ class UpgradeTab extends StatelessWidget {
       }
     }
 
-    List<Widget> listOfUpgrades = [
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 0.0,
-          child: GlobalUpgradeTile(kAutoClickName, true)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kAutoClickName) == 1.0,
-          child: GlobalUpgradeTile(kAutoClickName, false)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTile(kWorkerName, true)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kWorkerName) == 1.0,
-          child: GlobalUpgradeTile(kWorkerName, false)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTile(kManagerName, true)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kManagerName) == 1.0,
-          child: GlobalUpgradeTile(kManagerName, false)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kManagerName) != 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTile(kCeoName, true)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kCeoName) == 1.0,
-          child: GlobalUpgradeTile(kCeoName, false)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kCeoName) != 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kManagerName) != 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kWorkerName) != 0.0 &&
-              clickerBrain.showedGlobalUpgrade(kAutoClickName) != 0.0,
-          child: GlobalUpgradeTile(kMillionaireName, true)),
-      Visibility(
-          visible: clickerBrain.showedGlobalUpgrade(kMillionaireName) == 1.0,
-          child: GlobalUpgradeTile(kMillionaireName, false)),
-    ];
+    List<Widget> listOfUpgrades = [];
+
+    List<String> listOfNames = [];
+
+    for (String name in kListOfNamesExceptClick) {
+      bool showedPreviousRows = true;
+      for (String entry in listOfNames) {
+        if (clickerBrain.showedGlobalUpgrade(entry) == 0.0) {
+          showedPreviousRows = false;
+        }
+      }
+      listOfUpgrades.add(Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(name) == 0.0 &&
+              showedPreviousRows == true,
+          child: GlobalUpgradeTile(name, true)));
+      listOfUpgrades.add(Visibility(
+          visible: clickerBrain.showedGlobalUpgrade(name) == 1.0,
+          child: GlobalUpgradeTile(name, false)));
+      listOfNames.add(name);
+    }
 
     return Align(
       alignment: Alignment.bottomLeft,
