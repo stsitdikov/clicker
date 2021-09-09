@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:provider/provider.dart';
 
 import 'package:clicker/logic/constants.dart';
+import 'package:clicker/logic/clicker_brain.dart';
 
 import 'package:clicker/components/increment_container.dart';
 import 'package:clicker/components/upgrade_container.dart';
 
 class BlockedRow extends StatelessWidget {
+  final String name;
+
+  BlockedRow(this.name);
+
   @override
   Widget build(BuildContext context) {
+    var clickerBrain = Provider.of<ClickerBrain>(context);
+
     return Container(
       height: kRowHeight,
       child: Stack(
@@ -30,7 +38,7 @@ class BlockedRow extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        '0 x Unavailable',
+                        '0 x $name',
                         style: TextStyle(fontSize: 20.0),
                       ),
                     ),
@@ -47,7 +55,7 @@ class BlockedRow extends StatelessWidget {
                 ),
                 Expanded(
                   child: UpgradeContainer(
-                    '100',
+                    clickerBrain.getCostString(name),
                     Border(
                       top: BorderSide(color: kBorderColor),
                       right: BorderSide(color: kBorderColor),
@@ -58,7 +66,7 @@ class BlockedRow extends StatelessWidget {
             ),
           ),
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 7.0, sigmaY: 7.0),
+            filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
             child: Container(
               child: Center(
                 child: Column(

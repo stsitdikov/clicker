@@ -6,9 +6,9 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/logic/constants.dart';
 
 import 'package:clicker/components/money_display.dart';
-import 'package:clicker/components/reusable_progress_row.dart';
-import 'package:clicker/rows/blocked_row.dart';
-import 'package:clicker/rows/1_click_row.dart';
+import 'package:clicker/components/rows/reusable_progress_row.dart';
+import 'package:clicker/components/rows/blocked_row.dart';
+import 'package:clicker/components/rows/click_row.dart';
 
 class MainTab extends StatefulWidget {
   final Map animationControllerMap;
@@ -26,32 +26,32 @@ class _MainTabState extends State<MainTab> {
 
   late List<Widget> listOfRows = [
     ClickRow(),
-    BlockedRow(),
+    BlockedRow(kAutoClickName),
     ReusableProgressRow(
         animation: widget.animationMap[kAutoClickName],
         controller: widget.animationControllerMap[kAutoClickName],
         name: kAutoClickName),
-    BlockedRow(),
+    BlockedRow(kWorkerName),
     ReusableProgressRow(
         animation: widget.animationMap[kWorkerName],
         controller: widget.animationControllerMap[kWorkerName],
         name: kWorkerName),
-    BlockedRow(),
+    BlockedRow(kManagerName),
     ReusableProgressRow(
         animation: widget.animationMap[kManagerName],
         controller: widget.animationControllerMap[kManagerName],
         name: kManagerName),
-    BlockedRow(),
+    BlockedRow(kCeoName),
     ReusableProgressRow(
         animation: widget.animationMap[kCeoName],
         controller: widget.animationControllerMap[kCeoName],
         name: kCeoName),
-    BlockedRow(),
+    BlockedRow(kMillionaireName),
     ReusableProgressRow(
         animation: widget.animationMap[kMillionaireName],
         controller: widget.animationControllerMap[kMillionaireName],
         name: kMillionaireName),
-    BlockedRow(),
+    BlockedRow(kMillionaireName),
   ];
 
   late int removedBlockedRows = 0;

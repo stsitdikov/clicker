@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:clicker/components/upgrade_container.dart';
-import 'package:clicker/components/increment_container.dart';
-
 import 'package:clicker/logic/constants.dart';
 import 'package:clicker/logic/clicker_brain.dart';
+
+import 'package:clicker/components/upgrade_container.dart';
+import 'package:clicker/components/increment_container.dart';
 
 class ReusableProgressRow extends StatelessWidget {
   final Animation<double> animation;
