@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:clicker/components/upgrade_container.dart';
 import 'package:clicker/components/increment_container.dart';
+
 import 'package:clicker/logic/constants.dart';
+import 'package:clicker/logic/clicker_brain.dart';
 
 class ReusableProgressRow extends StatelessWidget {
   final Animation<double> animation;
-  final String title;
-  final onUpgradeTap;
-  final String upgradeCost;
-  final onIncrementTap;
-  final String incrementNumber;
+  final AnimationController controller;
+  final String name;
 
   ReusableProgressRow(
-      {required this.animation,
-      required this.title,
-      required this.onUpgradeTap,
-      required this.upgradeCost,
-      required this.onIncrementTap,
-      required this.incrementNumber});
+      {required this.animation, required this.controller, required this.name});
 
   @override
   Widget build(BuildContext context) {
+    var clickerBrain = Provider.of<ClickerBrain>(context);
+    var clickerBrainListenFalse =
+        Provider.of<ClickerBrain>(context, listen: false);
+
     return Container(
       height: kRowHeight,
       child: Row(
@@ -40,7 +40,7 @@ class ReusableProgressRow extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      title,
+                      clickerBrain.getNumberString(name) + ' x  $name',
                       style: TextStyle(fontSize: 20.0),
                     ),
                   ),
@@ -57,9 +57,11 @@ class ReusableProgressRow extends StatelessWidget {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: onIncrementTap,
+              onTap: () {
+                clickerBrainListenFalse.updateIncrement(name);
+              },
               child: IncrementContainer(
-                incrementNumber,
+                clickerBrain.getIncrement(name).toStringAsFixed(0),
                 Border(
                   top: BorderSide(color: kBorderColor),
                   right: BorderSide(color: kBorderColor),
@@ -69,9 +71,11 @@ class ReusableProgressRow extends StatelessWidget {
           ),
           Expanded(
             child: GestureDetector(
-              onTap: onUpgradeTap,
+              onTap: () {
+                clickerBrainListenFalse.upgradeRow(name, controller);
+              },
               child: UpgradeContainer(
-                upgradeCost,
+                clickerBrain.getCostString(name),
                 Border(
                   top: BorderSide(color: kBorderColor),
                   right: BorderSide(color: kBorderColor),

@@ -232,11 +232,9 @@ class ClickerBrain extends ChangeNotifier {
   Timer ceoTimer = Timer(Duration(milliseconds: 0), () {});
   Timer millionaireTimer = Timer(Duration(milliseconds: 0), () {});
 
-  void initialTimers(animationControllerList) {
-    int i = 0;
+  void initialTimers(animationControllerMap) {
     for (String name in kListOfNamesExceptClick) {
-      initiateTimer(name, animationControllerList[i]);
-      i++;
+      initiateTimer(name, animationControllerMap[name]);
     }
   }
 

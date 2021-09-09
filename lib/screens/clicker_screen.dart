@@ -80,23 +80,23 @@ class _ClickerScreenState extends State<ClickerScreen>
   Widget build(BuildContext context) {
     clickerBrain.launchIsNormal();
 
-    List<AnimationController> animationControllerList = [
-      autoClickController,
-      workerController,
-      managerController,
-      ceoController,
-      millionaireController,
-    ];
-    List<Animation<double>> animationList = [
-      autoClickAnimation,
-      workerAnimation,
-      managerAnimation,
-      ceoAnimation,
-      millionaireAnimation,
-    ];
+    Map animationControllerMap = {
+      kAutoClickName: autoClickController,
+      kWorkerName: workerController,
+      kManagerName: managerController,
+      kCeoName: ceoController,
+      kMillionaireName: millionaireController,
+    };
+    Map animationMap = {
+      kAutoClickName: autoClickAnimation,
+      kWorkerName: workerAnimation,
+      kManagerName: managerAnimation,
+      kCeoName: ceoAnimation,
+      kMillionaireName: millionaireAnimation,
+    };
 
     List<Widget> tabs = <Widget>[
-      MainTab(animationControllerList, animationList),
+      MainTab(animationControllerMap, animationMap),
       UpgradeTab(),
       InfoTab(),
     ];

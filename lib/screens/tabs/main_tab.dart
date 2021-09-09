@@ -6,18 +6,14 @@ import 'package:clicker/logic/clicker_brain.dart';
 import 'package:clicker/logic/constants.dart';
 
 import 'package:clicker/components/money_display.dart';
+import 'package:clicker/components/reusable_progress_row.dart';
 import 'package:clicker/rows/blocked_row.dart';
 import 'package:clicker/rows/1_click_row.dart';
-import 'package:clicker/rows/2_autoclick_row.dart';
-import 'package:clicker/rows/3_worker_row.dart';
-import 'package:clicker/rows/4_manager_row.dart';
-import 'package:clicker/rows/5_ceo_row.dart';
-import 'package:clicker/rows/6_millionaire_row.dart';
 
 class MainTab extends StatefulWidget {
-  final List<AnimationController> animationControllerList;
-  final List<Animation<double>> animationList;
-  MainTab(this.animationControllerList, this.animationList);
+  final Map animationControllerMap;
+  final Map animationMap;
+  MainTab(this.animationControllerMap, this.animationMap);
 
   @override
   State<MainTab> createState() => _MainTabState();
@@ -31,15 +27,30 @@ class _MainTabState extends State<MainTab> {
   late List<Widget> listOfRows = [
     ClickRow(),
     BlockedRow(),
-    AutoClickRow(widget.animationList[0], widget.animationControllerList[0]),
+    ReusableProgressRow(
+        animation: widget.animationMap[kAutoClickName],
+        controller: widget.animationControllerMap[kAutoClickName],
+        name: kAutoClickName),
     BlockedRow(),
-    WorkerRow(widget.animationList[1], widget.animationControllerList[1]),
+    ReusableProgressRow(
+        animation: widget.animationMap[kWorkerName],
+        controller: widget.animationControllerMap[kWorkerName],
+        name: kWorkerName),
     BlockedRow(),
-    ManagerRow(widget.animationList[2], widget.animationControllerList[2]),
+    ReusableProgressRow(
+        animation: widget.animationMap[kManagerName],
+        controller: widget.animationControllerMap[kManagerName],
+        name: kManagerName),
     BlockedRow(),
-    CeoRow(widget.animationList[3], widget.animationControllerList[3]),
+    ReusableProgressRow(
+        animation: widget.animationMap[kCeoName],
+        controller: widget.animationControllerMap[kCeoName],
+        name: kCeoName),
     BlockedRow(),
-    MillionaireRow(widget.animationList[4], widget.animationControllerList[4]),
+    ReusableProgressRow(
+        animation: widget.animationMap[kMillionaireName],
+        controller: widget.animationControllerMap[kMillionaireName],
+        name: kMillionaireName),
     BlockedRow(),
   ];
 
@@ -62,7 +73,7 @@ class _MainTabState extends State<MainTab> {
     }
 
     if (removedBlockedRows == 0) {
-      clickerBrain.initialTimers(widget.animationControllerList);
+      clickerBrain.initialTimers(widget.animationControllerMap);
       int i = 0;
       for (String name in kListOfNamesExceptClick) {
         i++;
