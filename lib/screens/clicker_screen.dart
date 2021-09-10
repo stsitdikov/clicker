@@ -66,6 +66,24 @@ class _ClickerScreenState extends State<ClickerScreen>
     curve: Curves.linear,
   );
 
+  late final AnimationController presidentController = AnimationController(
+    duration: clickerBrain.getDuration(kPresidentName),
+    vsync: this,
+  );
+  late final Animation<double> presidentAnimation = CurvedAnimation(
+    parent: presidentController,
+    curve: Curves.linear,
+  );
+
+  late final AnimationController jeffreyController = AnimationController(
+    duration: clickerBrain.getDuration(kJeffreyName),
+    vsync: this,
+  );
+  late final Animation<double> jeffreyAnimation = CurvedAnimation(
+    parent: jeffreyController,
+    curve: Curves.linear,
+  );
+
   @override
   void dispose() {
     autoClickController.dispose();
@@ -73,6 +91,8 @@ class _ClickerScreenState extends State<ClickerScreen>
     managerController.dispose();
     ceoController.dispose();
     millionaireController.dispose();
+    presidentController.dispose();
+    jeffreyController.dispose();
     super.dispose();
   }
 
@@ -86,6 +106,8 @@ class _ClickerScreenState extends State<ClickerScreen>
       kManagerName: managerController,
       kCeoName: ceoController,
       kMillionaireName: millionaireController,
+      kPresidentName: presidentController,
+      kJeffreyName: jeffreyController,
     };
     Map animationMap = {
       kAutoClickName: autoClickAnimation,
@@ -93,6 +115,8 @@ class _ClickerScreenState extends State<ClickerScreen>
       kManagerName: managerAnimation,
       kCeoName: ceoAnimation,
       kMillionaireName: millionaireAnimation,
+      kPresidentName: presidentAnimation,
+      kJeffreyName: jeffreyAnimation,
     };
 
     List<Widget> tabs = <Widget>[

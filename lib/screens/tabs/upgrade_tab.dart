@@ -42,6 +42,7 @@ class UpgradeTab extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomLeft,
       child: SingleChildScrollView(
+        reverse: true,
         padding: EdgeInsets.only(top: 15.0),
         child: Column(
           verticalDirection: VerticalDirection.up,

@@ -19,8 +19,10 @@ const String kClickName = 'Click';
 const String kAutoClickName = 'AutoClick';
 const String kWorkerName = 'Worker';
 const String kManagerName = 'Manager';
-const String kCeoName = 'Ceo';
+const String kCeoName = 'CEO';
 const String kMillionaireName = 'Millionaire';
+const String kPresidentName = 'President';
+const String kJeffreyName = 'Jeffrey';
 
 // main constants
 
@@ -39,6 +41,8 @@ const List<String> kListOfNamesExceptClick = [
   kManagerName,
   kCeoName,
   kMillionaireName,
+  kPresidentName,
+  kJeffreyName,
 ];
 const Map kMapOfDefaultCosts = {
   kClickName: 10.0,
@@ -47,6 +51,8 @@ const Map kMapOfDefaultCosts = {
   kManagerName: 10.0,
   kCeoName: 10.0,
   kMillionaireName: 10.0,
+  kPresidentName: 10.0,
+  kJeffreyName: 10.0,
 };
 const Map kMapOfDefaultDurations = {
   kAutoClickName: 3000.0,
@@ -54,6 +60,8 @@ const Map kMapOfDefaultDurations = {
   kManagerName: 30000.0,
   kCeoName: 60000.0,
   kMillionaireName: 120000.0,
+  kPresidentName: 240000.0,
+  kJeffreyName: 480000.0,
 };
 const Map kMapOfDefaultDecreaseDurationCosts = {
   kAutoClickName: 100.0,
@@ -61,6 +69,8 @@ const Map kMapOfDefaultDecreaseDurationCosts = {
   kManagerName: 10000.0,
   kCeoName: 100000.0,
   kMillionaireName: 1000000.0,
+  kPresidentName: 10000000.0,
+  kJeffreyName: 100000000.0,
 };
 const Map kMapOfVisibilityRequirements = {
   kAutoClickName: 10.0,
@@ -68,6 +78,8 @@ const Map kMapOfVisibilityRequirements = {
   kManagerName: 5.0,
   kCeoName: 5.0,
   kMillionaireName: 5.0,
+  kPresidentName: 5.0,
+  kJeffreyName: 5.0,
 };
 const Map kMapOfDecreaseDurationIncrements = {
   kAutoClickName: 1000.0,
@@ -75,4 +87,6 @@ const Map kMapOfDecreaseDurationIncrements = {
   kManagerName: 10000.0,
   kCeoName: 10000.0,
   kMillionaireName: 10000.0,
+  kPresidentName: 20000.0,
+  kJeffreyName: 20000.0,
 };

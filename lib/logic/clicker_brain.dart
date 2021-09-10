@@ -232,6 +232,8 @@ class ClickerBrain extends ChangeNotifier {
   Timer managerTimer = Timer(Duration(milliseconds: 0), () {});
   Timer ceoTimer = Timer(Duration(milliseconds: 0), () {});
   Timer millionaireTimer = Timer(Duration(milliseconds: 0), () {});
+  Timer presidentTimer = Timer(Duration(milliseconds: 0), () {});
+  Timer jeffreyTimer = Timer(Duration(milliseconds: 0), () {});
 
   void initialTimers(animationControllerMap) {
     for (String name in kListOfNamesExceptClick) {
@@ -245,6 +247,8 @@ class ClickerBrain extends ChangeNotifier {
     kManagerName: 0,
     kCeoName: 0,
     kMillionaireName: 0,
+    kPresidentName: 0,
+    kJeffreyName: 0,
   };
 
   void initiateTimer(name, controller) {
@@ -261,6 +265,8 @@ class ClickerBrain extends ChangeNotifier {
     managerTimer.cancel();
     ceoTimer.cancel();
     millionaireTimer.cancel();
+    presidentTimer.cancel();
+    jeffreyTimer.cancel();
   }
 
   void timerStart(name, controller) {
@@ -274,6 +280,10 @@ class ClickerBrain extends ChangeNotifier {
       ceoTimer = timerNew(name, controller);
     } else if (name == kMillionaireName) {
       millionaireTimer = timerNew(name, controller);
+    } else if (name == kPresidentName) {
+      presidentTimer = timerNew(name, controller);
+    } else if (name == kJeffreyName) {
+      jeffreyTimer = timerNew(name, controller);
     }
   }
 
