@@ -15,7 +15,7 @@ class GameMechanics extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             Text(
-              '- Click determines how much money you get each click.\n\n- AutoClick clicks for you every 3 seconds (at first).\n\n- Every Worker gives you an AutoClick every 10 seconds and so forth - it means every next item works slower, but gives you a set amount of previous items.',
+              '- $kClickName determines how much money you get each click.\n\n- $kAutoClickName clicks for you every ${(kMapOfDefaultDurations[kAutoClickName] / 1000).toInt()} seconds (at first).\n\n- Every $kWorkerName gives you an $kAutoClickName every ${(kMapOfDefaultDurations[kWorkerName] / 1000).toInt()} seconds and so forth - it means every next item works slower, but gives you a set amount of previous items.',
               style: kInfoTextStyle,
             ),
           ],

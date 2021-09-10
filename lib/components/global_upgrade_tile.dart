@@ -42,7 +42,7 @@ class GlobalUpgradeTile extends StatelessWidget {
           context: context,
           builder: (BuildContext context) => AlertDialog(
                 title: Text('Remove this button?'),
-                content: Text((name == kCeoName ? name.toUpperCase() : name) +
+                content: Text(name +
                     ' is fully upgraded, do you want to remove this button?'),
                 actions: <Widget>[
                   TextButton(
