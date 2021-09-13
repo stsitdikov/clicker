@@ -6,7 +6,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'screens/clicker_screen.dart';
 import 'screens/test_screen.dart';
-import 'screens/launch_screen.dart';
 
 import 'package:clicker/logic/constants.dart';
 import 'logic/clicker_brain.dart';
@@ -25,12 +24,6 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData.dark(),
         title: kAppName,
-        // initialRoute: Hive.box<double>(kClickerBrainBox)
-        //             .get('money', defaultValue: 0.0) ==
-        //         0.0
-        //     ? kClickerScreenName
-        //     : kLaunchScreenName,
-        // initialRoute: kTestScreenName,
         initialRoute: kClickerScreenName,
         routes: {
           kClickerScreenName: (context) => ClickerScreen(
@@ -42,7 +35,6 @@ class MyApp extends StatelessWidget {
                     : 1,
               ),
           kTestScreenName: (context) => TestScreen(),
-          kLaunchScreenName: (context) => LaunchScreen(),
         },
       ),
     );

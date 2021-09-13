@@ -236,9 +236,11 @@ class ClickerBrain extends ChangeNotifier {
   Timer jeffreyTimer = Timer(Duration(milliseconds: 0), () {});
 
   void initialTimers(animationControllerMap) {
-    for (String name in kListOfNamesExceptClick) {
-      initiateTimer(name, animationControllerMap[name]);
-    }
+    Future.delayed(Duration(seconds: 3), () {
+      for (String name in kListOfNamesExceptClick) {
+        initiateTimer(name, animationControllerMap[name]);
+      }
+    });
   }
 
   Map wasInitiated = {
