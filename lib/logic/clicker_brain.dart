@@ -134,8 +134,8 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  void updateNumberClickRow(numberToChange, increment) =>
-      box.put('ClickAmount', numberToChange * pow(kMainIncrement, increment));
+  void updateNumberClickRow(numberToChange, increment) => box.put('ClickAmount',
+      numberToChange * pow(kClickAmountIncreaseIncrement, increment));
 
   void updateNumber(name, numberToChange, increment, shouldAnimate) {
     box.put('${name}Number', numberToChange + increment);

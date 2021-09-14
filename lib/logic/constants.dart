@@ -27,8 +27,9 @@ const String kJeffreyName = 'Jeffrey';
 // main constants
 
 const String kAppName = 'Click & Tick';
-const double kDefaultClickAmount = 10.0;
+const double kDefaultClickAmount = 0.25;
 const double kMainIncrement = 1.2;
+const double kClickAmountIncreaseIncrement = 1.25;
 const double kRowHeight = 70.0;
 const double kGlobalUpgradeTileHeight = 100.0;
 const Duration kShowRowDuration = Duration(milliseconds: 500);
@@ -45,18 +46,18 @@ const List<String> kListOfNamesExceptClick = [
   kJeffreyName,
 ];
 const Map kMapOfDefaultCosts = {
-  kClickName: 10.0,
-  kAutoClickName: 10.0,
-  kWorkerName: 10.0,
-  kManagerName: 10.0,
-  kCeoName: 10.0,
-  kMillionaireName: 10.0,
-  kPresidentName: 10.0,
-  kJeffreyName: 10.0,
+  kClickName: 5.0,
+  kAutoClickName: 100.0,
+  kWorkerName: 5000.0,
+  kManagerName: 100000.0,
+  kCeoName: 100000.0,
+  kMillionaireName: 1000000.0,
+  kPresidentName: 10000000.0,
+  kJeffreyName: 100000000.0,
 };
 const Map kMapOfDefaultDurations = {
-  kAutoClickName: 3000.0,
-  kWorkerName: 10000.0,
+  kAutoClickName: 5000.0,
+  kWorkerName: 15000.0,
   kManagerName: 30000.0,
   kCeoName: 60000.0,
   kMillionaireName: 120000.0,
@@ -64,7 +65,7 @@ const Map kMapOfDefaultDurations = {
   kJeffreyName: 480000.0,
 };
 const Map kMapOfDefaultDecreaseDurationCosts = {
-  kAutoClickName: 100.0,
+  kAutoClickName: 1000000.0,
   kWorkerName: 1000.0,
   kManagerName: 10000.0,
   kCeoName: 100000.0,
@@ -82,11 +83,11 @@ const Map kMapOfVisibilityRequirements = {
   kJeffreyName: 5.0,
 };
 const Map kMapOfDecreaseDurationIncrements = {
-  kAutoClickName: 1000.0,
-  kWorkerName: 5000.0,
-  kManagerName: 10000.0,
-  kCeoName: 10000.0,
-  kMillionaireName: 10000.0,
-  kPresidentName: 20000.0,
-  kJeffreyName: 20000.0,
+  kAutoClickName: 100.0,
+  kWorkerName: 100.0,
+  kManagerName: 100.0,
+  kCeoName: 100.0,
+  kMillionaireName: 100.0,
+  kPresidentName: 100.0,
+  kJeffreyName: 100.0,
 };
