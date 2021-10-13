@@ -104,23 +104,28 @@ class ClickerBrain extends ChangeNotifier {
     double shouldAnimateRow = name == kClickName ? 1.0 : shouldAnimate(name);
     double numberToChange =
         name == kClickName ? getClickAmount() : getNumber(name);
+    double upgradeIncrement = kMapOfUpgradeCostIncrements[name];
 
     if (getMoney() >= getCost(name)) {
       decreaseMoney(getCost(name));
       if (increment == 1.0) {
-        box.put('${name}CostOne', costOne * pow(kMainIncrement, increment));
-        box.put('${name}Cost', costOne * pow(kMainIncrement, increment));
-        incrementalCost(name, 0.0, increment, costOne);
+        box.put('${name}CostOne', costOne * pow(upgradeIncrement, increment));
+        box.put('${name}Cost', costOne * pow(upgradeIncrement, increment));
+        incrementalCost(name, 0.0, increment, costOne, upgradeIncrement);
         if (name == kClickName) {
           updateNumberClickRow(numberToChange, increment);
         } else {
           updateNumber(name, numberToChange, increment, shouldAnimateRow);
         }
       } else {
-        box.put('${name}CostOne', costOne * pow(kMainIncrement, increment));
-        box.put('${name}Cost', costOne * pow(kMainIncrement, increment));
-        incrementalCost(name, costOne * pow(kMainIncrement, increment),
-            increment, costOne * pow(kMainIncrement, increment));
+        box.put('${name}CostOne', costOne * pow(upgradeIncrement, increment));
+        box.put('${name}Cost', costOne * pow(upgradeIncrement, increment));
+        incrementalCost(
+            name,
+            costOne * pow(upgradeIncrement, increment),
+            increment,
+            costOne * pow(upgradeIncrement, increment),
+            upgradeIncrement);
         if (name == kClickName) {
           updateNumberClickRow(numberToChange, increment);
         } else {
@@ -147,15 +152,16 @@ class ClickerBrain extends ChangeNotifier {
   void updateIncrement(name) {
     double increment = getIncrement(name);
     double costOne = getCostOne(name);
+    double upgradeIncrement = kMapOfUpgradeCostIncrements[name];
 
     if (increment == 1.0) {
       box.put('${name}Increment', 10.0);
       box.put('${name}Cost', costOne);
-      incrementalCost(name, costOne, 10.0, costOne);
+      incrementalCost(name, costOne, 10.0, costOne, upgradeIncrement);
     } else if (increment == 10.0) {
       box.put('${name}Increment', 100.0);
       box.put('${name}Cost', costOne);
-      incrementalCost(name, costOne, 100.0, costOne);
+      incrementalCost(name, costOne, 100.0, costOne, upgradeIncrement);
     } else if (increment == 100.0) {
       box.put('${name}Increment', 1.0);
       box.put('${name}Cost', costOne);
@@ -163,10 +169,10 @@ class ClickerBrain extends ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementalCost(name, newValue, increment, costOne) {
+  void incrementalCost(name, newValue, increment, costOne, upgradeIncrement) {
     double newCost = newValue;
     for (var i = 1; i <= increment; i++) {
-      newCost = newCost + costOne * pow(kMainIncrement, i);
+      newCost = newCost + costOne * pow(upgradeIncrement, i);
     }
     box.put('${name}Cost', newCost);
   }
@@ -236,11 +242,9 @@ class ClickerBrain extends ChangeNotifier {
   Timer jeffreyTimer = Timer(Duration(milliseconds: 0), () {});
 
   void initialTimers(animationControllerMap) {
-    Future.delayed(Duration(seconds: 3), () {
-      for (String name in kListOfNamesExceptClick) {
-        initiateTimer(name, animationControllerMap[name]);
-      }
-    });
+    for (String name in kListOfNamesExceptClick) {
+      initiateTimer(name, animationControllerMap[name]);
+    }
   }
 
   Map wasInitiated = {
@@ -301,15 +305,15 @@ class ClickerBrain extends ChangeNotifier {
 
   // global upgrades
 
-  bool canDecreaseDuration(which, decreaseConstant) =>
-      getDurationDouble(which) > decreaseConstant;
+  bool canDecreaseDuration(which) =>
+      getDurationDouble(which) > (kMapOfDefaultDurations[which] / 2);
 
   void decreaseDuration(name) {
     decreaseMoney(getDecreaseDurationCost(name));
     box.put('${name}DurationMilliseconds',
         (getDurationDouble(name) - kMapOfDecreaseDurationIncrements[name]));
     box.put('${name}DecreaseDurationCost',
-        (getDecreaseDurationCost(name) * kMainIncrement));
+        (getDecreaseDurationCost(name) * kDecreaseDurationIncrement));
     launchIsFromGlobalUpgrade();
     cancelTimers();
     notifyListeners();

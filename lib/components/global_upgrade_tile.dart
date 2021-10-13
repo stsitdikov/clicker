@@ -16,11 +16,9 @@ class GlobalUpgradeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var clickerBrain = Provider.of<ClickerBrain>(context);
 
-    bool canUpgradeMore = clickerBrain.canDecreaseDuration(
-        name, kMapOfDecreaseDurationIncrements[name]);
+    bool canUpgradeMore = clickerBrain.canDecreaseDuration(name);
     void onTap() {
-      if (clickerBrain.canDecreaseDuration(
-              name, kMapOfDecreaseDurationIncrements[name]) &&
+      if (clickerBrain.canDecreaseDuration(name) &&
           clickerBrain.canShowGlobalUpgrade(name)) {
         clickerBrain.decreaseDuration(name);
         Phoenix.rebirth(context);
