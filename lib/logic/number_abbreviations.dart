@@ -14,19 +14,25 @@ class NumberAbbreviations {
           numberLetter;
     }
 
+    int power = 0;
+
+    Map mapOfNumberLetters = {
+      3: 'K',
+      6: 'M',
+      9: 'B',
+      12: 'T',
+      15: 'Qa',
+      18: 'Qi',
+      21: 'Sx',
+    };
+
     if (n < pow(10, 3))
       return reformat(n, '');
-    else if (n >= pow(10, 3) && n < pow(10, 6))
-      return reformat(n / pow(10, 3), 'K');
-    else if (n >= pow(10, 6) && n < pow(10, 9))
-      return reformat(n / pow(10, 6), 'M');
-    else if (n >= pow(10, 9) && n < pow(10, 12))
-      return reformat(n / pow(10, 9), 'B');
-    else if (n >= pow(10, 12) && n < pow(10, 15))
-      return reformat(n / pow(10, 12), 'T');
-    else if (n >= pow(10, 15) && n < pow(10, 18))
-      return reformat(n / pow(10, 15), 'Qa');
-    else
-      return 'Error';
+    else {
+      for (int i = 3; i <= 21; i = i + 3)
+        if (n >= pow(10, i) && n < pow(10, i + 3)) power = i;
+
+      return reformat(n / pow(10, power), mapOfNumberLetters[power]);
+    }
   }
 }
