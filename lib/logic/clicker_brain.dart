@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'dart:math';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:clicker/logic/constants.dart';
+import 'package:clicker/logic/number_abbreviations.dart';
 
 class ClickerBrain extends ChangeNotifier {
+  NumberAbbreviations numberAbbreviations;
+  ClickerBrain(this.numberAbbreviations);
+
   Box box = Hive.box<double>(kClickerBrainBox);
   void clearBox() => box.clear();
 
@@ -17,7 +20,7 @@ class ClickerBrain extends ChangeNotifier {
 
   void decreaseMoney(amount) => box.put('money', (getMoney() - amount));
 
-  String getMoneyString() => NumberFormat.compact().format(getMoney());
+  String getMoneyString() => numberAbbreviations.getNumberString(getMoney());
 
   void clickIncreaseMoney() {
     box.put('money', (getMoney() + getClickAmount()));
@@ -67,7 +70,7 @@ class ClickerBrain extends ChangeNotifier {
       box.get('ClickAmount', defaultValue: kDefaultClickAmount);
 
   String getClickAmountString() =>
-      NumberFormat.compact().format(getClickAmount());
+      numberAbbreviations.getNumberString(getClickAmount());
 
   double getCost(which) =>
       box.get('${which}Cost', defaultValue: kMapOfDefaultCosts[which]);
@@ -75,14 +78,15 @@ class ClickerBrain extends ChangeNotifier {
   double getCostOne(which) =>
       box.get('${which}CostOne', defaultValue: kMapOfDefaultCosts[which]);
 
-  String getCostString(which) => NumberFormat.compact().format(getCost(which));
+  String getCostString(which) =>
+      numberAbbreviations.getNumberString(getCost(which));
 
   double getIncrement(which) => box.get('${which}Increment', defaultValue: 1.0);
 
   double getNumber(which) => box.get('${which}Number', defaultValue: 0.0);
 
   String getNumberString(which) =>
-      NumberFormat.compact().format(getNumber(which));
+      numberAbbreviations.getNumberString(getNumber(which));
 
   Duration getDuration(which) =>
       Duration(milliseconds: getDurationDouble(which).toInt());
@@ -324,6 +328,6 @@ class ClickerBrain extends ChangeNotifier {
           defaultValue: kMapOfDefaultDecreaseDurationCosts[which]);
 
   String getDecreaseDurationCostString(which) {
-    return NumberFormat.compact().format(getDecreaseDurationCost(which));
+    return numberAbbreviations.getNumberString(getDecreaseDurationCost(which));
   }
 }

@@ -9,6 +9,7 @@ import 'screens/test_screen.dart';
 
 import 'package:clicker/logic/constants.dart';
 import 'logic/clicker_brain.dart';
+import 'package:clicker/logic/number_abbreviations.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ClickerBrain>(
-      create: (_) => ClickerBrain(),
+      create: (_) => ClickerBrain(NumberAbbreviations()),
       child: MaterialApp(
         theme: ThemeData.dark(),
         title: kAppName,
