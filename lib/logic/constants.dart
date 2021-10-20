@@ -30,7 +30,7 @@ const String kAppName = 'Click & Tick';
 const double kDefaultClickAmount = 0.1;
 
 const double kClickAmountIncreaseIncrement = 1.5;
-const double kDecreaseDurationIncrement = 10.0;
+const double kDecreaseDurationIncrement = 5.0;
 
 const double kRowHeight = 70.0;
 const double kGlobalUpgradeTileHeight = 100.0;
@@ -48,7 +48,7 @@ const List<String> kListOfNamesExceptClick = [
   kJeffreyName,
 ];
 const Map kMapOfDefaultCosts = {
-  kClickName: 0.8,
+  kClickName: 100.0,
   kAutoClickName: 2.0,
   kWorkerName: 20.0,
   kManagerName: 100.0,
@@ -62,10 +62,10 @@ const Map kMapOfUpgradeCostIncrements = {
   kAutoClickName: 1.05,
   kWorkerName: 1.1,
   kManagerName: 1.2,
-  kCeoName: 1.4,
-  kMillionaireName: 1.8,
-  kPresidentName: 2.6,
-  kJeffreyName: 4.2,
+  kCeoName: 1.2,
+  kMillionaireName: 1.2,
+  kPresidentName: 1.2,
+  kJeffreyName: 1.2,
 };
 const Map kMapOfDefaultDurations = {
   kAutoClickName: 3000.0,
@@ -86,7 +86,7 @@ const Map kMapOfDefaultDecreaseDurationCosts = {
   kJeffreyName: 15625000.0,
 };
 const Map kMapOfDecreaseDurationIncrements = {
-  kAutoClickName: 100.0,
+  kAutoClickName: 200.0,
   kWorkerName: 200.0,
   kManagerName: 300.0,
   kCeoName: 400.0,
