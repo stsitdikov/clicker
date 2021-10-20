@@ -48,7 +48,7 @@ const List<String> kListOfNamesExceptClick = [
   kJeffreyName,
 ];
 const Map kMapOfDefaultCosts = {
-  kClickName: 500.0,
+  kClickName: 0.8,
   kAutoClickName: 2.0,
   kWorkerName: 20.0,
   kManagerName: 100.0,

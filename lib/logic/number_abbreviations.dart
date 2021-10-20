@@ -1,19 +1,8 @@
 import 'dart:math';
 
 class NumberAbbreviations {
-  String getNumberString(number) {
+  String getNumberString(n) {
     int numbersAfterDecimal = 2;
-    double n = number;
-
-    String reformat(n, numberLetter) {
-      if ((n * 10).truncateToDouble() == (n * 10)) {
-        numbersAfterDecimal = 1;
-      }
-      return n.toStringAsFixed(
-              n.truncateToDouble() == n ? 0 : numbersAfterDecimal) +
-          numberLetter;
-    }
-
     int power = 0;
 
     Map mapOfNumberLetters = {
@@ -25,6 +14,14 @@ class NumberAbbreviations {
       18: 'Qi',
       21: 'Sx',
     };
+
+    String reformat(n, numberLetter) {
+      if ((n * 10).truncate() == (n * 10)) {
+        numbersAfterDecimal = 1;
+      }
+      return n.toStringAsFixed(n.truncate() == n ? 0 : numbersAfterDecimal) +
+          numberLetter;
+    }
 
     if (n < pow(10, 3))
       return reformat(n, '');
