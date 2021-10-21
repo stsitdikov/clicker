@@ -18,12 +18,20 @@ class ClickerBrain extends ChangeNotifier {
 
   double getMoney() => box.get('money', defaultValue: 0.0) as double;
 
-  void decreaseMoney(amount) => box.put('money', (getMoney() - amount));
+  void decreaseMoney(amount) => box.put(
+      'money',
+      double.parse(
+        (getMoney() - amount).toStringAsFixed(kHiveDecimals),
+      ));
 
   String getMoneyString() => numberAbbreviations.getNumberString(getMoney());
 
   void clickIncreaseMoney() {
-    box.put('money', (getMoney() + getClickAmount()));
+    box.put(
+        'money',
+        double.parse(
+          (getMoney() + getClickAmount()).toStringAsFixed(kHiveDecimals),
+        ));
     notifyListeners();
   }
 
@@ -112,9 +120,13 @@ class ClickerBrain extends ChangeNotifier {
 
     if (getMoney() >= getCost(name)) {
       decreaseMoney(getCost(name));
+      double newCost = double.parse(
+        (costOne * pow(upgradeIncrement, increment))
+            .toStringAsFixed(kHiveDecimals),
+      );
       if (increment == 1.0) {
-        box.put('${name}CostOne', costOne * pow(upgradeIncrement, increment));
-        box.put('${name}Cost', costOne * pow(upgradeIncrement, increment));
+        box.put('${name}CostOne', newCost);
+        box.put('${name}Cost', newCost);
         incrementalCost(name, 0.0, increment, costOne, upgradeIncrement);
         if (name == kClickName) {
           updateNumberClickRow(numberToChange, increment);
@@ -122,8 +134,8 @@ class ClickerBrain extends ChangeNotifier {
           updateNumber(name, numberToChange, increment, shouldAnimateRow);
         }
       } else {
-        box.put('${name}CostOne', costOne * pow(upgradeIncrement, increment));
-        box.put('${name}Cost', costOne * pow(upgradeIncrement, increment));
+        box.put('${name}CostOne', newCost);
+        box.put('${name}Cost', newCost);
         incrementalCost(
             name,
             costOne * pow(upgradeIncrement, increment),
@@ -143,11 +155,19 @@ class ClickerBrain extends ChangeNotifier {
     }
   }
 
-  void updateNumberClickRow(numberToChange, increment) => box.put('ClickAmount',
-      numberToChange * pow(kClickAmountIncreaseIncrement, increment));
+  void updateNumberClickRow(numberToChange, increment) => box.put(
+      'ClickAmount',
+      double.parse(
+        (numberToChange * pow(kClickAmountIncreaseIncrement, increment))
+            .toStringAsFixed(kHiveDecimals),
+      ));
 
   void updateNumber(name, numberToChange, increment, shouldAnimate) {
-    box.put('${name}Number', numberToChange + increment);
+    box.put(
+        '${name}Number',
+        double.parse(
+          (numberToChange + increment).toStringAsFixed(kHiveDecimals),
+        ));
     if (shouldAnimate == 0.0) {
       box.put('shouldAnimate$name', 1.0);
     }
@@ -228,7 +248,12 @@ class ClickerBrain extends ChangeNotifier {
 
   void timerFunction(name) {
     if (name == kAutoClickName) {
-      box.put('money', (getMoney() + getNumber(name) * getClickAmount()));
+      box.put(
+          'money',
+          double.parse(
+            (getMoney() + getNumber(name) * getClickAmount())
+                .toStringAsFixed(kHiveDecimals),
+          ));
     } else {
       String previousRowName =
           kListOfNamesExceptClick[(kListOfNamesExceptClick.indexOf(name) - 1)];

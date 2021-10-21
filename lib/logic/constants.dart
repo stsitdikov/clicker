@@ -29,6 +29,8 @@ const String kJeffreyName = 'Jeffrey';
 const String kAppName = 'Click & Tick';
 const double kDefaultClickAmount = 0.1;
 
+const int kHiveDecimals = 2;
+
 const double kClickAmountIncreaseIncrement = 1.5;
 const double kDecreaseDurationIncrement = 5.0;
 

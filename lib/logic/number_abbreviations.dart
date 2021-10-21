@@ -1,7 +1,7 @@
 import 'dart:math';
 
 class NumberAbbreviations {
-  String getNumberString(number) {
+  String getNumberString(n) {
     int numbersAfterDecimal = 2;
     int power = 0;
 
@@ -22,8 +22,6 @@ class NumberAbbreviations {
       return n.toStringAsFixed(n.truncate() == n ? 0 : numbersAfterDecimal) +
           numberLetter;
     }
-
-    double n = double.parse(number.toStringAsFixed(2));
 
     if (n < pow(10, 3))
       return reformat(n, '');
