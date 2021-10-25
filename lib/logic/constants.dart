@@ -38,6 +38,8 @@ const double kRowHeight = 70.0;
 const double kGlobalUpgradeTileHeight = 100.0;
 const Duration kShowRowDuration = Duration(milliseconds: 500);
 
+const double kMaxDouble = 3870000000000000000.0;
+
 // lists and maps
 
 const List<String> kListOfNamesExceptClick = [
@@ -50,7 +52,7 @@ const List<String> kListOfNamesExceptClick = [
   kJeffreyName,
 ];
 const Map kMapOfDefaultCosts = {
-  kClickName: 100.0,
+  kClickName: 10.0,
   kAutoClickName: 2.0,
   kWorkerName: 20.0,
   kManagerName: 100.0,
@@ -60,7 +62,7 @@ const Map kMapOfDefaultCosts = {
   kJeffreyName: 62500.0,
 };
 const Map kMapOfUpgradeCostIncrements = {
-  kClickName: 10.0,
+  kClickName: 1.2,
   kAutoClickName: 1.05,
   kWorkerName: 1.1,
   kManagerName: 1.2,

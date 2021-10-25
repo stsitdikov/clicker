@@ -178,27 +178,34 @@ class ClickerBrain extends ChangeNotifier {
     double costOne = getCostOne(name);
     double upgradeIncrement = kMapOfUpgradeCostIncrements[name];
 
-    if (increment == 1.0) {
-      box.put('${name}Increment', 10.0);
-      box.put('${name}Cost', costOne);
+    if (increment == 1.0)
       incrementalCost(name, costOne, 10.0, costOne, upgradeIncrement);
-    } else if (increment == 10.0) {
-      box.put('${name}Increment', 100.0);
-      box.put('${name}Cost', costOne);
+    else if (increment == 10.0)
       incrementalCost(name, costOne, 100.0, costOne, upgradeIncrement);
-    } else if (increment == 100.0) {
-      box.put('${name}Increment', 1.0);
-      box.put('${name}Cost', costOne);
-    }
+    else if (increment == 100.0) returnToIncrementOne(name, costOne);
+
+    print(getCost(name));
     notifyListeners();
   }
 
+  void returnToIncrementOne(name, costOne) {
+    box.put('${name}Increment', 1.0);
+    box.put('${name}Cost', costOne);
+  }
+
   void incrementalCost(name, newValue, increment, costOne, upgradeIncrement) {
-    double newCost = newValue;
     for (var i = 1; i <= increment; i++) {
-      newCost = newCost + costOne * pow(upgradeIncrement, i);
+      newValue = newValue + costOne * pow(upgradeIncrement, i);
     }
-    box.put('${name}Cost', newCost);
+    if (newValue <= kMaxDouble) {
+      double newCost = double.parse(
+        newValue.toStringAsFixed(kHiveDecimals),
+      );
+      box.put('${name}Increment', increment);
+      box.put('${name}Cost', newCost);
+    } else {
+      returnToIncrementOne(name, costOne);
+    }
   }
 
   // visibility
