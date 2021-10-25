@@ -184,7 +184,6 @@ class ClickerBrain extends ChangeNotifier {
       incrementalCost(name, costOne, 100.0, costOne, upgradeIncrement);
     else if (increment == 100.0) returnToIncrementOne(name, costOne);
 
-    print(getCost(name));
     notifyListeners();
   }
 
