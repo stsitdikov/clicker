@@ -27,12 +27,14 @@ class ClickerBrain extends ChangeNotifier {
   String getMoneyString() => numberAbbreviations.getNumberString(getMoney());
 
   void clickIncreaseMoney() {
-    box.put(
-        'money',
-        double.parse(
-          (getMoney() + getClickAmount()).toStringAsFixed(kHiveDecimals),
-        ));
-    notifyListeners();
+    if (getMoney() <= kMaxDouble) {
+      box.put(
+          'money',
+          double.parse(
+            (getMoney() + getClickAmount()).toStringAsFixed(kHiveDecimals),
+          ));
+      notifyListeners();
+    }
   }
 
   // main tab flexes
@@ -254,17 +256,21 @@ class ClickerBrain extends ChangeNotifier {
 
   void timerFunction(name) {
     if (name == kAutoClickName) {
-      box.put(
-          'money',
-          double.parse(
-            (getMoney() + getNumber(name) * getClickAmount())
-                .toStringAsFixed(kHiveDecimals),
-          ));
+      if (getNumber(name) <= kMaxDouble) {
+        box.put(
+            'money',
+            double.parse(
+              (getMoney() + getNumber(name) * getClickAmount())
+                  .toStringAsFixed(kHiveDecimals),
+            ));
+      }
     } else {
       String previousRowName =
           kListOfNamesExceptClick[(kListOfNamesExceptClick.indexOf(name) - 1)];
-      box.put('${previousRowName}Number',
-          (getNumber(previousRowName) + getNumber(name)));
+      if (getNumber(previousRowName) <= kMaxDouble) {
+        box.put('${previousRowName}Number',
+            (getNumber(previousRowName) + getNumber(name)));
+      }
     }
   }
 

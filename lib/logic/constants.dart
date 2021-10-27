@@ -52,7 +52,7 @@ const List<String> kListOfNamesExceptClick = [
   kJeffreyName,
 ];
 const Map kMapOfDefaultCosts = {
-  kClickName: 10.0,
+  kClickName: 100.0,
   kAutoClickName: 2.0,
   kWorkerName: 20.0,
   kManagerName: 100.0,
@@ -62,7 +62,7 @@ const Map kMapOfDefaultCosts = {
   kJeffreyName: 62500.0,
 };
 const Map kMapOfUpgradeCostIncrements = {
-  kClickName: 10.0,
+  kClickName: 30.0,
   kAutoClickName: 1.05,
   kWorkerName: 1.1,
   kManagerName: 1.2,
@@ -100,10 +100,10 @@ const Map kMapOfDecreaseDurationIncrements = {
 };
 const Map kMapOfVisibilityRequirements = {
   kAutoClickName: 0.0,
-  kWorkerName: 3.0,
-  kManagerName: 5.0,
-  kCeoName: 7.0,
-  kMillionaireName: 9.0,
+  kWorkerName: 5.0,
+  kManagerName: 7.0,
+  kCeoName: 9.0,
+  kMillionaireName: 10.0,
   kPresidentName: 10.0,
   kJeffreyName: 10.0,
 };
