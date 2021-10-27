@@ -62,7 +62,7 @@ const Map kMapOfDefaultCosts = {
   kJeffreyName: 62500.0,
 };
 const Map kMapOfUpgradeCostIncrements = {
-  kClickName: 1.2,
+  kClickName: 10.0,
   kAutoClickName: 1.05,
   kWorkerName: 1.1,
   kManagerName: 1.2,

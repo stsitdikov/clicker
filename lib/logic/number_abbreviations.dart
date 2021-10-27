@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:clicker/logic/constants.dart';
+
 class NumberAbbreviations {
   String getNumberString(n) {
     int numbersAfterDecimal = 2;
@@ -12,7 +14,6 @@ class NumberAbbreviations {
       12: 'T',
       15: 'Qa',
       18: 'Qi',
-      21: 'Sx',
     };
 
     String reformat(n, numberLetter) {
@@ -23,10 +24,12 @@ class NumberAbbreviations {
           numberLetter;
     }
 
-    if (n < pow(10, 3))
+    if (n > kMaxDouble)
+      return 'MAX';
+    else if (n < pow(10, 3))
       return reformat(n, '');
     else {
-      for (int i = 3; i <= 21; i = i + 3)
+      for (int i = 3; i <= 18; i = i + 3)
         if (n >= pow(10, i) && n < pow(10, i + 3)) power = i;
 
       return reformat(n / pow(10, power), mapOfNumberLetters[power]);
