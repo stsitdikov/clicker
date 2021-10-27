@@ -5,7 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'screens/clicker_screen.dart';
-import 'screens/test_screen.dart';
 
 import 'package:clicker/logic/constants.dart';
 import 'logic/clicker_brain.dart';
@@ -25,18 +24,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData.dark(),
         title: kAppName,
-        initialRoute: kClickerScreenName,
-        routes: {
-          kClickerScreenName: (context) => ClickerScreen(
-                Hive.box<double>(kClickerBrainBox).get(
-                            'isLaunchFromGlobalUpgrade',
-                            defaultValue: 0.0) ==
-                        0.0
-                    ? 0
-                    : 1,
-              ),
-          kTestScreenName: (context) => TestScreen(),
-        },
+        home: ClickerScreen(
+          Hive.box<double>(kClickerBrainBox)
+                      .get('isLaunchFromGlobalUpgrade', defaultValue: 0.0) ==
+                  0.0
+              ? 0
+              : 1,
+        ),
       ),
     );
   }
