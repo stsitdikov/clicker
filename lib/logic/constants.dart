@@ -52,24 +52,42 @@ const List<String> kListOfNamesExceptClick = [
   kJeffreyName,
 ];
 const Map kMapOfDefaultCosts = {
-  kClickName: 50.0,
+  kClickName: 150.0,
   kAutoClickName: 2.0,
-  kWorkerName: 20.0,
+  kWorkerName: 10.0,
   kManagerName: 100.0,
-  kCeoName: 500.0,
-  kMillionaireName: 2500.0,
-  kPresidentName: 12500.0,
-  kJeffreyName: 62500.0,
+  kCeoName: 1500.0,
+  kMillionaireName: 32000.0,
+  kPresidentName: 1000000.0,
+  kJeffreyName: 42000000.0,
 };
 const Map kMapOfUpgradeCostIncrements = {
-  kClickName: 5.0,
-  kAutoClickName: 1.05,
-  kWorkerName: 1.1,
-  kManagerName: 1.2,
-  kCeoName: 1.2,
-  kMillionaireName: 1.2,
-  kPresidentName: 1.2,
-  kJeffreyName: 1.2,
+  kClickName: 10.0,
+  kAutoClickName: 1.1,
+  kWorkerName: 1.2,
+  kManagerName: 1.3,
+  kCeoName: 1.4,
+  kMillionaireName: 1.5,
+  kPresidentName: 1.6,
+  kJeffreyName: 1.7,
+};
+const Map kMapOfVisibilityRequirements = {
+  kAutoClickName: 0.0,
+  kWorkerName: 5.0,
+  kManagerName: 5.0,
+  kCeoName: 5.0,
+  kMillionaireName: 5.0,
+  kPresidentName: 5.0,
+  kJeffreyName: 5.0,
+};
+const Map kMapOfDefaultDecreaseDurationCosts = {
+  kAutoClickName: 1000.0,
+  kWorkerName: 5000.0,
+  kManagerName: 50000.0,
+  kCeoName: 750000.0,
+  kMillionaireName: 16000000.0,
+  kPresidentName: 500000000.0,
+  kJeffreyName: 21000000000.0,
 };
 const Map kMapOfDefaultDurations = {
   kAutoClickName: 3000.0,
@@ -80,30 +98,12 @@ const Map kMapOfDefaultDurations = {
   kPresidentName: 96000.0,
   kJeffreyName: 192000.0,
 };
-const Map kMapOfDefaultDecreaseDurationCosts = {
-  kAutoClickName: 1000.0,
-  kWorkerName: 5000.0,
-  kManagerName: 25000.0,
-  kCeoName: 125000.0,
-  kMillionaireName: 625000.0,
-  kPresidentName: 3125000.0,
-  kJeffreyName: 15625000.0,
-};
 const Map kMapOfDecreaseDurationIncrements = {
-  kAutoClickName: 250.0,
-  kWorkerName: 500.0,
-  kManagerName: 750.0,
-  kCeoName: 1000.0,
-  kMillionaireName: 1500.0,
-  kPresidentName: 3000.0,
-  kJeffreyName: 4500.0,
-};
-const Map kMapOfVisibilityRequirements = {
-  kAutoClickName: 0.0,
-  kWorkerName: 5.0,
-  kManagerName: 7.0,
-  kCeoName: 9.0,
-  kMillionaireName: 10.0,
-  kPresidentName: 10.0,
-  kJeffreyName: 10.0,
+  kAutoClickName: 100.0,
+  kWorkerName: 200.0,
+  kManagerName: 400.0,
+  kCeoName: 800.0,
+  kMillionaireName: 1600.0,
+  kPresidentName: 3200.0,
+  kJeffreyName: 6400.0,
 };
