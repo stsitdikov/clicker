@@ -146,27 +146,30 @@ class _ClickerScreenState extends State<ClickerScreen>
               icon: Icon(Icons.home_outlined), label: 'Main'),
           BottomNavigationBarItem(
             icon: Stack(
-              children: <Widget>[
+              children: [
                 Icon(Icons.upgrade_outlined),
-                Positioned(
-                  right: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(1),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    constraints: BoxConstraints(
-                      minWidth: 14,
-                      minHeight: 14,
-                    ),
-                    child: Text(
-                      '1',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
+                Visibility(
+                  visible: clickerBrain.globalUpgradesBadge() != 0.0,
+                  child: Positioned(
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(1),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                      textAlign: TextAlign.center,
+                      constraints: BoxConstraints(
+                        minWidth: 14,
+                        minHeight: 14,
+                      ),
+                      child: Text(
+                        clickerBrain.globalUpgradesBadge().toStringAsFixed(0),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 )

@@ -367,4 +367,14 @@ class ClickerBrain extends ChangeNotifier {
   String getDecreaseDurationCostString(which) {
     return numberAbbreviations.getNumberString(getDecreaseDurationCost(which));
   }
+
+  double globalUpgradesBadge() {
+    double badge = 0.0;
+    for (String name in kListOfNamesExceptClick) {
+      if (canDecreaseDuration(name) && canShowGlobalUpgrade(name)) {
+        badge++;
+      }
+    }
+    return badge;
+  }
 }
