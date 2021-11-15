@@ -99,11 +99,11 @@ const Map kMapOfDefaultDurations = {
   kJeffreyName: 192000.0,
 };
 const Map kMapOfDecreaseDurationIncrements = {
-  kAutoClickName: 100.0,
-  kWorkerName: 200.0,
-  kManagerName: 400.0,
-  kCeoName: 800.0,
-  kMillionaireName: 1600.0,
-  kPresidentName: 3200.0,
-  kJeffreyName: 6400.0,
+  kAutoClickName: 250.0,
+  kWorkerName: 500.0,
+  kManagerName: 1000.0,
+  kCeoName: 2000.0,
+  kMillionaireName: 4000.0,
+  kPresidentName: 8000.0,
+  kJeffreyName: 16000.0,
 };
