@@ -6,12 +6,12 @@ class MoneyDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () {
-      //   Provider.of<ClickerBrain>(context, listen: false).clickIncreaseMoney();
-      // },
       onTap: () {
-        Provider.of<ClickerBrain>(context, listen: false).clearBox();
+        Provider.of<ClickerBrain>(context, listen: false).clickIncreaseMoney();
       },
+      // onTap: () {
+      //   Provider.of<ClickerBrain>(context, listen: false).clearBox();
+      // },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 70.0, vertical: 15.0),
         decoration: BoxDecoration(
